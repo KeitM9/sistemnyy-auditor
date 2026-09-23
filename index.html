@@ -119,6 +119,17 @@
   .fix ol{list-style:none;counter-reset:s}
   .fix li{counter-increment:s;position:relative;padding:9px 0 9px 40px;border-top:1px solid var(--border2);color:var(--body);font-size:14px} .fix li:first-child{border-top:none}
   .fix li::before{content:counter(s);position:absolute;left:0;top:9px;width:24px;height:24px;display:grid;place-items:center;font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;color:var(--mint);border:1px solid var(--border);border-radius:var(--r)}
+  .dl{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:20px}
+  .dl span{color:var(--faint);font-size:12.5px}
+  @media print{
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    html,body{background:var(--bg)!important;height:auto}
+    .side,.top,.pfoot,.dl,.view:not(#report){display:none!important}
+    .app,.main{display:block}.content{padding:0;max-width:none}
+    #report{display:block!important;animation:none}
+    .graphwrap .scroll{overflow:visible}
+    .fxc,.block,.weak,.graphwrap{break-inside:avoid}
+  }
   .fix2{margin-top:16px}
   .fix2>h3{font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em;color:var(--muted);margin-bottom:12px}
   .fxc{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
@@ -361,7 +372,7 @@ const I18N={
   rep_weak:"Слабое звено",rep_battery:"Батарея по агентам",rep_system:"Системные проверки",
   rep_matched:"Совпало с библиотекой сбоев",rep_attack:"Атака · цепочка эксплойта",
   rep_comp:"Соответствие",rep_cert:"Сертификат надёжности",rep_fix:"Что укрепить",
-  rep_fix2:"Как исправить — по каждой находке",fx_do:"Что сделать",fx_how:"Как",fx_check:"Как проверить",
+  rep_fix2:"Как исправить — по каждой находке",rep_pdf:"Скачать отчёт (PDF)",rep_pdf_hint:"В окне печати выбери «Сохранить как PDF».",fx_do:"Что сделать",fx_how:"Как",fx_check:"Как проверить",
   rep_disc:"Второе мнение и проверка надёжности, а не гарантия. Финальное решение по системе остаётся за человеком. Architect Systems AI."
  },
  en:{
@@ -407,7 +418,7 @@ const I18N={
   rep_weak:"Weak link",rep_battery:"Per-agent battery",rep_system:"System checks",
   rep_matched:"Matched failure library",rep_attack:"Attack · exploit chain",
   rep_comp:"Compliance",rep_cert:"Reliability certificate",rep_fix:"What to harden",
-  rep_fix2:"How to fix — per finding",fx_do:"What to do",fx_how:"How",fx_check:"How to verify",
+  rep_fix2:"How to fix — per finding",rep_pdf:"Download report (PDF)",rep_pdf_hint:"In the print window choose “Save as PDF”.",fx_do:"What to do",fx_how:"How",fx_check:"How to verify",
   rep_disc:"A second opinion and reliability check, not a guarantee. The final decision on the system stays with a human. Architect Systems AI."
  }
 };
@@ -536,7 +547,9 @@ function render(r){
     ${r.compliance?`<div class="block comp" style="margin-top:16px"><h3>${t('rep_comp')} · ${r.compliance.ref}</h3>${comp}</div>`:''}
     ${r.cert?`<div class="cert"><div class="seal"><b>${r.score}</b></div><div class="info"><b>${t('rep_cert')}</b><div class="m">Architect Systems AI · ${r.cert.id} · ${r.cert.valid} · ${r.cert.level}</div></div></div>`:''}
     ${hard?`<div class="fix2"><h3>${t('rep_fix2')}</h3>${hard}</div>`:(steps?`<div class="fix"><h3>${t('rep_fix')}</h3><ol>${steps}</ol></div>`:'')}
-    <div class="disc">${t('rep_disc')}</div>`;
+    <div class="disc">${t('rep_disc')}</div>
+    <div class="dl"><button class="cta" id="pdfBtn">${t('rep_pdf')}</button><span>${t('rep_pdf_hint')}</span></div>`;
+  $('#pdfBtn').onclick=()=>{const old=document.title;document.title='AgentProof — '+(r.name||'отчёт').replace(/<[^>]*>/g,'');window.print();document.title=old;};
   show('report');
 }
 
