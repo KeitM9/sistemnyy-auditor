@@ -119,6 +119,9 @@
   .fix ol{list-style:none;counter-reset:s}
   .fix li{counter-increment:s;position:relative;padding:9px 0 9px 40px;border-top:1px solid var(--border2);color:var(--body);font-size:14px} .fix li:first-child{border-top:none}
   .fix li::before{content:counter(s);position:absolute;left:0;top:9px;width:24px;height:24px;display:grid;place-items:center;font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;color:var(--mint);border:1px solid var(--border);border-radius:var(--r)}
+  .warnbox{margin-top:16px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--mint);border-radius:var(--r);padding:12px 14px;font-size:13.5px;color:var(--body)}
+  .basis{margin-top:16px;color:var(--muted);font-size:12.5px}.basis b{color:var(--body);font-weight:600}
+  .dl a.cta{text-decoration:none;display:inline-block}
   .dl{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:20px}
   .dl span{color:var(--faint);font-size:12.5px}
   @media print{
@@ -359,8 +362,14 @@ const I18N={
   cta_h3:"Проверь свою систему",cta_p:"Загрузи агентов и получи карту с баллом надёжности.",cta_btn:"Начать аудит",
   drop_t1:"Перетащи файлы системы",drop_t2:"Промпты агентов и трейс прогона, или нажми чтобы выбрать",
   new_label:"Или впиши систему вручную",
-  new_ph:"Кто из агентов есть, что делает, кто кому передаёт (Приёмщик → Классификатор → Ответчик), какие инструменты и ключи вызывает, где вход клиента и выход.",
-  run_btn:"Проверить систему",safe_txt:"Секреты и ключи вычищаются до проверки.",load_txt:"Аудитор строит карту и гоняет проверки, обычно 1–2 минуты",
+  new_ph:"Опиши простыми словами: какие у тебя боты или агенты, что делает каждый, кто кому что передаёт, где принимают оплату или выдают доступ, какие ключи и сервисы подключены. Например: «Бот в Telegram отвечает ученицам и после оплаты выдаёт ссылку на уроки. Второй бот пишет посты из комментариев. Оба на одном ключе ChatGPT».",
+  run_btn:"Проверить систему",safe_txt:"Секреты и ключи вычищаются до проверки.",load_txt:"Аудитор строит карту и гоняет проверки — до 5 минут. Держи страницу открытой",
+  err_429:"Много проверок подряд. Следующая откроется через 10 минут.",
+  rep_axes:"Баллы по осям",rep_basis:"На чём основан вывод",
+  basis_txt:"Проверено описание системы: {checked} знаков · {date} · модель {model} · рубрика {rubric}. Живую систему проверяют на стенде — это следующая ступень.",
+  trunc_txt:"Документ длиннее лимита: проверено {checked} из {total} знаков. Раздели документ на части или сократи — и проверь остальное отдельно.",
+  rep_talk:"Разобрать отчёт с Екатериной",rep_talk_hint:"Покажу, с чего начать и что исправить первым.",
+  empty_reports:"Здесь появятся твои проверки. Они хранятся только на этом устройстве.",
   err_txt:"Аудит сейчас не собрался. Попробуй ещё раз через минуту — или напиши нам в t.me/arsysai_bot, разберём вручную.",
   kb:"КБ",
   th_sys:"Система",th_status:"Статус",th_score:"Балл",th_date:"Дата",
@@ -405,8 +414,14 @@ const I18N={
   cta_h3:"Check your system",cta_p:"Load your agents and get a map with a reliability score.",cta_btn:"Start audit",
   drop_t1:"Drop system files",drop_t2:"Agent prompts and a run trace, or click to choose",
   new_label:"Or describe the system by hand",
-  new_ph:"Which agents there are, what they do, who hands to whom (Intake → Classifier → Responder), which tools and keys they call, where the client enters and where output goes.",
-  run_btn:"Check system",safe_txt:"Secrets and keys are stripped before the check.",load_txt:"The auditor is building the map and running checks, usually 1–2 minutes",
+  new_ph:"Describe it in plain words: which bots or agents you have, what each one does, who passes what to whom, where payments are taken or access is granted, which keys and services are connected. For example: “A Telegram bot answers students and sends the lessons link after payment. A second bot writes posts from comments. Both run on one ChatGPT key”.",
+  run_btn:"Check system",safe_txt:"Secrets and keys are stripped before the check.",load_txt:"The auditor is building the map and running checks — up to 5 minutes. Keep this page open",
+  err_429:"Many checks in a row. The next one opens in 10 minutes.",
+  rep_axes:"Scores by axis",rep_basis:"What the verdict is based on",
+  basis_txt:"Checked: the system description, {checked} characters · {date} · model {model} · rubric {rubric}. A live system is checked on a test stand — that is the next step.",
+  trunc_txt:"The document is longer than the limit: {checked} of {total} characters were checked. Split or shorten it and check the rest separately.",
+  rep_talk:"Go through the report with Ekaterina",rep_talk_hint:"I will show where to start and what to fix first.",
+  empty_reports:"Your checks will appear here. They are stored only on this device.",
   err_txt:"The audit did not come together this time. Try again in a minute — or message t.me/arsysai_bot and we will run it by hand.",
   kb:"KB",
   th_sys:"System",th_status:"Status",th_score:"Score",th_date:"Date",
@@ -424,11 +439,6 @@ const I18N={
 };
 
 // table data (bilingual)
-const ROWS={
- ru:[["Бот-продавец","","6.4","22.09.2026"],["Воронка контента","ok:Готова","8.1","21.09.2026"],["Ассистент заявок","low:Сырой","3.9","20.09.2026"],["Аудит-бот","ok:Готов","7.6","19.09.2026"]],
- en:[["Sales bot","With caveats","6.4","22 Sep 2026"],["Content funnel","ok:Ready","8.1","21 Sep 2026"],["Leads assistant","low:Raw","3.9","20 Sep 2026"],["Audit bot","ok:Ready","7.6","19 Sep 2026"]]
-};
-const ROW_STATUS_RU={"":"С оговорками"};
 const LAB={
  ru:[["Выдуманный вызов инструмента","st_agent"],["Потеря контекста на стыке","st_system"],["Инъекция из найденного текста","st_agent"],["Отравление контекста в памяти","st_system"],["Утечка ключа между агентами","st_system"]],
  en:[["Fabricated tool call","st_agent"],["Context loss at handoff","st_system"],["Injection from retrieved text","st_agent"],["Context poisoning in memory","st_system"],["Key leak between agents","st_system"]]
@@ -480,10 +490,16 @@ function t(k){return (I18N[lang]&&I18N[lang][k]!=null)?I18N[lang][k]:(I18N.ru[k]
 const TITLES={overview:'t_overview',new:'t_new',report:'t_report',reports:'t_reports',lab:'t_lab'};
 function show(v){curView=v;$$('.view').forEach(x=>x.classList.toggle('on',x.dataset.view===v));$$('.nav').forEach(x=>x.classList.toggle('on',x.dataset.v===v));$('#title').textContent=t(TITLES[v]||'t_overview');$('#side').classList.remove('open');window.scrollTo({top:0});}
 
+// Мои проверки — только на этом устройстве (localStorage). Сбой хранилища не ломает страницу.
+function loadReps(){try{return JSON.parse(localStorage.getItem('ap_reports')||'[]')}catch(e){return []}}
+function saveRep(rep){try{const a=loadReps();a.unshift({date:new Date().toLocaleDateString(lang==='en'?'en':'ru'),rep});localStorage.setItem('ap_reports',JSON.stringify(a.slice(0,20)))}catch(e){}}
 function buildTables(){
+  const reps=loadReps();
   $('#reportsTable').innerHTML=`<div class="tr head"><span>${t('th_sys')}</span><span>${t('th_status')}</span><span>${t('th_score')}</span><span>${t('th_date')}</span></div>`+
-    ROWS[lang].map(r=>{let st=r[1],cls='',lbl=st; if(st.startsWith('ok:')){cls='ok';lbl=st.slice(3);} else if(st.startsWith('low:')){cls='low';lbl=st.slice(4);} else {lbl=st||(lang==='ru'?'С оговорками':'With caveats');}
-    return `<div class="tr"><span class="name">${r[0]}</span><span><i class="badge ${cls}">${lbl}</i></span><span class="sc">${r[2]}</span><span class="dt">${r[3]}</span></div>`;}).join('');
+    (reps.length?reps.map((x,i)=>{const s=x.rep.score,cls=s>=7.5?'ok':s<5?'low':'';
+      return `<div class="tr" data-i="${i}" style="cursor:pointer"><span class="name">${x.rep.name}</span><span><i class="badge ${cls}">${x.rep.verdict}</i></span><span class="sc">${s}</span><span class="dt">${x.date}</span></div>`;}).join('')
+    :`<div class="tr" style="grid-template-columns:1fr"><span class="dt">${t('empty_reports')}</span></div>`);
+  $$('#reportsTable .tr[data-i]').forEach(el=>el.onclick=()=>{isDemo=false;render(reps[+el.dataset.i].rep);});
   $('#labTable').innerHTML=`<div class="tr head" style="grid-template-columns:1fr 130px"><span>${t('lab_pattern')}</span><span>${t('lab_stage')}</span></div>`+
     LAB[lang].map(r=>`<div class="tr" style="grid-template-columns:1fr 130px"><span class="name">${r[0]}</span><span class="dt">${t(r[1])}</span></div>`).join('');
 }
@@ -528,6 +544,9 @@ function render(r){
     (h.check?`<div class="fxr"><span class="fxk">${t('fx_check')}</span><span class="fxv">${h.check}</span></div>`:'')+
     `</div>`).join('');
   const tags=(r.matched||[]).map(m=>`<span class="tag">${m}</span>`).join('');
+  const fill=(s,o)=>s.replace(/\{(\w+)\}/g,(_,k)=>o[k]==null?'':k==='date'?new Date(o[k]).toLocaleDateString(lang==='en'?'en':'ru'):typeof o[k]==='number'?o[k].toLocaleString(lang==='en'?'en':'ru'):o[k]);
+  const b=r.basis, trunc=b&&b.total>b.checked;
+  const axes=(r.axes||[]).map(a=>`<div class="metric"><div class="rowt"><span class="lb">${a.t}</span><span class="sc">${a.s}/10</span></div><div class="nt">${a.why}</div><div class="track"><i style="width:${a.s*10}%"></i></div></div>`).join('');
   const chain=((r.exploit&&r.exploit.path)||[]).map((s,i)=>`${i?'<span class="ar">→</span>':''}<span class="st">${s}</span>`).join('');
   const comp=((r.compliance&&r.compliance.items)||[]).map(c=>`<div class="cl"><span class="mk ${c.ok?'ok':''}">${c.ok?'✓':'·'}</span><span class="t">${c.t}</span></div>`).join('');
   $('#report').innerHTML=`
@@ -540,15 +559,19 @@ function render(r){
       <div class="scroll">${graphSVG(r.graph)}</div>
       <div class="legend">${t('rep_legend')}</div>
     </div>
+    ${trunc?`<div class="warnbox">${fill(t('trunc_txt'),b)}</div>`:''}
     <div class="weak"><div class="k">${t('rep_weak')}</div><div class="v">${r.weak}</div></div>
+    ${axes?`<div class="block" style="margin-top:16px"><h3>${t('rep_axes')}</h3>${axes}</div>`:''}
     <div class="cols"><div class="block"><h3>${t('rep_battery')}</h3>${bat}</div><div class="block"><h3>${t('rep_system')}</h3>${sys}</div></div>
     ${tags?`<div class="matched"><h3>${t('rep_matched')}</h3><div class="tags">${tags}</div></div>`:''}
     ${r.exploit?`<div class="block" style="margin-top:16px"><h3>${t('rep_attack')}</h3><div class="chain">${chain}</div><div style="color:var(--muted);font-size:12.5px;margin-top:11px">${r.exploit.note}</div></div>`:''}
     ${r.compliance?`<div class="block comp" style="margin-top:16px"><h3>${t('rep_comp')} · ${r.compliance.ref}</h3>${comp}</div>`:''}
     ${r.cert?`<div class="cert"><div class="seal"><b>${r.score}</b></div><div class="info"><b>${t('rep_cert')}</b><div class="m">Architect Systems AI · ${r.cert.id} · ${r.cert.valid} · ${r.cert.level}</div></div></div>`:''}
     ${hard?`<div class="fix2"><h3>${t('rep_fix2')}</h3>${hard}</div>`:(steps?`<div class="fix"><h3>${t('rep_fix')}</h3><ol>${steps}</ol></div>`:'')}
+    ${b?`<div class="basis"><b>${t('rep_basis')}.</b> ${fill(t('basis_txt'),{...b,rubric:r.rubric||''})}</div>`:''}
     <div class="disc">${t('rep_disc')}</div>
-    <div class="dl"><button class="cta" id="pdfBtn">${t('rep_pdf')}</button><span>${t('rep_pdf_hint')}</span></div>`;
+    <div class="dl"><a class="cta" href="https://t.me/arsysai_bot?start=agentproof" target="_blank" rel="noopener">${t('rep_talk')}</a><span>${t('rep_talk_hint')}</span></div>
+    <div class="dl"><button class="langbtn" id="pdfBtn">${t('rep_pdf')}</button><span>${t('rep_pdf_hint')}</span></div>`;
   $('#pdfBtn').onclick=()=>{const old=document.title;document.title='AgentProof — '+(r.name||'отчёт').replace(/<[^>]*>/g,'');window.print();document.title=old;};
   show('report');
 }
@@ -589,8 +612,8 @@ $('#run').addEventListener('click',async()=>{
   store.forEach(f=>parts.push(`# ${f.name}\n${f.text}`));
   const system=parts.join('\n\n'); if(!system){$('#sys').focus();return;}
   $('#run').disabled=true; $('#load').style.display='flex';
-  $('#err').style.display='none';
-  try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system,lang})});if(!res.ok)throw 0;const rep=await res.json();isDemo=false;render(rep);}
+  $('#err').style.display='none';$('#err').textContent=t('err_txt');
+  try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system,lang})});if(res.status===429){$('#err').textContent=t('err_429');throw 0;}if(!res.ok)throw 0;const rep=await res.json();isDemo=false;saveRep(rep);render(rep);}
   catch(e){$('#err').style.display='block';}
   finally{$('#run').disabled=false;$('#load').style.display='none';}
 });
