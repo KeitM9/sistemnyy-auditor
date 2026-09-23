@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architect Systems AI — Audit for AI agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#232935; --panel:#2c3341; --surface:#252b37; --surface2:#333b49;
+    --border:#454e60; --border2:#3a4252; --line:#5a6273;
+    --mint:#B4FAB2; --mint-ink:#1c2530;
+    --ink:#ffffff; --body:#d8dce2; --muted:#a4acba; --faint:#8891a0;
+    --r:3px; --side:248px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--body);font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+  h1,h2,h3{font-family:'Oswald',sans-serif;color:var(--ink);letter-spacing:.01em}
+  ::placeholder{color:var(--muted)} ::selection{background:var(--mint);color:var(--mint-ink)}
+  a{color:inherit;text-decoration:none}
+
+  .app{display:flex;min-height:100vh}
+  .side{width:var(--side);flex:none;background:var(--panel);border-right:1px solid var(--border2);display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+  .logo{display:flex;align-items:center;gap:11px;padding:20px 20px 18px;border-bottom:1px solid var(--border2)}
+  .logo .g{width:30px;height:30px;flex:none;border:2px solid var(--mint);border-radius:var(--r);position:relative}
+  .logo .g::after{content:"";position:absolute;inset:6px 6px auto 6px;height:2px;background:var(--mint)}
+  .logo .g::before{content:"";position:absolute;inset:auto 6px 7px 6px;height:8px;border:2px solid var(--mint);border-top:none;border-radius:0 0 2px 2px}
+  .logo b{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;color:var(--ink);line-height:1.1;text-transform:uppercase;letter-spacing:.03em}
+  .logo b i{display:block;font-style:normal;font-size:10px;letter-spacing:.16em;color:var(--mint);font-weight:500}
+  nav{padding:14px 12px;flex:1}
+  .nav{display:flex;align-items:center;gap:11px;width:100%;background:none;border:none;cursor:pointer;color:var(--muted);font-family:'Manrope',sans-serif;font-size:14px;font-weight:500;text-align:left;padding:10px 12px;border-radius:var(--r);margin-bottom:2px;transition:.13s}
+  .nav:hover{color:var(--ink);background:var(--surface)}
+  .nav.on{color:var(--mint-ink);background:var(--mint);font-weight:600}
+  .nav svg{width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8}
+  .sfoot{padding:16px 20px;border-top:1px solid var(--border2);font-size:11px;color:var(--faint);line-height:1.7}
+  .sfoot a{color:var(--muted)} .sfoot a:hover{color:var(--mint)}
+
+  .main{flex:1;min-width:0;display:flex;flex-direction:column}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 30px;border-bottom:1px solid var(--border2);position:sticky;top:0;background:rgba(35,41,53,.9);backdrop-filter:blur(8px);z-index:10}
+  .top h1{font-weight:600;text-transform:uppercase;font-size:18px;letter-spacing:.04em}
+  .topright{display:flex;align-items:center;gap:12px}
+  .langbtn{font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;letter-spacing:.08em;color:var(--muted);background:none;border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;cursor:pointer;transition:.15s}
+  .langbtn:hover{color:var(--ink);border-color:var(--mint)}
+  .cta{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:13px;background:var(--mint);color:var(--mint-ink);border:none;border-radius:var(--r);padding:11px 20px;cursor:pointer;transition:filter .15s}
+  .cta:hover{filter:brightness(1.06)} .cta:disabled{opacity:.5;cursor:default}
+  .content{padding:30px;max-width:1080px;width:100%;flex:1}
+  .view{display:none} .view.on{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .table{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden}
+  .tr{display:grid;grid-template-columns:1fr 130px 70px 120px;gap:14px;padding:13px 18px;align-items:center;border-top:1px solid var(--border2)}
+  .tr:first-child{border-top:none;background:var(--surface2)}
+  .tr.head{font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:11px;letter-spacing:.08em;color:var(--muted)}
+  .tr .name{color:var(--ink);font-weight:600;font-size:14px}
+  .tr .sc{font-family:'Oswald',sans-serif;font-weight:700;color:var(--ink)}
+  .badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid var(--border);color:var(--muted)}
+  .badge.ok{color:var(--mint-ink);background:var(--mint);border-color:var(--mint)}
+  .badge.low{color:var(--faint);border-style:dashed}
+  .tr .dt{color:var(--faint);font-size:13px}
+
+  .work{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:24px;max-width:720px}
+  .drop{border:1.5px dashed var(--border);border-radius:var(--r);background:var(--surface2);padding:32px 20px;text-align:center;cursor:pointer;transition:.18s}
+  .drop:hover,.drop.over{border-color:var(--mint);background:#2c3543}
+  .drop .t1{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:15px;color:var(--ink)}
+  .drop .t2{color:var(--muted);font-size:13px;margin-top:6px} .drop .t3{color:var(--faint);font-size:12px;margin-top:9px;letter-spacing:.05em}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .chip{display:inline-flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:7px 11px;font-size:13px}
+  .chip b{color:var(--ink)} .chip span{color:var(--faint)} .chip .rm{color:var(--faint);cursor:pointer;font-weight:700} .chip .rm:hover{color:var(--mint)}
+  label.fl{display:block;font-family:'Oswald',sans-serif;font-weight:500;text-transform:uppercase;font-size:12px;letter-spacing:.08em;color:var(--muted);margin:20px 0 8px}
+  textarea{width:100%;min-height:110px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--body);font-family:'Manrope',sans-serif;font-size:14px;line-height:1.6;padding:13px 14px;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--mint)}
+  .actions{display:flex;align-items:center;gap:16px;margin-top:20px;flex-wrap:wrap}
+  .safe{color:var(--faint);font-size:12px;max-width:38ch}
+  .load{display:none;align-items:center;gap:10px;color:var(--mint);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.07em;font-size:13px;margin-top:18px}
+  .spin{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--mint);border-radius:50%;animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .rtop{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+  .rtop .nm{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:16px;color:var(--ink);letter-spacing:.03em}
+  .scorechip{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:20px;padding:6px 14px}
+  .scorechip b{font-family:'Oswald',sans-serif;font-weight:700;font-size:16px;color:var(--ink)} .scorechip b em{font-style:normal;color:var(--muted);font-size:12px;font-weight:500}
+  .scorechip s{text-decoration:none;font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:11px;letter-spacing:.06em;color:var(--mint)}
+  .scorechip .dot{width:7px;height:7px;border-radius:50%;background:var(--mint)}
+  .graphwrap{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:22px 24px}
+  .graphwrap h3{font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+  .graphwrap .scroll{overflow-x:auto;padding:12px 0 4px}
+  .legend{color:var(--faint);font-size:12px;margin-top:4px} .legend em{color:var(--mint);font-style:normal}
+  .weak{background:var(--surface);border:1px solid var(--mint);border-radius:var(--r);padding:18px 22px;margin-top:16px}
+  .weak .k{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:.07em;color:var(--mint);margin-bottom:6px}
+  .weak .v{color:var(--ink);font-size:15px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+  .block{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:20px 22px}
+  .block>h3{font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em;color:var(--muted);margin-bottom:14px}
+  .metric{padding:11px 0;border-top:1px solid var(--border2)} .metric:first-of-type{border-top:none;padding-top:0}
+  .metric .rowt{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .metric .lb{color:var(--ink);font-size:14px;font-weight:500} .metric .sc{font-family:'Oswald',sans-serif;font-weight:700;font-size:14px;color:var(--mint)}
+  .metric .nt{color:var(--muted);font-size:12.5px;margin:3px 0 8px}
+  .item{padding:12px 0;border-top:1px solid var(--border2)} .item:first-of-type{border-top:none;padding-top:0}
+  .item .k{color:var(--ink);font-weight:600;font-size:14px;margin-bottom:2px} .item .v{color:var(--muted);font-size:13px}
+  .matched{margin-top:16px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:16px 22px}
+  .matched h3{font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+  .matched .tags{display:flex;flex-wrap:wrap;gap:8px}
+  .matched .tag{font-size:13px;color:var(--body);border:1px solid var(--border);border-radius:20px;padding:5px 12px}
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:4px}
+  .chain .st{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;font-size:13px;color:var(--ink)}
+  .chain .ar{color:var(--mint);font-family:'Oswald',sans-serif;font-weight:700}
+  .comp .cl{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid var(--border2)} .comp .cl:first-child{border-top:none}
+  .comp .mk{width:17px;height:17px;flex:none;border-radius:3px;border:1px solid var(--border);display:grid;place-items:center;font-size:11px;color:var(--faint)}
+  .comp .mk.ok{background:var(--mint);border-color:var(--mint);color:var(--mint-ink)}
+  .comp .cl .t{color:var(--body);font-size:14px}
+  .cert{display:flex;align-items:center;gap:18px;background:rgba(180,250,178,.045);border:1px solid var(--mint);border-radius:var(--r);padding:20px 22px;margin-top:16px;flex-wrap:wrap}
+  .cert .seal{width:58px;height:58px;border:2px solid var(--mint);border-radius:var(--r);display:grid;place-items:center;flex:none}
+  .cert .seal b{font-family:'Oswald',sans-serif;font-weight:700;color:var(--mint);font-size:19px}
+  .cert .info b{font-family:'Oswald',sans-serif;text-transform:uppercase;color:var(--ink);font-size:14px;letter-spacing:.04em;display:block} .cert .info .m{color:var(--muted);font-size:12.5px;margin-top:3px}
+  .fix{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:20px 22px;margin-top:16px}
+  .fix>h3{font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em;color:var(--muted);margin-bottom:12px}
+  .fix ol{list-style:none;counter-reset:s}
+  .fix li{counter-increment:s;position:relative;padding:9px 0 9px 40px;border-top:1px solid var(--border2);color:var(--body);font-size:14px} .fix li:first-child{border-top:none}
+  .fix li::before{content:counter(s);position:absolute;left:0;top:9px;width:24px;height:24px;display:grid;place-items:center;font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;color:var(--mint);border:1px solid var(--border);border-radius:var(--r)}
+  .disc{color:var(--faint);font-size:12px;margin-top:20px;line-height:1.6}
+
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(620px 420px at 74% 14%, rgba(180,250,178,.07), transparent 62%)}
+  .content{position:relative;z-index:1}
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center;padding:40px 0 24px}
+  .eyebrow{display:inline-block;font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.22em;color:var(--mint);border:1px solid var(--border);border-radius:20px;padding:6px 14px;margin-bottom:24px}
+  .htitle{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;font-size:clamp(40px,5.4vw,64px);line-height:.95;letter-spacing:-.01em;color:var(--ink);text-wrap:balance}
+  .htitle .m{color:var(--mint)}
+  .hsub{color:var(--muted);font-size:17px;margin-top:20px;max-width:50ch;line-height:1.65}
+  .hcta{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:12px;font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:14px;border-radius:var(--r);padding:12px 16px 12px 22px;cursor:pointer;border:1px solid transparent;transition:transform .5s cubic-bezier(.32,.72,0,1),filter .3s,color .3s,border-color .3s}
+  .btn.pri{background:var(--mint);color:var(--mint-ink)} .btn.pri:hover{filter:brightness(1.05)}
+  .btn.ghost{background:none;color:var(--body);border-color:var(--border);padding:12px 22px} .btn.ghost:hover{border-color:var(--mint);color:var(--ink)}
+  .btn:active{transform:scale(.985)}
+  .btn .arw{width:26px;height:26px;border-radius:var(--r);display:grid;place-items:center;flex:none;background:rgba(28,37,48,.16);transition:transform .5s cubic-bezier(.32,.72,0,1)}
+  .btn:hover .arw{transform:translateX(3px)} .btn .arw svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2}
+  .heroaside{display:flex;gap:20px;align-items:center}
+  .heroimg{max-width:180px;flex:none}
+  .heroimg video,.heroimg img{display:block;width:100%;height:auto}
+  .herovals{flex:1;min-width:0}
+  .herovals .lbl{font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:11px;letter-spacing:.14em;color:var(--muted);margin-bottom:14px}
+  .herovals .hv{display:flex;gap:10px;margin-bottom:13px}
+  .herovals .hv:last-child{margin-bottom:0}
+  .herovals .hv .b{width:7px;height:7px;border-radius:2px;background:var(--mint);margin-top:6px;flex:none}
+  .herovals .hv .k{color:var(--ink);font-weight:600;font-size:13.5px}
+  .herovals .hv .v{color:var(--muted);font-size:12.5px;margin-top:1px;line-height:1.45}
+  .lead-sec{margin-top:66px}
+  .lead-sec>h2{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:15px;letter-spacing:.14em;color:var(--muted);margin-bottom:24px}
+  .checklist{display:grid;grid-template-columns:1fr 1fr;gap:22px 36px}
+  .ck{display:flex;gap:13px} .ck .b{width:8px;height:8px;border-radius:2px;background:var(--mint);margin-top:7px;flex:none}
+  .ck .k{color:var(--ink);font-weight:600;font-size:15px} .ck .v{color:var(--muted);font-size:13.5px;margin-top:2px}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .step{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:24px 24px 26px;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+  .step .n{font-family:'Oswald',sans-serif;font-weight:700;font-size:24px;color:var(--mint)}
+  .step h4{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:14px;color:var(--ink);margin:10px 0 6px;letter-spacing:.03em}
+  .step p{color:var(--muted);font-size:13.5px}
+  .ctaband{margin-top:66px;background:rgba(180,250,178,.045);border:1px solid var(--mint);border-radius:var(--r);padding:34px 36px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .ctaband h3{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:24px;color:var(--ink)} .ctaband p{color:var(--muted);font-size:15px;margin-top:6px}
+  .reveal{opacity:0;transform:translateY(24px);filter:blur(6px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1),filter .8s}
+  .reveal.in{opacity:1;transform:none;filter:none}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;gap:30px;padding-top:26px} .checklist,.steps{grid-template-columns:1fr}}
+  @media(max-width:520px){.heroaside{flex-direction:column;align-items:flex-start} .heroimg{max-width:200px}}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;filter:none;transition:none}}
+
+  .pfoot{padding:20px 30px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--faint);font-size:12px}
+  .pfoot a{color:var(--muted)} .pfoot a:hover{color:var(--mint)}
+  .pfoot .r{font-family:'Oswald',sans-serif;letter-spacing:.06em;text-transform:uppercase}
+  @media(max-width:820px){
+    .side{position:fixed;left:-260px;transition:left .2s;z-index:40} .side.open{left:0}
+    .cols{grid-template-columns:1fr} .menu-btn{display:inline-flex!important}
+    .tr{grid-template-columns:1fr 100px 60px} .tr .dt{display:none}
+  }
+  .menu-btn{display:none;align-items:center;justify-content:center;width:38px;height:38px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);color:var(--ink);cursor:pointer}
+  @media (prefers-reduced-motion:reduce){.view.on{animation:none}.spin{animation:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="logo"><span class="g"></span><b>Architect Systems<i>arsysai.com</i></b></div>
+    <nav id="nav">
+      <button class="nav on" data-v="overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span data-i18n="nav_overview"></span></button>
+      <button class="nav" data-v="new"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="nav_new"></span></button>
+      <button class="nav" data-v="reports"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span data-i18n="nav_reports"></span></button>
+      <button class="nav" data-v="lab"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg><span data-i18n="nav_lab"></span></button>
+    </nav>
+    <div class="sfoot">Architect Systems AI<br><a href="https://arsysai.com" target="_blank" rel="noopener">arsysai.com</a> · <a href="https://t.me/arsysai_bot" target="_blank" rel="noopener">t.me/arsysai_bot</a><br>© 2026</div>
+  </aside>
+
+  <div class="main">
+    <div class="top">
+      <div style="display:flex;align-items:center;gap:14px">
+        <button class="menu-btn" id="menu" aria-label="Menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        <h1 id="title"></h1>
+      </div>
+      <div class="topright">
+        <button class="langbtn" id="langbtn">EN</button>
+        <button class="cta" id="newBtn" data-i18n="newAudit"></button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- OVERVIEW = HOME -->
+      <section class="view on" data-view="overview">
+        <div class="hero">
+          <div class="reveal in">
+            <span class="eyebrow">Architect Systems AI</span>
+            <h1 class="htitle" data-i18n-html="hero_title"></h1>
+            <p class="hsub" data-i18n="hero_sub"></p>
+            <div class="hcta">
+              <button class="btn pri" data-go="new"><span data-i18n="btn_check"></span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+              <button class="btn ghost" id="demoBtn" data-i18n="btn_example"></button>
+            </div>
+          </div>
+          <div class="reveal in heroaside">
+            <div class="heroimg">
+              <video src="hero.mp4" poster="hero.png" autoplay muted loop playsinline preload="auto"></video>
+            </div>
+            <div class="herovals">
+              <div class="lbl" data-i18n="hv_label"></div>
+              <div class="hv"><span class="b"></span><div><div class="k" data-i18n="hv1k"></div><div class="v" data-i18n="hv1v"></div></div></div>
+              <div class="hv"><span class="b"></span><div><div class="k" data-i18n="hv2k"></div><div class="v" data-i18n="hv2v"></div></div></div>
+              <div class="hv"><span class="b"></span><div><div class="k" data-i18n="hv3k"></div><div class="v" data-i18n="hv3v"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lead-sec reveal">
+          <h2 data-i18n="checks_h2"></h2>
+          <div class="checklist">
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="c1k"></div><div class="v" data-i18n="c1v"></div></div></div>
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="c2k"></div><div class="v" data-i18n="c2v"></div></div></div>
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="c3k"></div><div class="v" data-i18n="c3v"></div></div></div>
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="c4k"></div><div class="v" data-i18n="c4v"></div></div></div>
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="c5k"></div><div class="v" data-i18n="c5v"></div></div></div>
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="c6k"></div><div class="v" data-i18n="c6v"></div></div></div>
+          </div>
+        </div>
+
+        <div class="lead-sec reveal">
+          <h2 data-i18n="how_h2"></h2>
+          <div class="steps">
+            <div class="step"><div class="n">1</div><h4 data-i18n="s1h"></h4><p data-i18n="s1p"></p></div>
+            <div class="step"><div class="n">2</div><h4 data-i18n="s2h"></h4><p data-i18n="s2p"></p></div>
+            <div class="step"><div class="n">3</div><h4 data-i18n="s3h"></h4><p data-i18n="s3p"></p></div>
+          </div>
+        </div>
+
+        <div class="lead-sec reveal">
+          <h2 data-i18n="strong_h2"></h2>
+          <div class="steps">
+            <div class="step"><div class="n">01</div><h4 data-i18n="st1h"></h4><p data-i18n="st1p"></p></div>
+            <div class="step"><div class="n">02</div><h4 data-i18n="st2h"></h4><p data-i18n="st2p"></p></div>
+            <div class="step"><div class="n">03</div><h4 data-i18n="st3h"></h4><p data-i18n="st3p"></p></div>
+          </div>
+        </div>
+
+        <div class="ctaband reveal">
+          <div><h3 data-i18n="cta_h3"></h3><p data-i18n="cta_p"></p></div>
+          <button class="btn pri" data-go="new"><span data-i18n="cta_btn"></span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+        </div>
+      </section>
+
+      <!-- NEW -->
+      <section class="view" data-view="new">
+        <div class="work">
+          <div class="drop" id="drop">
+            <div class="t1" data-i18n="drop_t1"></div>
+            <div class="t2" data-i18n="drop_t2"></div>
+            <div class="t3">txt · md · json · yaml · log</div>
+            <input type="file" id="file" multiple accept=".txt,.md,.json,.log,.yaml,.yml" hidden>
+          </div>
+          <div class="chips" id="chips"></div>
+          <label class="fl" for="sys" data-i18n="new_label"></label>
+          <textarea id="sys" data-i18n-ph="new_ph"></textarea>
+          <div class="actions"><button class="cta" id="run" data-i18n="run_btn"></button><span class="safe" data-i18n="safe_txt"></span></div>
+          <div class="load" id="load"><span class="spin"></span><span data-i18n="load_txt"></span></div>
+        </div>
+      </section>
+
+      <!-- REPORT -->
+      <section class="view" data-view="report" id="report"></section>
+
+      <!-- REPORTS -->
+      <section class="view" data-view="reports">
+        <div class="table" id="reportsTable"></div>
+      </section>
+
+      <!-- LAB -->
+      <section class="view" data-view="lab">
+        <p style="color:var(--muted);font-size:14px;margin-bottom:16px;max-width:60ch" data-i18n="lab_intro"></p>
+        <div class="table" id="labTable"></div>
+      </section>
+    </div>
+
+    <footer class="pfoot">
+      <span class="r" data-i18n="footer_sub"></span>
+      <span><a href="https://arsysai.com" target="_blank" rel="noopener">arsysai.com</a> · <a href="https://t.me/arsysai_bot" target="_blank" rel="noopener">t.me/arsysai_bot</a> · © 2026</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+
+const I18N={
+ ru:{
+  nav_overview:"Обзор",nav_new:"Новый аудит",nav_reports:"Отчёты",nav_lab:"Библиотека сбоев",
+  newAudit:"Новый аудит",
+  t_overview:"Обзор",t_new:"Новый аудит",t_report:"Отчёт по системе",t_reports:"Отчёты",t_lab:"Библиотека сбоев",
+  hero_title:"Проверка систем <span class='m'>AI-агентов</span>",
+  hero_sub:"Ваши агенты уже отвечают клиентам и работают с деньгами. Аудитор проходит по всей системе, находит утечки, сбои и слабое звено, и показывает, что укрепить.",
+  btn_check:"Проверить систему",btn_example:"Пример отчёта",
+  hv_label:"Что вы получаете",
+  hv1k:"Карта системы",hv1v:"кто кому передаёт, где ключи и внешние вызовы",
+  hv2k:"Балл надёжности 0–10",hv2v:"по единой рубрике, сравнимый между проверками",
+  hv3k:"Слабое звено и шаги",hv3v:"точные шаги укрепления, а не общие советы",
+  checks_h2:"Что проверяет аудитор",
+  c1k:"Утечки",c1v:"Секреты и данные не перетекают между агентами и наружу.",
+  c2k:"Сбои передачи",c2v:"На стыке «агент → агент» ничего не теряется и не искажается.",
+  c3k:"Длинная цепочка",c3v:"Где на 8+ шагов копится ошибка и рушится результат.",
+  c4k:"Инъекции из контента",c4v:"Отличает ли система данные от команд в найденном тексте.",
+  c5k:"Зацикливание и стоимость",c5v:"Уходит ли в циклы со счётом за токены.",
+  c6k:"Дрейф при смене модели",c6v:"Держит ли качество, когда модель меняется.",
+  how_h2:"Как это работает",
+  s1h:"Загрузи систему",s1p:"Промпты агентов и трейс прогона — файлами или текстом.",
+  s2h:"Аудитор проверяет",s2p:"Строит карту, гоняет батарею и системные проверки в изолированной среде.",
+  s3h:"Получаешь отчёт",s3p:"Карта с разрывом, слабое звено, балл и шаги укрепления.",
+  strong_h2:"Что делает аудит сильным",
+  st1h:"Активная атака",st1p:"Сами строим цепочку эксплойта: инъекция → права → утечка. Не пассивные логи, а проверка на прочность.",
+  st2h:"Соответствие EU AI Act",st2p:"Отчёт как доказательство устойчивости для регулятора. С августа 2026 это требование к high-risk AI.",
+  st3h:"Сертификат надёжности",st3p:"Публичный знак «Проверено Architect Systems AI» с баллом, ID и сроком.",
+  cta_h3:"Проверь свою систему",cta_p:"Загрузи агентов и получи карту с баллом надёжности.",cta_btn:"Начать аудит",
+  drop_t1:"Перетащи файлы системы",drop_t2:"Промпты агентов и трейс прогона, или нажми чтобы выбрать",
+  new_label:"Или впиши систему вручную",
+  new_ph:"Кто из агентов есть, что делает, кто кому передаёт (Приёмщик → Классификатор → Ответчик), какие инструменты и ключи вызывает, где вход клиента и выход.",
+  run_btn:"Проверить систему",safe_txt:"Секреты и ключи вычищаются до проверки.",load_txt:"Аудитор строит карту и гоняет проверки",
+  kb:"КБ",
+  th_sys:"Система",th_status:"Статус",th_score:"Балл",th_date:"Дата",
+  lab_intro:"Каталог известных паттернов отказа. Каждый аудит сверяется с этой базой.",
+  lab_pattern:"Паттерн сбоя",lab_stage:"Стадия",st_agent:"агент",st_system:"система",
+  footer_sub:"Architect Systems AI · Системный Аудитор",
+  rep_mapTitle:"Карта системы и разрыв",
+  rep_legend:"<em>Мятным</em> отмечены разрыв в цепочке и точка утечки. Серым — исправные передачи.",
+  rep_weak:"Слабое звено",rep_battery:"Батарея по агентам",rep_system:"Системные проверки",
+  rep_matched:"Совпало с библиотекой сбоев",rep_attack:"Атака · цепочка эксплойта",
+  rep_comp:"Соответствие",rep_cert:"Сертификат надёжности",rep_fix:"Что укрепить",
+  rep_disc:"Второе мнение и проверка надёжности, а не гарантия. Финальное решение по системе остаётся за человеком. Architect Systems AI."
+ },
+ en:{
+  nav_overview:"Overview",nav_new:"New audit",nav_reports:"Reports",nav_lab:"Failure library",
+  newAudit:"New audit",
+  t_overview:"Overview",t_new:"New audit",t_report:"System report",t_reports:"Reports",t_lab:"Failure library",
+  hero_title:"Audit for <span class='m'>AI agent systems</span>",
+  hero_sub:"Your agents already talk to clients and handle money. The auditor walks the whole system, finds leaks, failures and the weak link, and shows what to harden.",
+  btn_check:"Check your system",btn_example:"Sample report",
+  hv_label:"What you get",
+  hv1k:"System map",hv1v:"who hands to whom, where keys and external calls are",
+  hv2k:"Reliability score 0–10",hv2v:"on one rubric, comparable across checks",
+  hv3k:"Weak link and steps",hv3v:"precise hardening steps, not generic advice",
+  checks_h2:"What the auditor checks",
+  c1k:"Leaks",c1v:"Secrets and data do not flow between agents or outside.",
+  c2k:"Handoff failures",c2v:"Nothing is lost or distorted at the agent → agent seam.",
+  c3k:"Long chain",c3v:"Where error builds up over 8+ steps and the result breaks.",
+  c4k:"Content injections",c4v:"Whether the system tells data from commands in retrieved text.",
+  c5k:"Looping and cost",c5v:"Whether it spins into loops that burn tokens.",
+  c6k:"Model drift",c6v:"Whether quality holds when the model changes.",
+  how_h2:"How it works",
+  s1h:"Load the system",s1p:"Agent prompts and a run trace, as files or text.",
+  s2h:"The auditor checks",s2p:"Builds the map, runs the battery and system checks in an isolated sandbox.",
+  s3h:"Get the report",s3p:"Map with the break, weak link, score and hardening steps.",
+  strong_h2:"What makes the audit strong",
+  st1h:"Active attack",st1p:"We build the exploit chain ourselves: injection → privileges → leak. Not passive logs, a real stress test.",
+  st2h:"EU AI Act compliance",st2p:"The report as evidence of robustness for the regulator. Since August 2026 this is required for high-risk AI.",
+  st3h:"Reliability certificate",st3p:"A public mark, Verified by Architect Systems AI, with a score, ID and validity.",
+  cta_h3:"Check your system",cta_p:"Load your agents and get a map with a reliability score.",cta_btn:"Start audit",
+  drop_t1:"Drop system files",drop_t2:"Agent prompts and a run trace, or click to choose",
+  new_label:"Or describe the system by hand",
+  new_ph:"Which agents there are, what they do, who hands to whom (Intake → Classifier → Responder), which tools and keys they call, where the client enters and where output goes.",
+  run_btn:"Check system",safe_txt:"Secrets and keys are stripped before the check.",load_txt:"The auditor is building the map and running checks",
+  kb:"KB",
+  th_sys:"System",th_status:"Status",th_score:"Score",th_date:"Date",
+  lab_intro:"A catalog of known failure patterns. Every audit is checked against it.",
+  lab_pattern:"Failure pattern",lab_stage:"Stage",st_agent:"agent",st_system:"system",
+  footer_sub:"Architect Systems AI · System Auditor",
+  rep_mapTitle:"System map and break",
+  rep_legend:"<em>Mint</em> marks the broken link and the leak point. Grey marks healthy handoffs.",
+  rep_weak:"Weak link",rep_battery:"Per-agent battery",rep_system:"System checks",
+  rep_matched:"Matched failure library",rep_attack:"Attack · exploit chain",
+  rep_comp:"Compliance",rep_cert:"Reliability certificate",rep_fix:"What to harden",
+  rep_disc:"A second opinion and reliability check, not a guarantee. The final decision on the system stays with a human. Architect Systems AI."
+ }
+};
+
+// table data (bilingual)
+const ROWS={
+ ru:[["Бот-продавец","","6.4","22.09.2026"],["Воронка контента","ok:Готова","8.1","21.09.2026"],["Ассистент заявок","low:Сырой","3.9","20.09.2026"],["Аудит-бот","ok:Готов","7.6","19.09.2026"]],
+ en:[["Sales bot","With caveats","6.4","22 Sep 2026"],["Content funnel","ok:Ready","8.1","21 Sep 2026"],["Leads assistant","low:Raw","3.9","20 Sep 2026"],["Audit bot","ok:Ready","7.6","19 Sep 2026"]]
+};
+const ROW_STATUS_RU={"":"С оговорками"};
+const LAB={
+ ru:[["Выдуманный вызов инструмента","st_agent"],["Потеря контекста на стыке","st_system"],["Инъекция из найденного текста","st_agent"],["Отравление контекста в памяти","st_system"],["Утечка ключа между агентами","st_system"]],
+ en:[["Fabricated tool call","st_agent"],["Context loss at handoff","st_system"],["Injection from retrieved text","st_agent"],["Context poisoning in memory","st_system"],["Key leak between agents","st_system"]]
+};
+
+const DEMO={
+ ru:{score:6.4,verdict:"С оговорками",name:"Бот-продавец",
+  note:"Система работает, но теряет надёжность на длинной цепочке и на одном стыке передачи.",
+  graph:{nodes:[{id:'in',label:'Вход',io:1},{id:'a',label:'Приёмщик',flags:['ключ']},{id:'b',label:'Классификатор',leak:1,flags:['утечка ключа']},{id:'c',label:'Ответчик',flags:['ключ']},{id:'out',label:'Выход',io:1}],
+    edges:[{f:'in',t:'a'},{f:'a',t:'b'},{f:'b',t:'c',weak:1,label:'разрыв'},{f:'c',t:'out'}]},
+  weak:"Стык Классификатор → Ответчик: здесь теряется контекст и рушится длинная цепочка.",
+  battery:[{t:"Вызовы инструментов",s:5,n:"Обращается только к реальным инструментам."},{t:"Длинная дистанция",s:2,n:"План рассыпается после 4–5 шагов."},{t:"Инъекции из контента",s:3,n:"Иногда исполняет команды из текста клиента."},{t:"Первоисточник",s:4,n:"Факты в основном привязаны к базе."},{t:"Зацикливание",s:4,n:"Есть выход, нет жёсткого лимита шагов."},{t:"Стабильность",s:3,n:"Проседает при смене модели."}],
+  system:[{t:"Утечки",n:"Ключ бота виден Классификатору, которому он не нужен для его шага."},{t:"Стыки передачи",n:"Классификатор → Ответчик: теряется часть контекста задачи."},{t:"Накопление ошибки",n:"Сквозная надёжность цепочки около 41 процента, точка невозврата на шаге 5."},{t:"Дрейф модели",n:"Проверка тона проседает заметнее прочего при смене модели."}],
+  matched:["Потеря контекста на стыке","Утечка ключа между агентами","Длинная цепочка рассыпается"],
+  exploit:{path:["Инъекция в письме клиента","Классификатор исполняет команду","Доступ к ключу бота","Утечка наружу"],note:"Воспроизводимая цепочка: от инъекции до утечки за три перехода."},
+  compliance:{ref:"EU AI Act · ст. 9, 15",items:[{t:"Устойчивость к атакам",ok:false},{t:"Изоляция секретов между агентами",ok:false},{t:"Логирование и прозрачность",ok:true}]},
+  cert:{id:"ASA-2609-6410",valid:"до 22.10.2026",level:"С оговорками"},
+  steps:["Изолировать ключ бота: у Классификатора доступ убрать.","На стыке Классификатор → Ответчик закрепить формат передачи и проверять его на входе.","Поставить жёсткий лимит шагов и проверку плана на середине цепочки.","Разделять данные клиента и команды: текст клиента это данные, не инструкции."]},
+ en:{score:6.4,verdict:"With caveats",name:"Sales bot",
+  note:"The system works, but loses reliability on the long chain and at one handoff.",
+  graph:{nodes:[{id:'in',label:'Entry',io:1},{id:'a',label:'Intake',flags:['key']},{id:'b',label:'Classifier',leak:1,flags:['key leak']},{id:'c',label:'Responder',flags:['key']},{id:'out',label:'Exit',io:1}],
+    edges:[{f:'in',t:'a'},{f:'a',t:'b'},{f:'b',t:'c',weak:1,label:'break'},{f:'c',t:'out'}]},
+  weak:"Handoff Classifier → Responder: context is lost here and the long chain breaks.",
+  battery:[{t:"Tool calls",s:5,n:"Calls only real tools."},{t:"Long horizon",s:2,n:"The plan falls apart after 4–5 steps."},{t:"Content injections",s:3,n:"Sometimes executes commands from client text."},{t:"Source grounding",s:4,n:"Facts are mostly tied to the database."},{t:"Looping",s:4,n:"Has an exit, no hard step limit."},{t:"Stability",s:3,n:"Drops when the model changes."}],
+  system:[{t:"Leaks",n:"The bot key is visible to the Classifier, which does not need it for its step."},{t:"Handoffs",n:"Classifier → Responder: part of the task context is lost."},{t:"Error accumulation",n:"End-to-end reliability about 41 percent, point of no return at step 5."},{t:"Model drift",n:"Tone check drops more than others when the model changes."}],
+  matched:["Context loss at handoff","Key leak between agents","Long chain falls apart"],
+  exploit:{path:["Injection in a client email","Classifier executes the command","Access to the bot key","Leak outside"],note:"Reproducible chain: from injection to leak in three hops."},
+  compliance:{ref:"EU AI Act · Art. 9, 15",items:[{t:"Robustness to attacks",ok:false},{t:"Secret isolation between agents",ok:false},{t:"Logging and transparency",ok:true}]},
+  cert:{id:"ASA-2609-6410",valid:"until 22 Oct 2026",level:"With caveats"},
+  steps:["Isolate the bot key: remove the Classifier's access.","Fix the transfer format at the Classifier → Responder handoff and validate it on input.","Add a hard step limit and a mid-chain plan check.","Separate client data from commands: client text is data, not instructions."]}
+};
+
+let lang = (function(){try{return localStorage.getItem('asa_lang')||'ru';}catch(e){return 'ru';}})();
+let curView='overview';
+function t(k){return (I18N[lang]&&I18N[lang][k]!=null)?I18N[lang][k]:(I18N.ru[k]||k);}
+
+const TITLES={overview:'t_overview',new:'t_new',report:'t_report',reports:'t_reports',lab:'t_lab'};
+function show(v){curView=v;$$('.view').forEach(x=>x.classList.toggle('on',x.dataset.view===v));$$('.nav').forEach(x=>x.classList.toggle('on',x.dataset.v===v));$('#title').textContent=t(TITLES[v]||'t_overview');$('#side').classList.remove('open');window.scrollTo({top:0});}
+
+function buildTables(){
+  $('#reportsTable').innerHTML=`<div class="tr head"><span>${t('th_sys')}</span><span>${t('th_status')}</span><span>${t('th_score')}</span><span>${t('th_date')}</span></div>`+
+    ROWS[lang].map(r=>{let st=r[1],cls='',lbl=st; if(st.startsWith('ok:')){cls='ok';lbl=st.slice(3);} else if(st.startsWith('low:')){cls='low';lbl=st.slice(4);} else {lbl=st||(lang==='ru'?'С оговорками':'With caveats');}
+    return `<div class="tr"><span class="name">${r[0]}</span><span><i class="badge ${cls}">${lbl}</i></span><span class="sc">${r[2]}</span><span class="dt">${r[3]}</span></div>`;}).join('');
+  $('#labTable').innerHTML=`<div class="tr head" style="grid-template-columns:1fr 130px"><span>${t('lab_pattern')}</span><span>${t('lab_stage')}</span></div>`+
+    LAB[lang].map(r=>`<div class="tr" style="grid-template-columns:1fr 130px"><span class="name">${r[0]}</span><span class="dt">${t(r[1])}</span></div>`).join('');
+}
+
+const HEROG={
+ ru:['Приёмщик','Классификатор','Ответчик','РАЗРЫВ','утечка ключа'],
+ en:['Intake','Classifier','Responder','BREAK','key leak']
+};
+function heroGraph(){const L=HEROG[lang];
+ return `<svg viewBox="0 0 440 104" width="100%" style="display:block" font-family="Manrope">
+ <line x1="112" y1="46" x2="161" y2="46" stroke="#5a6273" stroke-width="1.6"/><polygon points="161,42 167,46 161,50" fill="#5a6273"/>
+ <text x="300" y="30" fill="#B4FAB2" font-size="11" text-anchor="middle" font-family="Oswald" letter-spacing="1">${L[3]}</text>
+ <line x1="274" y1="46" x2="323" y2="46" stroke="#B4FAB2" stroke-width="3" stroke-dasharray="7 5"/><polygon points="323,42 329,46 323,50" fill="#B4FAB2"/>
+ <rect x="4" y="24" width="108" height="44" rx="3" fill="#333b49" stroke="#454e60"/><text x="58" y="50" fill="#f1f3f3" font-size="12" text-anchor="middle" font-weight="600">${L[0]}</text>
+ <rect x="166" y="24" width="108" height="44" rx="3" fill="#333b49" stroke="#B4FAB2" stroke-width="2"/><text x="220" y="50" fill="#f1f3f3" font-size="12" text-anchor="middle" font-weight="600">${L[1]}</text>
+ <text x="220" y="86" fill="#B4FAB2" font-size="10.5" text-anchor="middle">${L[4]}</text>
+ <rect x="328" y="24" width="108" height="44" rx="3" fill="#333b49" stroke="#454e60"/><text x="382" y="50" fill="#f1f3f3" font-size="12" text-anchor="middle" font-weight="600">${L[2]}</text>
+</svg>`;}
+
+function graphSVG(g){
+  const nw=118,nh=48,yc=30,H=118,N=g.nodes.length;
+  const W=Math.max(700,20+N*(nw+44));
+  const step=(W-20-nw)/(N-1), pos={};
+  g.nodes.forEach((n,i)=>pos[n.id]={x:10+i*step,y:yc});
+  const edges=g.edges.map(e=>{const a=pos[e.f],b=pos[e.t];const x1=a.x+nw,y1=a.y+nh/2,x2=b.x,y2=b.y+nh/2;
+    const c=e.weak?'#B4FAB2':'#5a6273',w=e.weak?3:1.6,d=e.weak?'7 5':'0';
+    const lb=e.label?`<text x="${(x1+x2)/2}" y="${y1-9}" fill="#B4FAB2" font-size="11" text-anchor="middle" font-family="Oswald" letter-spacing="1">${e.label.toUpperCase()}</text>`:'';
+    return `<line x1="${x1}" y1="${y1}" x2="${x2-7}" y2="${y2}" stroke="${c}" stroke-width="${w}" stroke-dasharray="${d}"/><polygon points="${x2-7},${y2-4} ${x2},${y2} ${x2-7},${y2+4}" fill="${c}"/>${lb}`;}).join('');
+  const nodes=g.nodes.map(n=>{const p=pos[n.id],leak=!!n.leak,st=leak?'#B4FAB2':'#454e60';
+    const tag=(n.flags||[]).length?`<text x="${p.x+nw/2}" y="${p.y+nh+16}" fill="${leak?'#B4FAB2':'#8891a0'}" font-size="10.5" text-anchor="middle" font-family="Manrope">${n.flags.join(' · ')}</text>`:'';
+    return `<rect x="${p.x}" y="${p.y}" width="${nw}" height="${nh}" rx="3" fill="${n.io?'#232935':'#333b49'}" stroke="${st}" stroke-width="${leak?2:1}"/><text x="${p.x+nw/2}" y="${p.y+nh/2+4}" fill="#f1f3f3" font-size="13" text-anchor="middle" font-family="Manrope" font-weight="600">${n.label}</text>${tag}`;}).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" height="118" preserveAspectRatio="xMinYMid meet" style="min-width:${W}px">${edges}${nodes}</svg>`;
+}
+function render(r){
+  const pct=s=>Math.round(s/5*100);
+  const bat=r.battery.map(b=>`<div class="metric"><div class="rowt"><span class="lb">${b.t}</span><span class="sc">${b.s}/5</span></div><div class="nt">${b.n}</div><div class="track"><i style="width:${pct(b.s)}%"></i></div></div>`).join('');
+  const sys=r.system.map(s=>`<div class="item"><div class="k">${s.t}</div><div class="v">${s.n}</div></div>`).join('');
+  const steps=r.steps.map(s=>`<li>${s}</li>`).join('');
+  const tags=(r.matched||[]).map(m=>`<span class="tag">${m}</span>`).join('');
+  const chain=((r.exploit&&r.exploit.path)||[]).map((s,i)=>`${i?'<span class="ar">→</span>':''}<span class="st">${s}</span>`).join('');
+  const comp=((r.compliance&&r.compliance.items)||[]).map(c=>`<div class="cl"><span class="mk ${c.ok?'ok':''}">${c.ok?'✓':'·'}</span><span class="t">${c.t}</span></div>`).join('');
+  $('#report').innerHTML=`
+    <div class="rtop">
+      <span class="nm">${r.name||''}</span>
+      <span class="scorechip"><span class="dot"></span><b>${r.score}<em> / 10</em></b><s>${r.verdict}</s></span>
+    </div>
+    <div class="graphwrap">
+      <h3>${t('rep_mapTitle')}</h3>
+      <div class="scroll">${graphSVG(r.graph)}</div>
+      <div class="legend">${t('rep_legend')}</div>
+    </div>
+    <div class="weak"><div class="k">${t('rep_weak')}</div><div class="v">${r.weak}</div></div>
+    <div class="cols"><div class="block"><h3>${t('rep_battery')}</h3>${bat}</div><div class="block"><h3>${t('rep_system')}</h3>${sys}</div></div>
+    ${tags?`<div class="matched"><h3>${t('rep_matched')}</h3><div class="tags">${tags}</div></div>`:''}
+    ${r.exploit?`<div class="block" style="margin-top:16px"><h3>${t('rep_attack')}</h3><div class="chain">${chain}</div><div style="color:var(--muted);font-size:12.5px;margin-top:11px">${r.exploit.note}</div></div>`:''}
+    ${r.compliance?`<div class="block comp" style="margin-top:16px"><h3>${t('rep_comp')} · ${r.compliance.ref}</h3>${comp}</div>`:''}
+    ${r.cert?`<div class="cert"><div class="seal"><b>${r.score}</b></div><div class="info"><b>${t('rep_cert')}</b><div class="m">Architect Systems AI · ${r.cert.id} · ${r.cert.valid} · ${r.cert.level}</div></div></div>`:''}
+    <div class="fix"><h3>${t('rep_fix')}</h3><ol>${steps}</ol></div>
+    <div class="disc">${t('rep_disc')}</div>`;
+  show('report');
+}
+
+function applyLang(){
+  document.documentElement.lang=lang;
+  $$('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+  $$('[data-i18n-html]').forEach(e=>e.innerHTML=t(e.dataset.i18nHtml));
+  $$('[data-i18n-ph]').forEach(e=>e.placeholder=t(e.dataset.i18nPh));
+  $('#title').textContent=t(TITLES[curView]||'t_overview');
+  $('#langbtn').textContent = lang==='ru'?'EN':'RU';
+  if($('#heroViz')) $('#heroViz').innerHTML=heroGraph();
+  buildTables();
+  if($('#report').classList.contains('on')) render(DEMO[lang]);
+}
+
+// nav + controls
+$$('.nav').forEach(b=>b.onclick=()=>show(b.dataset.v));
+$$('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
+$('#newBtn').onclick=()=>show('new');
+$('#menu').onclick=()=>$('#side').classList.toggle('open');
+$('#langbtn').onclick=()=>{lang=lang==='ru'?'en':'ru';try{localStorage.setItem('asa_lang',lang);}catch(e){}applyLang();};
+$('#demoBtn').onclick=()=>render(DEMO[lang]);
+
+// upload
+const store=[];
+function renderChips(){$('#chips').innerHTML=store.map((f,i)=>`<span class="chip"><b>${f.name}</b> <span>${(f.text.length/1024).toFixed(1)} ${t('kb')}</span><span class="rm" data-i="${i}">✕</span></span>`).join('');$$('.chip .rm').forEach(x=>x.onclick=()=>{store.splice(+x.dataset.i,1);renderChips();});}
+function addFiles(list){[...list].forEach(f=>{const r=new FileReader();r.onload=()=>{store.push({name:f.name,text:String(r.result).slice(0,60000)});renderChips();};r.readAsText(f);});}
+const drop=$('#drop'),fi=$('#file');
+drop.onclick=()=>fi.click(); fi.onchange=()=>addFiles(fi.files);
+['dragenter','dragover'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',ev=>addFiles(ev.dataTransfer.files));
+$('#run').addEventListener('click',async()=>{
+  const parts=[]; if($('#sys').value.trim())parts.push($('#sys').value.trim());
+  store.forEach(f=>parts.push(`# ${f.name}\n${f.text}`));
+  const system=parts.join('\n\n'); if(!system){$('#sys').focus();return;}
+  $('#run').disabled=true; $('#load').style.display='flex';
+  try{const res=await fetch('/api/audit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system,lang})});if(!res.ok)throw 0;render(await res.json());}
+  catch(e){render(DEMO[lang]);}
+  finally{$('#run').disabled=false;$('#load').style.display='none';}
+});
+
+// reveal on scroll
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
+$$('.reveal').forEach(el=>io.observe(el));
+
+// hero graph container lives inside herovals? no — it's the video. heroGraph goes to #heroViz if present.
+applyLang();
+</script>
+</body>
+</html>
