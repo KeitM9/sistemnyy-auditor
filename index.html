@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Architect Systems AI — Audit for AI agents</title>
+<title>AgentProof — Multi-Agent System Audit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
   .logo .g::after{content:"";position:absolute;inset:6px 6px auto 6px;height:2px;background:var(--mint)}
   .logo .g::before{content:"";position:absolute;inset:auto 6px 7px 6px;height:8px;border:2px solid var(--mint);border-top:none;border-radius:0 0 2px 2px}
   .logo b{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;color:var(--ink);line-height:1.1;text-transform:uppercase;letter-spacing:.03em}
-  .logo b i{display:block;font-style:normal;font-size:10px;letter-spacing:.16em;color:var(--mint);font-weight:500}
+  .logo b i{display:block;font-style:normal;text-transform:none;font-size:10px;letter-spacing:.04em;color:var(--mint);font-weight:500;line-height:1.3;margin-top:2px}
   nav{padding:14px 12px;flex:1}
   .nav{display:flex;align-items:center;gap:11px;width:100%;background:none;border:none;cursor:pointer;color:var(--muted);font-family:'Manrope',sans-serif;font-size:14px;font-weight:500;text-align:left;padding:10px 12px;border-radius:var(--r);margin-bottom:2px;transition:.13s}
   .nav:hover{color:var(--ink);background:var(--surface)}
@@ -179,7 +179,7 @@
 <body>
 <div class="app">
   <aside class="side" id="side">
-    <div class="logo"><span class="g"></span><b>Architect Systems<i>arsysai.com</i></b></div>
+    <div class="logo"><span class="g"></span><b>AgentProof<i data-i18n="brand_sub"></i></b></div>
     <nav id="nav">
       <button class="nav on" data-v="overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span data-i18n="nav_overview"></span></button>
       <button class="nav" data-v="new"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="nav_new"></span></button>
@@ -206,7 +206,7 @@
       <section class="view on" data-view="overview">
         <div class="hero">
           <div class="reveal in">
-            <span class="eyebrow">Architect Systems AI</span>
+            <span class="eyebrow">AgentProof · Architect Systems AI</span>
             <h1 class="htitle" data-i18n-html="hero_title"></h1>
             <p class="hsub" data-i18n="hero_sub"></p>
             <div class="hcta">
@@ -308,6 +308,7 @@ const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 const I18N={
  ru:{
   nav_overview:"Обзор",nav_new:"Новый аудит",nav_reports:"Отчёты",nav_lab:"Библиотека сбоев",
+  brand_sub:"Аудит систем AI-агентов",
   newAudit:"Новый аудит",
   t_overview:"Обзор",t_new:"Новый аудит",t_report:"Отчёт по системе",t_reports:"Отчёты",t_lab:"Библиотека сбоев",
   hero_title:"Проверка систем <span class='m'>AI-агентов</span>",
@@ -341,7 +342,7 @@ const I18N={
   th_sys:"Система",th_status:"Статус",th_score:"Балл",th_date:"Дата",
   lab_intro:"Каталог известных паттернов отказа. Каждый аудит сверяется с этой базой.",
   lab_pattern:"Паттерн сбоя",lab_stage:"Стадия",st_agent:"агент",st_system:"система",
-  footer_sub:"Architect Systems AI · Системный Аудитор",
+  footer_sub:"AgentProof · Architect Systems AI",
   rep_mapTitle:"Карта системы и разрыв",
   rep_legend:"<em>Мятным</em> отмечены разрыв в цепочке и точка утечки. Серым — исправные передачи.",
   rep_weak:"Слабое звено",rep_battery:"Батарея по агентам",rep_system:"Системные проверки",
@@ -351,6 +352,7 @@ const I18N={
  },
  en:{
   nav_overview:"Overview",nav_new:"New audit",nav_reports:"Reports",nav_lab:"Failure library",
+  brand_sub:"Multi-Agent System Audit",
   newAudit:"New audit",
   t_overview:"Overview",t_new:"New audit",t_report:"System report",t_reports:"Reports",t_lab:"Failure library",
   hero_title:"Audit for <span class='m'>AI agent systems</span>",
@@ -384,7 +386,7 @@ const I18N={
   th_sys:"System",th_status:"Status",th_score:"Score",th_date:"Date",
   lab_intro:"A catalog of known failure patterns. Every audit is checked against it.",
   lab_pattern:"Failure pattern",lab_stage:"Stage",st_agent:"agent",st_system:"system",
-  footer_sub:"Architect Systems AI · System Auditor",
+  footer_sub:"AgentProof · Architect Systems AI",
   rep_mapTitle:"System map and break",
   rep_legend:"<em>Mint</em> marks the broken link and the leak point. Grey marks healthy handoffs.",
   rep_weak:"Weak link",rep_battery:"Per-agent battery",rep_system:"System checks",
