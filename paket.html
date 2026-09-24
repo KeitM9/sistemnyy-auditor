@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Подготовка проекта к аудиту — AgentProof</title>
+<meta name="description" content="Как подготовить проект с AI-агентами к аудиту AgentProof: 18 проверок, пример отчёта, промпт для вашего AI-агента, состав описания и форматы файлов.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20fill%3D%22none%22%20stroke%3D%22%232c3341%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M16%2016%20C12.5%2010.5%208.5%209%206%2011%20C3.3%2013.2%203.3%2018.8%206%2021%20C8.5%2023%2012.5%2021.5%2016%2016%20C19.5%2010.5%2023.5%209%2026%2011%20C28.7%2013.2%2028.7%2018.8%2026%2021%20C23.5%2023%2019.5%2021.5%2016%2016%22/%3E%3Cpath%20d%3D%22M21.8%2016%20L24.4%2018.6%20L29.6%2012.4%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%226%22/%3E%3Cpath%20d%3D%22M21.8%2016%20L24.4%2018.6%20L29.6%2012.4%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#2c3341;--body:#394050;--muted:#646c7b;--rule:#e6e9ec;--mint:#B4FAB2;--mint-ink:#2e8540;--paper:#fff;--r:3px}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--body);font-family:'Manrope',sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Oswald',sans-serif;color:var(--ink);font-weight:600}
+  a{color:var(--ink);text-decoration-color:var(--mint);text-decoration-thickness:3px;text-underline-offset:3px}
+  ::selection{background:var(--mint);color:var(--ink)}
+  :focus-visible{outline:3px solid var(--mint-ink);outline-offset:2px;border-radius:var(--r)}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 28px}
+  mark{background:linear-gradient(transparent 60%,var(--mint) 60%);color:inherit;padding:0 .06em;white-space:nowrap}
+
+  .top{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--rule)}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .brand b{font-family:'Oswald',sans-serif;font-weight:600;font-size:18px;letter-spacing:.05em;color:var(--ink)}
+  .brand b em{font-style:normal;color:var(--mint-ink)}
+  .top nav{display:flex;gap:22px;font-size:15px}
+  .top nav a{text-decoration:none;color:var(--muted)} .top nav a:hover{color:var(--ink)}
+
+  .hero{padding:32px 0 30px}
+  .kicker{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .hero h1{font-size:clamp(28px,3.4vw,40px);line-height:1.02;text-transform:uppercase}
+  .lead{font-size:18.5px;margin-top:12px;max-width:44em}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:0;border-radius:var(--r);padding:12px 20px;transition:transform .15s,box-shadow .15s,background .15s}
+  .btn.ink{background:var(--ink);color:#fff} .btn.ink:hover{transform:translateY(-1px);box-shadow:0 8px 18px -10px rgba(44,51,65,.6)}
+  .btn.mint{background:var(--mint);color:var(--ink)} .btn.mint:hover{transform:translateY(-1px)}
+  .btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)} .btn.line:hover{background:var(--ink);color:#fff}
+  .btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
+  .facts{margin-top:16px;font-size:15px;color:var(--muted)} .facts b{color:var(--ink)}
+
+  section{padding:30px 0;border-top:1px solid var(--rule)}
+  .label{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .label b{color:var(--mint-ink);margin-right:8px}
+  h2{font-size:clamp(24px,3vw,32px);line-height:1.1;text-transform:uppercase}
+  .intro{font-size:17px;color:var(--muted);max-width:48em;margin-top:6px}
+
+  /* 01 проверки */
+  .groups{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:18px}
+  .group h3{font-size:17px;text-transform:uppercase;letter-spacing:.04em;padding-top:8px;border-top:3px solid var(--mint);margin-bottom:8px}
+  .group ul{list-style:none;display:grid;gap:5px}
+  .group li{font-size:15.5px;line-height:1.45;padding-left:16px;position:relative}
+  .group li::before{content:"";position:absolute;left:0;top:.66em;width:8px;height:2px;background:var(--ink)}
+
+  /* 02 отчёт */
+  .rep-top{display:grid;grid-template-columns:auto 1fr 1fr;gap:28px;margin-top:18px;padding-top:14px;border-top:2px solid var(--ink);align-items:start}
+  .score b{display:block;font-family:'Oswald',sans-serif;font-weight:600;font-size:56px;line-height:.95;color:var(--ink)}
+  .score b small{font-size:24px;color:var(--muted)}
+  .score span{font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);background:linear-gradient(transparent 55%,var(--mint) 55%)}
+  .rk{font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+  .rq{font-size:15.5px;line-height:1.5;padding-left:10px;border-left:3px solid var(--mint);color:var(--ink);font-weight:600}
+  .rp{font-size:15.5px;line-height:1.5}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:20px}
+  .cols>*,.rep-top>*,.groups>*,.kit>*,.steps>*{min-width:0}
+  .tbl h3{font-size:15px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+  .tr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:7px 0;border-bottom:1px solid var(--rule)}
+  .tr b{font-size:15px;color:var(--ink)} .tr i{font-style:normal;font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;color:var(--ink)}
+  .tr p{grid-column:1/-1;font-size:14.5px;line-height:1.45;color:var(--muted)}
+  .chain{grid-column:1/-1;list-style:none;display:flex;flex-wrap:wrap;gap:4px 0;font-size:15px;color:var(--ink);margin-top:2px}
+  .chain li+li::before{content:"→";color:var(--mint-ink);font-weight:700;margin:0 10px}
+  .plan{margin-top:20px}
+  .plan h3{font-size:15px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+  .fx{display:grid;grid-template-columns:5.2em 1fr 1.1fr;gap:12px;padding:7px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+  .fx .p{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.05em;color:var(--ink);background:var(--mint);padding:1px 6px;border-radius:var(--r);justify-self:start;white-space:nowrap}
+  .fx b{font-size:15px;color:var(--ink)} .fx span{font-size:14.5px;color:var(--muted)}
+  .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:20px}
+  .feats b{display:block;font-family:'Oswald',sans-serif;font-weight:600;font-size:18px;text-transform:uppercase;color:var(--ink);padding-top:8px;border-top:3px solid var(--mint);margin-bottom:4px}
+  .feats p{font-size:15px;color:var(--muted)}
+
+  /* 03 промпт */
+  .agents{font-size:15px;color:var(--muted);margin-top:6px} .agents span{white-space:nowrap}
+  .doc{margin-top:16px;border-left:3px solid var(--mint)}
+  .docbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:0 0 10px 22px;border-bottom:1px solid var(--rule);position:sticky;top:0;background:var(--paper);z-index:2}
+  .fname{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:14px;color:var(--muted)}
+  .acts{display:flex;gap:8px;flex-wrap:wrap}
+  .prompt{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace;font-size:14.5px;line-height:1.65;white-space:pre-wrap;word-break:break-word;padding:12px 0 4px 22px;max-height:460px;overflow:auto}
+  .prompt .h1{color:var(--ink);font-weight:600;background:linear-gradient(transparent 58%,var(--mint) 58%)}
+  .prompt .h2{color:var(--ink);font-weight:600}
+  .toast{font-size:14.5px;color:var(--mint-ink);font-weight:700;min-height:1.3em;padding:6px 0 0 22px}
+  .noagent{margin-top:10px;font-size:16px;max-width:52em} .noagent b{font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:13px;background:var(--mint);padding:2px 7px;border-radius:var(--r);margin-right:8px;color:var(--ink)}
+
+  /* 04 состав */
+  .kit{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:16px}
+  .kit h3{font-size:17px;text-transform:uppercase;padding-top:8px;border-top:3px solid var(--mint);margin-bottom:6px}
+  .kit .out h3{border-top-color:var(--ink)}
+  .kit ul{list-style:none;display:grid;gap:5px}
+  .kit li{font-size:15.5px;line-height:1.45} .kit li b{color:var(--ink)}
+  .ext{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13.5px;color:var(--ink);display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:10px}
+  .ext span{border-bottom:2px solid var(--mint)} .out .ext span{border-bottom-color:var(--rule);color:var(--muted)}
+  .facts2{margin-top:14px;font-size:15px;color:var(--muted)} .facts2 b{color:var(--ink)}
+
+  /* 05 шаги */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:14px;counter-reset:s}
+  .step{counter-increment:s;padding-top:8px;border-top:2px solid var(--ink);font-size:15px;color:var(--muted)}
+  .step h3{font-size:16px;text-transform:uppercase;margin-bottom:3px}
+  .step h3::before{content:counter(s) ".";color:var(--mint-ink);margin-right:6px}
+
+  .final{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:26px 0;border-top:1px solid var(--rule)}
+  .final h2{font-size:clamp(22px,2.6vw,28px)}
+  footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px 0 26px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted)}
+  footer a{color:var(--muted)}
+
+  @media(max-width:900px){.groups{grid-template-columns:1fr 1fr}.rep-top{grid-template-columns:auto 1fr}.rep-top>:last-child{grid-column:1/-1}.steps{grid-template-columns:1fr 1fr}.top nav{display:none}}
+  @media(max-width:640px){.wrap{padding:0 18px}.groups,.cols,.kit,.feats,.steps{grid-template-columns:1fr;gap:18px}.rep-top{grid-template-columns:1fr}.fx{grid-template-columns:4.6em 1fr}.fx span{grid-column:2}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="https://agentproof.arsysai.com" aria-label="AgentProof">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 16 C12.5 10.5 8.5 9 6 11 C3.3 13.2 3.3 18.8 6 21 C8.5 23 12.5 21.5 16 16 C19.5 10.5 23.5 9 26 11 C28.7 13.2 28.7 18.8 26 21 C23.5 23 19.5 21.5 16 16" stroke="#2c3341" stroke-width="2.4"/><path d="M21.8 16 L24.4 18.6 L29.6 12.4" stroke="#ffffff" stroke-width="5.2"/><path d="M21.8 16 L24.4 18.6 L29.6 12.4" stroke="#2e8540" stroke-width="2.4"/></svg>
+      <b>AGENT<em>PROOF</em></b>
+    </a>
+    <nav><a href="#check">Что проверяем</a><a href="#report">Отчёт</a><a href="#prompt">Промпт</a><a href="#kit">Что входит</a><a href="#steps">Как пройти</a></nav>
+  </header>
+
+  <div class="hero">
+    <div class="kicker">Аудит мультиагентных систем</div>
+    <h1>Подготовка проекта <mark>к аудиту</mark></h1>
+    <p class="lead">Для аудита нужно описание вашего проекта с AI-агентами: промпты, связи, права, ключи. Всё это уже есть в папке проекта. Передайте своему AI-агенту промпт со страницы — он соберёт описание в один файл без ключей и личных данных.</p>
+    <div class="cta"><a class="btn ink" href="#prompt">Промпт для агента</a><a class="btn line" href="#report">Пример отчёта</a></div>
+    <p class="facts"><b>18 проверок</b> · <b>6 осей</b> надёжности · <b>балл 0–10</b> по открытой рубрике · отчёт за несколько минут · <b>PDF</b></p>
+  </div>
+</div>
+
+<section id="check"><div class="wrap">
+  <div class="label"><b>01</b>Что проверяет аудит</div>
+  <h2>Каждого агента и каждую связь</h2>
+  <p class="intro">Промпты, код, деньги и связи — как одно целое: где входит внешний текст, куда он может дойти, что может сломаться и сколько это стоит.</p>
+  <div class="groups">
+    <div class="group"><h3>Безопасность</h3><ul><li>Изоляция ключей и прав между агентами</li><li>Инъекции из сообщений, писем, комментариев, сайтов, документов</li><li>Отравление памяти и баз знаний</li><li>Утечка персональных данных</li><li>Цепочки атак от входа до денег и ключей</li></ul></div>
+    <div class="group"><h3>Деньги и права</h3><ul><li>Вызовы инструментов и выдуманные вызовы</li><li>Необратимые действия без подтверждения человеком</li><li>Выдача денег и доступа по непроверенному тексту</li><li>Денежные потоки и двойные начисления</li></ul></div>
+    <div class="group"><h3>Надёжность</h3><ul><li>Стыки передачи между агентами</li><li>Накопление ошибки на длинной цепочке</li><li>Опора на первоисточник</li><li>Стабильность при смене модели</li><li>Резервная модель и обработка отказов</li><li>Изоляция процессов и единая точка отказа</li></ul></div>
+    <div class="group"><h3>Контроль</h3><ul><li>Зацикливание агентов друг на друге</li><li>Лимиты шагов и бюджета</li><li>Журналирование и трассировка</li></ul></div>
+  </div>
+</div></section>
+
+<section id="report"><div class="wrap">
+  <div class="label"><b>02</b>Так выглядит отчёт</div>
+  <h2>Реальный аудит бота-продавца</h2>
+  <p class="intro">Четыре бота в одном процессе, два AI-агента, оплата через платёжную связку. Отчёт показан почти целиком, данные обезличены.</p>
+
+  <div class="rep-top">
+    <div class="score"><b>6<small>/10</small></b><span>С оговорками</span></div>
+    <div><div class="rk">Слабое звено</div><p class="rq">Выдача платного доступа по коду из служебной ссылки — единственный вход в «оплачено», который напрямую зависит от текста клиента.</p></div>
+    <div><div class="rk">Сильное место</div><p class="rp">Платёжная связка пишет в базу ключом только на добавление записей — разумная изоляция. Ключи в контекст модели не попадают.</p></div>
+  </div>
+
+  <div class="cols">
+    <div class="tbl"><h3>Батарея по агентам</h3>
+      <div class="tr"><b>Вызовы инструментов</b><i>4/5</i><p>AI-агенты только пишут текст: деньги и доступ решает код по базе.</p></div>
+      <div class="tr"><b>Длинная дистанция</b><i>4/5</i><p>История до 40 сообщений переживает перезапуск; разрешение противоречий старого и нового контекста стоит описать.</p></div>
+      <div class="tr"><b>Инъекции из контента</b><i>3/5</i><p>Вход — только текст клиента, площадь атаки узкая; явного правила против инструкций из этого текста пока нет.</p></div>
+      <div class="tr"><b>Первоисточник</b><i>3/5</i><p>Выдумывать факты запрещено; путаница материалов разных клиентов в общей базе отдельно не проверяется.</p></div>
+      <div class="tr"><b>Зацикливание</b><i>3/5</i><p>Жёсткого лимита обращений к модели на диалог нет — только повторы при перегрузке.</p></div>
+      <div class="tr"><b>Стабильность при смене модели</b><i>3/5</i><p>Запасная модель включается автоматически; её соблюдение жёстких правил отдельно не проверяется.</p></div>
+    </div>
+    <div class="tbl"><h3>Системные проверки</h3>
+      <div class="tr"><b>Утечки</b><p>Ключи в контекст модели не попадают, но все секреты живут в одном процессе с ботом, читающим текст клиента, — единая точка отказа для четырёх ботов.</p></div>
+      <div class="tr"><b>Стыки передачи</b><p>«Платёжная связка → база» изолирован разумно; «ссылка с кодом → оплачено» проходит без проверки источника.</p></div>
+      <div class="tr"><b>Накопление ошибки</b><p>Цепочки короткие; риск в параллельной записи статуса оплаты и начислений.</p></div>
+      <div class="tr"><b>Дрейф модели</b><p>Каскад из трёх моделей разной силы: под нагрузкой жёсткие правила могут ослабнуть.</p></div>
+      <div class="tr"><b>Цепочка атаки · гипотеза</b><ol class="chain"><li>Клиент отправляет ссылку с подобранным кодом</li><li>Бот ставит «оплачено» и выдаёт токен</li><li>Платный доступ без оплаты</li></ol></div>
+    </div>
+  </div>
+
+  <div class="plan"><h3>План укрепления · как проверить</h3>
+    <div class="fx"><span class="p">P1</span><b>Одноразовые коды или подписанная ссылка вместо статичного кода</b><span>Один код дважды с разных аккаунтов — доступ выдаётся ожидаемое число раз.</span></div>
+    <div class="fx"><span class="p">P2</span><b>Бот выплат — в отдельный процесс со своими ключами</b><span>Ключи выплат недоступны из процесса продавца.</span></div>
+    <div class="fx"><span class="p">P2</span><b>Лимит обращений к модели на пользователя</b><span>N+5 сообщений подряд — после лимита понятный отказ.</span></div>
+    <div class="fx"><span class="p">P3</span><b>Барьер в коде против запроса «покажи инструкцию»</b><span>Запрос и вариации — в ответе ноль фрагментов промпта.</span></div>
+    <div class="fx"><span class="p">P3</span><b>Защита от двойного начисления при параллельной записи</b><span>Два одновременных запуска — одно начисление.</span></div>
+    <div class="fx"><span class="p">Позже</span><b>Проверка запасной модели на жёсткие правила</b><span>10–15 провокаций на обеих моделях — одинаково безопасный ответ.</span></div>
+  </div>
+
+  <div class="feats">
+    <div><b>Весь путь денег</b><p>Дальше промптов: выдача доступа, начисления, гонки записи, изоляция процессов.</p></div>
+    <div><b>Факт или гипотеза</b><p>У каждой находки — основание; названы и сильные места.</p></div>
+    <div><b>Проверяемый план</b><p>Приоритет и тест к каждому исправлению — видно, что дыра закрыта.</p></div>
+  </div>
+</div></section>
+
+<section id="prompt"><div class="wrap">
+  <div class="label"><b>03</b>Промпт для вашего агента</div>
+  <h2>Агент соберёт описание из папки проекта</h2>
+  <p class="intro">Откройте проект в своём AI-агенте и передайте ему промпт целиком. На выходе — файл <b style="color:var(--ink)">agentproof-package.md</b> для загрузки на аудит.</p>
+  <p class="agents"><span>Claude Code</span> · <span>Codex</span> · <span>Cursor</span> · <span>Windsurf</span> · <span>GitHub Copilot</span> · <span>Gemini CLI</span> · <span>ChatGPT и Claude с загрузкой файлов</span></p>
+  <div class="doc">
+    <div class="docbar"><span class="fname">agentproof-prompt.md</span>
+      <div class="acts">
+        <button class="btn mint" id="copy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>Скопировать промпт</button>
+        <button class="btn line" id="dl"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Скачать .md</button>
+      </div></div>
+    <pre class="prompt" id="promptView"></pre>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+  <p class="noagent"><b>Без агента</b>Этот же промпт — готовое техническое задание: пройдите по разделам сами или передайте разработчику. Для n8n, Make, Zapier, GPTs приложите экспорт сценария.</p>
+</div></section>
+
+<section id="kit"><div class="wrap">
+  <div class="label"><b>04</b>Состав описания</div>
+  <h2>Что взять и что убрать</h2>
+  <div class="kit">
+    <div class="in"><h3>Взять</h3><ul>
+      <li><b>Промпты агентов</b> — полностью, с шаблонами подстановки</li>
+      <li><b>Код и сценарии</b> — вызовы моделей и инструментов, выдача доступа и денег; экспорты n8n, Make, Zapier</li>
+      <li><b>Настройки</b> — модели и версии, лимиты, схемы данных, имена переменных без значений</li>
+      <li><b>Журналы</b> — 2–3 обезличенных примера, один со сбоем</li></ul>
+      <p class="ext"><span>.md</span><span>.txt</span><span>.docx</span><span>.json</span><span>.yaml</span><span>.log</span><span>.csv</span><span>.xml</span><span>.toml</span><span>.py</span><span>.js</span><span>.ts</span><span>.jsx</span><span>.tsx</span><span>.mjs</span><span>.env.example</span></p></div>
+    <div class="out"><h3>Убрать</h3><ul>
+      <li><b>Значения секретов</b> — ключи, токены, пароли, строки подключения → [СЕКРЕТ]</li>
+      <li><b>Персональные данные</b> — имена, телефоны, email, адреса, платежи → [ПДн]</li>
+      <li><b>Лишние файлы</b> — сайт пропускает их автоматически</li></ul>
+      <p class="ext"><span>.env</span><span>ключи и сертификаты</span><span>дампы баз</span><span>клиентские выгрузки</span><span>медиа</span><span>архивы</span><span>node_modules</span></p></div>
+  </div>
+  <p class="facts2"><b>До 4 МБ</b> текста · ключи, оставшиеся по ошибке, сайт вырезает до проверки · <b>0 копий</b>: описание проверяется в памяти и сразу забывается</p>
+</div></section>
+
+<section id="steps"><div class="wrap">
+  <div class="label"><b>05</b>Как пройти аудит</div>
+  <div class="steps">
+    <div class="step"><h3>Описание</h3>Соберите заранее — промптом со страницы.</div>
+    <div class="step"><h3>Код</h3>«АУДИТ» в <a href="https://t.me/arsysai_bot">@arsysai_bot</a>. 48 часов, одна проверка.</div>
+    <div class="step"><h3>Загрузка</h3><a href="https://agentproof.arsysai.com">agentproof.arsysai.com</a> → «Новый аудит» → код → файл.</div>
+    <div class="step"><h3>Отчёт</h3>Через несколько минут — карта, балл, атаки, план. PDF.</div>
+  </div>
+</div></section>
+
+<div class="wrap">
+  <div class="final"><h2>Ваш проект готов <mark>к аудиту</mark></h2><a class="btn ink" href="https://t.me/arsysai_bot">Получить код в боте</a></div>
+  <footer><span>AGENTPROOF · Architect Systems AI</span><span><a href="https://agentproof.arsysai.com">agentproof.arsysai.com</a> · <a href="https://t.me/arsysai_bot">t.me/arsysai_bot</a> · © 2026</span></footer>
+</div>
+
+<script>
+const PROMPT = `# РОЛЬ
+Ты — инженер по подготовке систем к аудиту. Ты описываешь мультиагентную систему для внешнего аудитора AgentProof: точно, полно и безопасно.
+
+# ЦЕЛЬ
+Создать файл agentproof-package.md — полное описание системы для аудита надёжности и безопасности. Аудитор видит систему только через это описание: его полнота определяет глубину отчёта.
+
+# КОНТЕКСТ
+Проект находится в текущей папке. Работай в режиме чтения: исходные файлы остаются без изменений, создаётся один новый файл.
+
+# ЧТО ВКЛЮЧИТЬ
+- Системные промпты всех агентов — полностью, с шаблонами подстановки и путём к файлу.
+- Код, где агенты вызывают модели и инструменты, принимают внешний текст, выдают доступ или проводят деньги.
+- Сценарии и конфигурации оркестрации: n8n, Make, Zapier, LangGraph, CrewAI, GPTs.
+- Описания инструментов и API, схемы данных на стыках между агентами.
+- Настройки моделей: провайдер, модель, версия, температура, лимиты.
+- Журналы и примеры работы: 2–3 обезличенных, один — со сбоем.
+- Имена переменных окружения — без значений.
+
+# ЧТО УБРАТЬ
+- Значения ключей, токенов, паролей и строк подключения → [СЕКРЕТ]. Имя переменной сохрани: OPENAI_API_KEY=[СЕКРЕТ].
+- Персональные данные клиентов: имена, телефоны, email, адреса, платёжные данные → [ПДн].
+- Файлы .env, приватные ключи и сертификаты, дампы баз, клиентские выгрузки, медиа, архивы, зависимости (node_modules, venv).
+
+# ПОРЯДОК РАБОТЫ
+1. Изучи структуру проекта. Найди всех агентов и все точки вызова моделей.
+2. Построй путь запроса от входа клиента до результата.
+3. Собери промпты, инструменты, права, секреты и защитные механизмы.
+4. Заполни все разделы выхода. Где данных нет — «нет данных».
+5. Перечитай файл целиком на секреты и персональные данные.
+
+# ФОРМАТ ВЫХОДА — agentproof-package.md
+## 0. Обзор
+Назначение, для кого, каналы. Касается ли денег, доступа к платному, персональных данных, публикаций от имени бренда. Стек и хостинг.
+## 1. Реестр агентов
+Таблица: ID | роль | модель и провайдер | где работает | вход | выход | читает внешний текст (да/нет).
+## 2. Схема передач
+Кто → кому → что, формат, проверка на входе. Сквозной сценарий одного запроса по шагам. Диаграмма Mermaid.
+## 3. Инструменты и права
+Таблица: агент | инструмент или API | права | необратимое действие (да/нет) | подтверждение человеком (да/нет).
+## 4. Секреты и доступы
+Таблица: название | где хранится | какие агенты имеют доступ | общий или отдельный.
+## 5. Защитные механизмы
+Для каждого — есть / частично / нет и где в коде: лимит шагов, лимит бюджета, проверка оплаты по платёжной системе, подтверждение необратимых действий, модерация публикаций, разделение данных и инструкций, проверка формата на стыках, изоляция ключей, ограничение частоты, журналирование, резервная модель.
+## 6. Память и данные
+История диалогов, базы знаний и RAG, общая память агентов, срок хранения.
+## 7. Модели и версии
+Модель каждого агента, зафиксирована ли версия, параметры.
+## 8. Промпты
+Системный промпт каждого агента полностью.
+## 9. Ключевой код
+Фрагменты с вызовами инструментов, приёмом внешнего текста, выдачей доступа и денег — с путями к файлам.
+## 10. Журналы и примеры
+2–3 обезличенных диалога или трассы, один — со сбоем.
+## 11. Известные сбои и опасения владельца
+## 12. Пробелы
+Что в проекте найти не удалось.
+
+# КРИТЕРИИ КАЧЕСТВА
+- Каждое утверждение опирается на файл проекта, путь указан.
+- Таблицы заполнены по всем агентам.
+- В файле ноль значений секретов и персональных данных.
+
+# ОТЧЁТ
+Сообщи: размер файла, число найденных агентов, что осталось неясным.`;
+
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+document.getElementById('promptView').innerHTML = PROMPT.split('\n').map(l =>
+  l.startsWith('# ') ? `<span class="h1">${esc(l)}</span>` : l.startsWith('## ') ? `<span class="h2">${esc(l)}</span>` : esc(l)
+).join('\n');
+
+const toast = m => { const t = document.getElementById('toast'); t.textContent = m; clearTimeout(toast.t); toast.t = setTimeout(() => t.textContent = '', 3000); };
+document.getElementById('copy').onclick = async () => {
+  try { await navigator.clipboard.writeText(PROMPT); toast('Промпт скопирован — вставьте его своему агенту'); }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(document.getElementById('promptView')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('Промпт выделен — нажмите Ctrl+C'); }
+};
+document.getElementById('dl').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([PROMPT], { type: 'text/markdown;charset=utf-8' }));
+  a.download = 'agentproof-prompt.md'; document.body.appendChild(a); a.click(); a.remove();
+  toast('Файл agentproof-prompt.md скачан');
+};
+</script>
+</body>
+</html>

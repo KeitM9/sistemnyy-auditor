@@ -119,6 +119,8 @@
   .fix ol{list-style:none;counter-reset:s}
   .fix li{counter-increment:s;position:relative;padding:9px 0 9px 40px;border-top:1px solid var(--border2);color:var(--body);font-size:14px} .fix li:first-child{border-top:none}
   .fix li::before{content:counter(s);position:absolute;left:0;top:9px;width:24px;height:24px;display:grid;place-items:center;font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;color:var(--mint);border:1px solid var(--border);border-radius:var(--r)}
+  .pkrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:12px}
+  .pklink{color:var(--mint);font-size:13.5px;text-decoration:underline;text-underline-offset:3px}
   #gate{max-width:560px}.gaterow{display:flex;gap:10px;flex-wrap:wrap}
   #codeIn{flex:1;min-width:220px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--ink);font-family:'Manrope',sans-serif;font-size:15px;padding:11px 13px;letter-spacing:.02em}
   #codeIn:focus{outline:none;border-color:var(--mint)}
@@ -224,6 +226,7 @@
       <button class="nav" data-v="new"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="nav_new"></span></button>
       <button class="nav" data-v="reports"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span data-i18n="nav_reports"></span></button>
       <button class="nav" data-v="lab"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg><span data-i18n="nav_lab"></span></button>
+      <a class="nav" href="paket.html"><svg viewBox="0 0 24 24"><path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M8 5H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2"/><path d="M9 13l2 2 4-4"/></svg><span data-i18n="nav_prep"></span></a>
     </nav>
     <div class="sfoot">Architect Systems AI<br><a href="https://arsysai.com" target="_blank" rel="noopener">arsysai.com</a> · <a href="https://t.me/arsysai_bot" target="_blank" rel="noopener">t.me/arsysai_bot</a><br>© 2026</div>
   </aside>
@@ -315,9 +318,11 @@
           <div class="drop" id="drop">
             <div class="t1" data-i18n="drop_t1"></div>
             <div class="t2" data-i18n="drop_t2"></div>
-            <div class="t3">txt · md · json · yaml · log</div>
-            <input type="file" id="file" multiple accept=".txt,.md,.json,.log,.yaml,.yml" hidden>
+            <div class="t3">md · txt · docx · json · yaml · log · csv · xml · toml · py · js · ts</div>
+            <input type="file" id="file" multiple accept=".md,.txt,.docx,.json,.yaml,.yml,.log,.csv,.xml,.toml,.py,.js,.ts,.jsx,.tsx,.mjs,.cjs,.example" hidden>
+            <input type="file" id="dir" webkitdirectory directory multiple hidden>
           </div>
+          <div class="pkrow"><button type="button" class="langbtn" id="dirBtn" data-i18n="dir_btn"></button><a class="pklink" href="paket.html" target="_blank" rel="noopener" data-i18n="pkg_link"></a></div>
           <div class="chips" id="chips"></div>
           <label class="fl" for="sys" data-i18n="new_label"></label>
           <textarea id="sys" data-i18n-ph="new_ph"></textarea>
@@ -357,7 +362,7 @@ const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 
 const I18N={
  ru:{
-  nav_overview:"Обзор",nav_new:"Новый аудит",nav_reports:"Отчёты",nav_lab:"Библиотека сбоев",
+  nav_overview:"Обзор",nav_new:"Новый аудит",nav_reports:"Отчёты",nav_lab:"Библиотека сбоев",nav_prep:"Подготовка",
   brand_sub:"Аудит систем AI-агентов",
   newAudit:"Новый аудит",
   t_overview:"Обзор",t_new:"Новый аудит",t_report:"Отчёт по системе",t_reports:"Отчёты",t_lab:"Библиотека сбоев",
@@ -384,7 +389,10 @@ const I18N={
   st2h:"Соответствие EU AI Act",st2p:"Отчёт как доказательство устойчивости для регулятора. С августа 2026 это требование к high-risk AI.",
   st3h:"Сертификат надёжности",st3p:"Публичный знак «Проверено Architect Systems AI» с баллом, ID и сроком.",
   cta_h3:"Проверь свою систему",cta_p:"Загрузи агентов и получи карту с баллом надёжности.",cta_btn:"Начать аудит",
-  drop_t1:"Перетащи файлы системы",drop_t2:"Промпты агентов и трейс прогона, или нажми чтобы выбрать",
+  drop_t1:"Перетащи описание проекта",drop_t2:"Файл agentproof-package.md или файлы проекта. Или нажми, чтобы выбрать",
+  dir_btn:"Выбрать папку проекта",pkg_link:"Подготовка проекта к аудиту",
+  skipped:"Пропущено служебных и лишних файлов: {n}",too_big:"Пакет больше 4 МБ — оставь промпты, схемы и ключевой код, остальное убери.",more_files:"и ещё {n}",
+  file_err:"Файл «{f}» не прочитался — пересохрани его как .docx и загрузи ещё раз.",
   new_label:"Или впиши систему вручную",
   new_ph:"Опиши простыми словами: какие у тебя боты или агенты, что делает каждый, кто кому что передаёт, где принимают оплату или выдают доступ, какие ключи и сервисы подключены. Например: «Бот в Telegram отвечает ученицам и после оплаты выдаёт ссылку на уроки. Второй бот пишет посты из комментариев. Оба на одном ключе ChatGPT».",
   run_btn:"Проверить систему",safe_txt:"Секреты и ключи вычищаются до проверки.",load_txt:"Аудитор строит карту и гоняет проверки — до 5 минут. Держи страницу открытой",
@@ -425,7 +433,7 @@ const I18N={
   rep_disc:"Второе мнение и проверка надёжности, а не гарантия. Финальное решение по системе остаётся за человеком. Architect Systems AI."
  },
  en:{
-  nav_overview:"Overview",nav_new:"New audit",nav_reports:"Reports",nav_lab:"Failure library",
+  nav_overview:"Overview",nav_new:"New audit",nav_reports:"Reports",nav_lab:"Failure library",nav_prep:"Preparation",
   brand_sub:"Multi-Agent System Audit",
   newAudit:"New audit",
   t_overview:"Overview",t_new:"New audit",t_report:"System report",t_reports:"Reports",t_lab:"Failure library",
@@ -452,7 +460,10 @@ const I18N={
   st2h:"EU AI Act compliance",st2p:"The report as evidence of robustness for the regulator. Since August 2026 this is required for high-risk AI.",
   st3h:"Reliability certificate",st3p:"A public mark, Verified by Architect Systems AI, with a score, ID and validity.",
   cta_h3:"Check your system",cta_p:"Load your agents and get a map with a reliability score.",cta_btn:"Start audit",
-  drop_t1:"Drop system files",drop_t2:"Agent prompts and a run trace, or click to choose",
+  drop_t1:"Drop the project description",drop_t2:"The agentproof-package.md file or project files. Or click to choose",
+  dir_btn:"Choose project folder",pkg_link:"Preparing a project for audit",
+  skipped:"Skipped service and extra files: {n}",too_big:"The package is over 4 MB — keep prompts, schemas and key code, remove the rest.",more_files:"and {n} more",
+  file_err:"The file “{f}” could not be read — save it again as .docx and upload once more.",
   new_label:"Or describe the system by hand",
   new_ph:"Describe it in plain words: which bots or agents you have, what each one does, who passes what to whom, where payments are taken or access is granted, which keys and services are connected. For example: “A Telegram bot answers students and sends the lessons link after payment. A second bot writes posts from comments. Both run on one ChatGPT key”.",
   run_btn:"Check system",safe_txt:"Secrets and keys are stripped before the check.",load_txt:"The auditor is building the map and running checks — up to 5 minutes. Keep this page open",
@@ -657,7 +668,7 @@ function applyLang(){
 }
 
 // nav + controls
-$$('.nav').forEach(b=>b.onclick=()=>show(b.dataset.v));
+$$('.nav[data-v]').forEach(b=>b.onclick=()=>show(b.dataset.v));
 $$('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
 $('#newBtn').onclick=()=>show('new');
 $('#menu').onclick=()=>$('#side').classList.toggle('open');
@@ -667,10 +678,34 @@ $('#demoBtn').onclick=()=>{isDemo=true;render(DEMO[lang]);};
 
 // upload
 const store=[];
-function renderChips(){$('#chips').innerHTML=store.map((f,i)=>`<span class="chip"><b>${f.name}</b> <span>${(f.text.length/1024).toFixed(1)} ${t('kb')}</span><span class="rm" data-i="${i}">✕</span></span>`).join('');$$('.chip .rm').forEach(x=>x.onclick=()=>{store.splice(+x.dataset.i,1);renderChips();});}
-function addFiles(list){[...list].forEach(f=>{const r=new FileReader();r.onload=()=>{store.push({name:f.name,text:String(r.result).slice(0,60000)});renderChips();};r.readAsText(f);});}
+function renderChips(){const more=store.length-12;$('#chips').innerHTML=store.slice(0,12).map((f,i)=>`<span class="chip"><b>${f.name}</b> <span>${(f.text.length/1024).toFixed(1)} ${t('kb')}</span><span class="rm" data-i="${i}">✕</span></span>`).join('')+(more>0?`<span class="chip"><span>${t('more_files').replace('{n}',more)}</span></span>`:'');$$('.chip .rm').forEach(x=>x.onclick=()=>{store.splice(+x.dataset.i,1);renderChips();});}
+// Word (.docx) читаем в браузере библиотекой mammoth — подгружается только когда нужна.
+const loadMammoth=()=>window.mammoth?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.12.3/mammoth.browser.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s);});
+function fileErr(name){$('#err').textContent=t('file_err').replace('{f}',name);$('#err').style.display='block';}
+const OK_EXT=/\.(md|txt|docx|json|ya?ml|log|csv|xml|toml|py|jsx?|tsx?|mjs|cjs)$|\.env\.example$/i;
+const SKIP_DIR=/(^|\/)(node_modules|\.git|\.venv|venv|__pycache__|dist|build|\.next|\.vercel|coverage)(\/|$)/;
+const SKIP_NAME=/(^|\/)\.env(?!\.example$)[^/]*$|\.(pem|key|p12|pfx|crt|sqlite|db|dump)$|(^|\/)package-lock\.json$/i;
+const MAX_TOTAL=4*1024*1024;
+function note(k,n){$('#err').textContent=t(k).replace('{n}',n);$('#err').style.display='block';}
+function addFiles(list){
+  const all=[...list]; let skipped=0;
+  const keep=all.filter(f=>{const path=f.webkitRelativePath||f.name;
+    const ok=OK_EXT.test(f.name)&&!SKIP_DIR.test(path)&&!SKIP_NAME.test(path); if(!ok)skipped++; return ok;});
+  if(skipped)note('skipped',skipped);
+  keep.forEach(async f=>{
+  try{
+    let text;
+    if(/\.docx$/i.test(f.name)){await loadMammoth();text=(await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()})).value;}
+    else text=await f.text();
+    if(!text.trim())return fileErr(f.name);
+    const size=store.reduce((s,x)=>s+x.text.length,0)+text.length;
+    if(size>MAX_TOTAL)return note('too_big','');
+    store.push({name:f.webkitRelativePath||f.name,text});renderChips();
+  }catch(e){fileErr(f.name);}
+});}
 const drop=$('#drop'),fi=$('#file');
 drop.onclick=()=>fi.click(); fi.onchange=()=>addFiles(fi.files);
+$('#dirBtn').onclick=()=>$('#dir').click(); $('#dir').onchange=()=>addFiles($('#dir').files);
 ['dragenter','dragover'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('over');}));
 ['dragleave','drop'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove('over');}));
 drop.addEventListener('drop',ev=>addFiles(ev.dataTransfer.files));
