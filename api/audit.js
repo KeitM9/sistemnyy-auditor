@@ -201,7 +201,7 @@ export default async function handler(req, res) {
 
   const body = req.body || {};
   const lang = body.lang === 'en' ? 'en' : 'ru';
-  const secret = process.env.AP_CODE_SECRET;
+  const secret = (process.env.AP_CODE_SECRET || '').trim(); // лишний пробел/перенос при вставке
   if (!secret || !redisCfg()) {
     await tell('движок не настроен: нет AP_CODE_SECRET или памяти Redis');
     return res.status(503).json({ error: 'not configured' });
