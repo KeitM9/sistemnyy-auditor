@@ -119,6 +119,20 @@
   .fix ol{list-style:none;counter-reset:s}
   .fix li{counter-increment:s;position:relative;padding:9px 0 9px 40px;border-top:1px solid var(--border2);color:var(--body);font-size:14px} .fix li:first-child{border-top:none}
   .fix li::before{content:counter(s);position:absolute;left:0;top:9px;width:24px;height:24px;display:grid;place-items:center;font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;color:var(--mint);border:1px solid var(--border);border-radius:var(--r)}
+  #gate{max-width:560px}.gaterow{display:flex;gap:10px;flex-wrap:wrap}
+  #codeIn{flex:1;min-width:220px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--ink);font-family:'Manrope',sans-serif;font-size:15px;padding:11px 13px;letter-spacing:.02em}
+  #codeIn:focus{outline:none;border-color:var(--mint)}
+  .gatemsg{margin-top:12px;color:var(--muted);font-size:13px}.gatemsg a{color:var(--mint)}
+  .gatemsg.bad{color:var(--ink);border-left:3px solid var(--mint);padding-left:10px}
+  .codeok{color:var(--muted);font-size:13px;margin-bottom:14px}
+  .consent{display:flex;gap:10px;align-items:flex-start;margin-top:18px;color:var(--body);font-size:13px;cursor:pointer}
+  .consent input{margin-top:3px;accent-color:#B4FAB2}
+  .fb{margin-top:20px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:18px 20px}
+  .fb h3{font-size:15px;margin-bottom:10px}
+  .stars{display:flex;gap:6px;margin-bottom:12px}.stars button{background:none;border:1px solid var(--border);border-radius:var(--r);color:var(--muted);font-family:'Oswald',sans-serif;font-size:15px;width:38px;height:34px;cursor:pointer}
+  .stars button.on{background:var(--mint);color:var(--mint-ink);border-color:var(--mint)}
+  .fb textarea{min-height:80px}.fb .consent{margin-top:10px}
+  .fbdone{color:var(--body);font-size:14px}
   .warnbox{margin-top:16px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--mint);border-radius:var(--r);padding:12px 14px;font-size:13.5px;color:var(--body)}
   .basis{margin-top:16px;color:var(--muted);font-size:12.5px}.basis b{color:var(--body);font-weight:600}
   .dl a.cta{text-decoration:none;display:inline-block}
@@ -291,6 +305,13 @@
       <!-- NEW -->
       <section class="view" data-view="new">
         <div class="work">
+          <div id="gate">
+            <label class="fl" for="codeIn" data-i18n="gate_label"></label>
+            <div class="gaterow"><input id="codeIn" autocomplete="off" spellcheck="false" placeholder="ap-…"><button class="cta" id="codeBtn" data-i18n="gate_btn"></button></div>
+            <div class="gatemsg" id="gateMsg" data-i18n-html="gate_help"></div>
+          </div>
+          <div id="formwrap" style="display:none">
+          <div class="codeok" id="codeOk"></div>
           <div class="drop" id="drop">
             <div class="t1" data-i18n="drop_t1"></div>
             <div class="t2" data-i18n="drop_t2"></div>
@@ -300,9 +321,11 @@
           <div class="chips" id="chips"></div>
           <label class="fl" for="sys" data-i18n="new_label"></label>
           <textarea id="sys" data-i18n-ph="new_ph"></textarea>
+          <label class="consent"><input type="checkbox" id="agree"><span data-i18n="consent_txt"></span></label>
           <div class="actions"><button class="cta" id="run" data-i18n="run_btn"></button><span class="safe" data-i18n="safe_txt"></span></div>
           <div class="load" id="load"><span class="spin"></span><span data-i18n="load_txt"></span></div>
           <div class="errbox" id="err" data-i18n="err_txt"></div>
+          </div>
         </div>
       </section>
 
@@ -312,6 +335,7 @@
       <!-- REPORTS -->
       <section class="view" data-view="reports">
         <div class="table" id="reportsTable"></div>
+        <div class="dl"><button class="langbtn" id="delReps" data-i18n="del_reps"></button></div>
       </section>
 
       <!-- LAB -->
@@ -370,6 +394,22 @@ const I18N={
   trunc_txt:"Документ длиннее лимита: проверено {checked} из {total} знаков. Раздели документ на части или сократи — и проверь остальное отдельно.",
   rep_talk:"Разобрать отчёт с Екатериной",rep_talk_hint:"Покажу, с чего начать и что исправить первым.",
   empty_reports:"Здесь появятся твои проверки. Они хранятся только на этом устройстве.",
+  gate_label:"Личный код доступа",gate_btn:"Войти",
+  gate_help:"Код выдаёт бот <a href=\"https://t.me/arsysai_bot\" target=\"_blank\" rel=\"noopener\">@arsysai_bot</a> — напиши «АУДИТ». Код действует 48 часов и даёт одну проверку.",
+  code_ok:"Код принят · действует до {d}. Одна проверка — загрузи документ, собранный по анкете.",
+  code_bad:"Проверь, что код скопирован целиком, вместе с ap- в начале.",
+  code_expired:"Срок кода закончился. Напиши в @arsysai_bot — выдадим новый.",
+  code_used:"Этот код уже дал свою проверку. Отчёт — в разделе «Отчёты» на устройстве, где она проходила.",
+  code_off:"Проверка сейчас недоступна. Напиши в @arsysai_bot — разберёмся.",
+  consent_txt:"Я заменила пароли и ключи на [СЕКРЕТ] и согласна на проверку. Документ уходит на проверку в Claude (Anthropic), проверяется в памяти и сразу забывается — мы его не храним.",
+  consent_need:"Отметь согласие — и запускай проверку.",
+  err_running:"Проверка по этому коду уже идёт. Дождись отчёта на той вкладке, где запустила.",
+  fb_title:"Как тебе проверка?",fb_ph:"Что было полезно, что неточно — по желанию",
+  fb_help:"Нужна помощь с исправлением — хочу, чтобы Екатерина помогла поправить систему",
+  fb_share:"Можно показать результат обезличенно",fb_send:"Отправить отзыв",
+  fb_thanks:"Спасибо! Твой отзыв у Екатерины.",fb_thanks_help:" Она напишет тебе в Telegram про исправление.",
+  fb_err:"Отзыв не отправился — попробуй ещё раз.",
+  del_reps:"Удалить мои отчёты с этого устройства",del_ok:"Удалить все отчёты с этого устройства?",
   err_txt:"Аудит сейчас не собрался. Попробуй ещё раз через минуту — или напиши нам в t.me/arsysai_bot, разберём вручную.",
   kb:"КБ",
   th_sys:"Система",th_status:"Статус",th_score:"Балл",th_date:"Дата",
@@ -422,6 +462,22 @@ const I18N={
   trunc_txt:"The document is longer than the limit: {checked} of {total} characters were checked. Split or shorten it and check the rest separately.",
   rep_talk:"Go through the report with Ekaterina",rep_talk_hint:"I will show where to start and what to fix first.",
   empty_reports:"Your checks will appear here. They are stored only on this device.",
+  gate_label:"Personal access code",gate_btn:"Enter",
+  gate_help:"Codes come from the <a href=\"https://t.me/arsysai_bot\" target=\"_blank\" rel=\"noopener\">@arsysai_bot</a> bot — send “АУДИТ”. A code works for 48 hours and gives one check.",
+  code_ok:"Code accepted · valid until {d}. One check — upload the document you prepared with the questionnaire.",
+  code_bad:"Make sure the whole code is copied, including ap- at the start.",
+  code_expired:"This code has expired. Message @arsysai_bot and we will issue a new one.",
+  code_used:"This code has already given its check. The report is under “Reports” on the device where it ran.",
+  code_off:"Checks are unavailable right now. Message @arsysai_bot and we will sort it out.",
+  consent_txt:"I replaced passwords and keys with [SECRET] and agree to the check. The document goes to Claude (Anthropic), is checked in memory and forgotten right away — we keep nothing.",
+  consent_need:"Tick the consent box to start the check.",
+  err_running:"A check with this code is already running. Wait for the report in the tab where you started it.",
+  fb_title:"How was the check?",fb_ph:"What helped, what was off — optional",
+  fb_help:"I need help with the fixes — I want Ekaterina to help adjust my system",
+  fb_share:"You may show the result anonymously",fb_send:"Send feedback",
+  fb_thanks:"Thank you! Your feedback is with Ekaterina.",fb_thanks_help:" She will message you on Telegram about the fixes.",
+  fb_err:"The feedback did not send — try again.",
+  del_reps:"Delete my reports from this device",del_ok:"Delete all reports from this device?",
   err_txt:"The audit did not come together this time. Try again in a minute — or message t.me/arsysai_bot and we will run it by hand.",
   kb:"KB",
   th_sys:"System",th_status:"Status",th_score:"Score",th_date:"Date",
@@ -571,7 +627,19 @@ function render(r){
     ${b?`<div class="basis"><b>${t('rep_basis')}.</b> ${fill(t('basis_txt'),{...b,rubric:r.rubric||''})}</div>`:''}
     <div class="disc">${t('rep_disc')}</div>
     <div class="dl"><a class="cta" href="https://t.me/arsysai_bot?start=agentproof" target="_blank" rel="noopener">${t('rep_talk')}</a><span>${t('rep_talk_hint')}</span></div>
-    <div class="dl"><button class="langbtn" id="pdfBtn">${t('rep_pdf')}</button><span>${t('rep_pdf_hint')}</span></div>`;
+    <div class="dl"><button class="langbtn" id="pdfBtn">${t('rep_pdf')}</button><span>${t('rep_pdf_hint')}</span></div>
+    ${r._code&&!isDemo?`<div class="fb" id="fb"><h3>${t('fb_title')}</h3>
+      <div class="stars">${[1,2,3,4,5].map(n=>`<button type="button" data-s="${n}">${n}</button>`).join('')}</div>
+      <textarea id="fbText" placeholder="${t('fb_ph')}"></textarea>
+      <label class="consent"><input type="checkbox" id="fbHelp"><span>${t('fb_help')}</span></label>
+      <label class="consent"><input type="checkbox" id="fbShare"><span>${t('fb_share')}</span></label>
+      <div class="dl"><button class="cta" id="fbSend">${t('fb_send')}</button><span id="fbMsg"></span></div></div>`:''}`;
+  if($('#fb')){let stars=0;
+    $$('#fb .stars button').forEach(b=>b.onclick=()=>{stars=+b.dataset.s;$$('#fb .stars button').forEach(x=>x.classList.toggle('on',+x.dataset.s<=stars));});
+    $('#fbSend').onclick=async()=>{const help=$('#fbHelp').checked;$('#fbSend').disabled=true;
+      try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'feedback',code:r._code,lang,feedback:{stars,text:$('#fbText').value.trim(),help,share:$('#fbShare').checked,score:r.score}})});
+        if(!res.ok)throw 0;$('#fb').innerHTML=`<div class="fbdone">${t('fb_thanks')}${help?t('fb_thanks_help'):''}</div>`;}
+      catch(e){$('#fbSend').disabled=false;$('#fbMsg').textContent=t('fb_err');}};}
   $('#pdfBtn').onclick=()=>{const old=document.title;document.title='AgentProof — '+(r.name||'отчёт').replace(/<[^>]*>/g,'');window.print();document.title=old;};
   show('report');
 }
@@ -606,17 +674,41 @@ drop.onclick=()=>fi.click(); fi.onchange=()=>addFiles(fi.files);
 ['dragenter','dragover'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('over');}));
 ['dragleave','drop'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove('over');}));
 drop.addEventListener('drop',ev=>addFiles(ev.dataTransfer.files));
-const ENGINE='https://app.arsysai.com/api/audit';
+const ENGINE='https://agentproof-engine.vercel.app/api/audit';
+// Личный код живёт в этой вкладке (sessionStorage); проверку проводит только сервер.
+let memCode=''; // запас, если браузер запрещает хранилище (приватный режим)
+const getCode=()=>{try{return sessionStorage.getItem('ap_code')||memCode}catch(e){return memCode}};
+const setCode=c=>{memCode=c||'';try{c?sessionStorage.setItem('ap_code',c):sessionStorage.removeItem('ap_code')}catch(e){}};
+function gateView(){const on=!!getCode();$('#gate').style.display=on?'none':'block';$('#formwrap').style.display=on?'block':'none';}
+function gateMsg(k){const m=$('#gateMsg');m.innerHTML=t(k);m.classList.toggle('bad',k!=='gate_help');}
+$('#codeBtn').onclick=async()=>{const code=$('#codeIn').value.trim(); if(!code){$('#codeIn').focus();return;}
+  $('#codeBtn').disabled=true;
+  try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'check',code,lang})});
+    if(res.status===401)return gateMsg('code_bad'); if(res.status===410)return gateMsg('code_expired'); if(!res.ok)return gateMsg('code_off');
+    const j=await res.json(); if(j.used)return gateMsg('code_used');
+    setCode(code); gateMsg('gate_help');
+    $('#codeOk').textContent=t('code_ok').replace('{d}',new Date(j.expires*1000).toLocaleString(lang==='en'?'en':'ru',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}));
+    gateView();}
+  catch(e){gateMsg('code_off');} finally{$('#codeBtn').disabled=false;}};
+$('#codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('#codeBtn').click();});
+gateView();
 $('#run').addEventListener('click',async()=>{
   const parts=[]; if($('#sys').value.trim())parts.push($('#sys').value.trim());
   store.forEach(f=>parts.push(`# ${f.name}\n${f.text}`));
   const system=parts.join('\n\n'); if(!system){$('#sys').focus();return;}
-  $('#run').disabled=true; $('#load').style.display='flex';
-  $('#err').style.display='none';$('#err').textContent=t('err_txt');
-  try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system,lang})});if(res.status===429){$('#err').textContent=t('err_429');throw 0;}if(!res.ok)throw 0;const rep=await res.json();isDemo=false;saveRep(rep);render(rep);}
+  $('#err').style.display='none';
+  if(!$('#agree').checked){$('#err').textContent=t('consent_need');$('#err').style.display='block';return;}
+  const code=getCode(); if(!code){gateView();return;}
+  $('#run').disabled=true; $('#load').style.display='flex'; $('#err').textContent=t('err_txt');
+  try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'audit',code,system,lang})});
+    if(res.status===401||res.status===410){setCode('');gateView();gateMsg(res.status===410?'code_expired':'code_bad');return;}
+    if(res.status===409){const j=await res.json().catch(()=>({}));if(j.error==='used'){setCode('');gateView();gateMsg('code_used');return;}$('#err').textContent=t('err_running');throw 0;}
+    if(!res.ok)throw 0;
+    const rep=await res.json(); rep._code=code; isDemo=false; saveRep(rep); setCode(''); gateView(); render(rep);}
   catch(e){$('#err').style.display='block';}
   finally{$('#run').disabled=false;$('#load').style.display='none';}
 });
+$('#delReps').onclick=()=>{if(!confirm(t('del_ok')))return;try{localStorage.removeItem('ap_reports')}catch(e){}buildTables();};
 
 // reveal on scroll
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
