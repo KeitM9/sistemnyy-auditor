@@ -188,8 +188,8 @@ export function normalize(r, lang, meta) {
 async function runModel(client, model, system, lang) {
   const userMsg = `Язык отчёта: ${lang === 'en' ? 'English' : 'русский'} (все строки на этом языке).\n\n<untrusted_artifact id="system">\n${system}\n</untrusted_artifact>`;
   return client.messages.parse({
-    model, max_tokens: 16000, system: SYSTEM_PROMPT,
-    output_config: { effort: 'high', format: zodOutputFormat(Report) },
+    model, max_tokens: 20000, system: SYSTEM_PROMPT, // ponytail: effort medium — отчёт по подробному описанию не влезал в 16k вместе с рассуждениями; для длиннее — стриминг
+    output_config: { effort: 'medium', format: zodOutputFormat(Report) },
     messages: [{ role: 'user', content: userMsg }]
   });
 }
