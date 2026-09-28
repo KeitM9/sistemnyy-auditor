@@ -69,6 +69,17 @@ exploit.path пустой.
 конкретно, барьер структурный (изоляция ключей, лимит шагов, проверка формата на стыке, разделение
 данных и команд).
 
+ПОЛНОТА — главное требование. Отчёт должен быть исчерпывающим за один проход: клиент не должен
+проходить аудит повторно, чтобы узнать о следующих находках.
+- battery: по КАЖДОМУ AI-агенту все 6 проверок (агентов два — значит 12 строк, и т. д.).
+- system: все системные проверки из списка выше, каждая отдельной строкой.
+- hardening: ПОЛНЫЙ реестр — каждая найденная находка отдельным пунктом, без ограничения числа,
+  от самой важной к менее важной (p: P1 — путь к деньгам/доступу/ключам, P2 — ослабляет барьер,
+  P3 — укрепление). Разные находки не объединяй. Включай и малые.
+- steps: по одному шагу на каждый пункт hardening, в том же порядке.
+Чтобы полный отчёт поместился, пиши каждую строку коротко: why/n — до 350 знаков, do — одна фраза,
+how — до 400 знаков, check — одна проверка до 200 знаков.
+
 Подписи на карте короткие: узел до 14 символов, ребро до 10, флаги до 20. Узлы 3–7 в порядке
 потока, первый — вход (io 1), последний — выход (io 1), у остальных io 0. Рёбра только между id из
 nodes. leak 1 — узел с утечкой, weak 1 — слабое ребро, иначе 0.`;
@@ -177,18 +188,18 @@ export function normalize(r, lang, meta) {
         .map(e => ({ f: String(e.f), t: String(e.t), weak: e.weak ? 1 : 0, label: cut(e.label, 12) }))
     },
     weak: r.weak || '',
-    battery: (r.battery || []).slice(0, 6).map(b => ({ t: b.t || '', s: clamp(b.s, 0, 5), n: b.n || '' })),
-    system: (r.system || []).slice(0, 6).map(s => ({ t: s.t || '', n: s.n || '' })),
-    exploit: r.exploit?.path?.length ? { path: r.exploit.path.slice(0, 6), note: r.exploit.note || '' } : null,
-    hardening: (r.hardening || []).slice(0, 8).map(h => ({ t: h.t || '', p: h.p || '', do: h.do || '', how: h.how || '', check: h.check || '' })),
-    steps: (r.steps || []).slice(0, 8)
+    battery: (r.battery || []).map(b => ({ t: b.t || '', s: clamp(b.s, 0, 5), n: b.n || '' })),
+    system: (r.system || []).map(s => ({ t: s.t || '', n: s.n || '' })),
+    exploit: r.exploit?.path?.length ? { path: r.exploit.path.slice(0, 12), note: r.exploit.note || '' } : null,
+    hardening: (r.hardening || []).map(h => ({ t: h.t || '', p: h.p || '', do: h.do || '', how: h.how || '', check: h.check || '' })),
+    steps: (r.steps || [])
   };
 }
 
 async function runModel(client, model, system, lang) {
   const userMsg = `Язык отчёта: ${lang === 'en' ? 'English' : 'русский'} (все строки на этом языке).\n\n<untrusted_artifact id="system">\n${system}\n</untrusted_artifact>`;
   return client.messages.parse({
-    model, max_tokens: 20000, system: SYSTEM_PROMPT, // ponytail: effort medium — отчёт по подробному описанию не влезал в 16k вместе с рассуждениями; для длиннее — стриминг
+    model, max_tokens: 32000, system: SYSTEM_PROMPT, // ponytail: effort medium — отчёт по подробному описанию не влезал в 16k вместе с рассуждениями; для длиннее — стриминг
     output_config: { effort: 'medium', format: zodOutputFormat(Report) },
     messages: [{ role: 'user', content: userMsg }]
   });
