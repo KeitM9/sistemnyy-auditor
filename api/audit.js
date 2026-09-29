@@ -77,6 +77,12 @@ exploit.path пустой.
   от самой важной к менее важной (p: P1 — путь к деньгам/доступу/ключам, P2 — ослабляет барьер,
   P3 — укрепление). Разные находки не объединяй. Включай и малые.
 - steps: по одному шагу на каждый пункт hardening, в том же порядке.
+- id и st у каждого пункта hardening. Первая проверка: id F1, F2… по порядку, st "new".
+  Повторная проверка (есть блок previous_registry): это тот же реестр — пройди КАЖДУЮ прежнюю
+  находку с её прежним id и p: st "closed", если описание показывает, что она устранена (в do —
+  чем это подтверждено), иначе st "open". Новые находки — st "new", id со следующего номера.
+  Прежний id не меняй и не переиспользуй. Закрытые ставь в конец списка; steps — только для
+  open и new. Закрытой считай находку только по явному признаку в описании.
 Чтобы полный отчёт поместился, пиши каждую строку коротко: why/n — до 350 знаков, do — одна фраза,
 how — до 400 знаков, check — одна проверка до 200 знаков.
 
@@ -98,7 +104,7 @@ const Report = z.object({
   battery: z.array(z.object({ t: z.string(), s: z.number(), n: z.string() })),
   system: z.array(z.object({ t: z.string(), n: z.string() })),
   exploit: z.object({ path: z.array(z.string()), note: z.string() }),
-  hardening: z.array(z.object({ t: z.string(), p: z.string(), do: z.string(), how: z.string(), check: z.string() })),
+  hardening: z.array(z.object({ id: z.string(), st: z.enum(['new', 'open', 'closed']), t: z.string(), p: z.string(), do: z.string(), how: z.string(), check: z.string() })),
   steps: z.array(z.string())
 });
 
@@ -176,12 +182,16 @@ export function normalize(r, lang, meta) {
   const ids = new Set(nodes.map(n => String(n.id)));
   if (nodes.length < 2) throw new Error('graph');
   const { score, hit } = scoreOf(r.axes, r.caps);
+  // Реестр стабилен: прежняя находка, которую модель пропустила, остаётся открытой
+  const seen = new Set((r.hardening || []).map(h => String(h.id)));
+  const lost = (meta.prev?.items || []).filter(h => !seen.has(h.id)).map(h => ({ ...h, st: 'open', do: '', how: '', check: '' }));
+  r.hardening = [...(r.hardening || []), ...lost];
   const L = lang === 'en' ? 3 : 2;
   const capNote = hit.length ? (lang === 'en' ? 'Ceiling applied: ' : 'Сработал потолок: ') + hit.map(c => `${c[1]} — ${c[L]}`).join('; ') + '. ' : '';
   return {
     name: r.name || '', score, verdict: verdictOf(score, lang), note: capNote + (r.note || ''),
     axes: AXES.map(([k, w, ru, en]) => ({ t: lang === 'en' ? en : ru, w, s: clamp(r.axes?.[k]?.score, 0, 10), why: r.axes?.[k]?.why || '' })),
-    rubric: RUBRIC, basis: meta,
+    rubric: RUBRIC, basis: { ...meta, prev: undefined },
     graph: {
       nodes: nodes.map(n => ({ id: String(n.id), label: cut(n.label || n.id, 16), io: n.io ? 1 : 0, leak: n.leak ? 1 : 0, flags: (n.flags || []).slice(0, 2).map(f => cut(f, 22)) })),
       edges: (r.graph?.edges || []).filter(e => e && ids.has(String(e.f)) && ids.has(String(e.t)))
@@ -191,13 +201,23 @@ export function normalize(r, lang, meta) {
     battery: (r.battery || []).map(b => ({ t: b.t || '', s: clamp(b.s, 0, 5), n: b.n || '' })),
     system: (r.system || []).map(s => ({ t: s.t || '', n: s.n || '' })),
     exploit: r.exploit?.path?.length ? { path: r.exploit.path.slice(0, 12), note: r.exploit.note || '' } : null,
-    hardening: (r.hardening || []).map(h => ({ t: h.t || '', p: h.p || '', do: h.do || '', how: h.how || '', check: h.check || '' })),
+    hardening: (r.hardening || []).map((h, i) => ({ id: cut(h.id || `F${i + 1}`, 8), st: meta.prev && ['open', 'closed'].includes(h.st) ? h.st : 'new', t: h.t || '', p: h.p || '', do: h.do || '', how: h.how || '', check: h.check || '' })),
+    prev_score: meta.prev ? meta.prev.score : null,
     steps: (r.steps || [])
   };
 }
 
-async function runModel(client, model, system, lang) {
-  const userMsg = `Язык отчёта: ${lang === 'en' ? 'English' : 'русский'} (все строки на этом языке).\n\n<untrusted_artifact id="system">\n${system}\n</untrusted_artifact>`;
+// Прошлый реестр для повторной проверки приходит из браузера клиента — чистим и режем.
+function prevOf(p) {
+  const items = Array.isArray(p?.items) ? p.items.slice(0, 120) : [];
+  if (!items.length) return null;
+  const clean = (s, n) => cut(String(s || '').replace(/[<>]/g, ''), n);
+  return { score: clamp(p.score, 0, 10), items: items.map(h => ({ id: clean(h.id, 8), p: clean(h.p, 3), t: clean(h.t, 200) })) };
+}
+
+async function runModel(client, model, system, lang, prev) {
+  const reg = prev ? `\n\n<previous_registry score="${prev.score}">\n${prev.items.map(h => `${h.id} | ${h.p} | ${h.t}`).join('\n')}\n</previous_registry>` : '';
+  const userMsg = `Язык отчёта: ${lang === 'en' ? 'English' : 'русский'} (все строки на этом языке).${reg}\n\n<untrusted_artifact id="system">\n${system}\n</untrusted_artifact>`;
   return client.messages.parse({
     model, max_tokens: 32000, system: SYSTEM_PROMPT, // ponytail: effort medium — отчёт по подробному описанию не влезал в 16k вместе с рассуждениями; для длиннее — стриминг
     output_config: { effort: 'medium', format: zodOutputFormat(Report) },
@@ -254,10 +274,11 @@ export default async function handler(req, res) {
     const meta = { total: raw.length, checked: Math.min(raw.length, MAX_INPUT), source: 'description', model: MODEL, date: new Date().toISOString().slice(0, 10) };
 
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY, maxRetries: 1, timeout: 280000 });
-    let resp = await runModel(client, MODEL, system, lang);
+    const prev = prevOf(body.prev); meta.prev = prev;
+    let resp = await runModel(client, MODEL, system, lang, prev);
     if (resp.stop_reason === 'refusal') {
       await tell(`Opus отказал (${resp.stop_details?.category || '—'}), пробую ${FALLBACK_MODEL} · tg ${code.tg}`);
-      resp = await runModel(client, FALLBACK_MODEL, system, lang);
+      resp = await runModel(client, FALLBACK_MODEL, system, lang, prev);
       meta.model = FALLBACK_MODEL;
     }
     if (!resp.parsed_output) throw new Error('no report, stop=' + resp.stop_reason);

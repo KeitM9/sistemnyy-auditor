@@ -150,6 +150,22 @@
     .fxc,.block,.weak,.graphwrap{break-inside:avoid}
   }
   .fix2{margin-top:16px}
+  .finish{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;margin-top:16px}
+  .finish.done{border-color:var(--mint)}
+  .finish h3,.retest h3{font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em;color:var(--muted);margin-bottom:12px}
+  .fl3{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--border2);font-size:14px;color:var(--body)}
+  .fl3 .mk{color:var(--muted);font-weight:700}.fl3.ok .mk{color:var(--mint)}
+  .fl3 .nw{color:var(--muted);font-size:12.5px}
+  .finish .fin{margin-top:12px;font-size:14px;color:var(--ink)}.finish.done .fin{color:var(--mint);font-weight:600}
+  .retest{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;margin-top:16px}
+  .retest .bs{font-family:'Oswald',sans-serif;font-size:30px;font-weight:700;color:var(--ink)}.retest .bs em{font-style:normal;color:var(--muted);font-size:22px;margin:0 10px}
+  .retest .cnt{display:flex;gap:22px;flex-wrap:wrap;margin-top:8px;font-size:13.5px;color:var(--body)}.retest .cnt b{color:var(--mint);font-family:'Oswald',sans-serif;font-size:16px;margin-right:4px}
+  .fxs{margin-left:auto;font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--mint)}
+  .fxs.open{color:var(--muted)}
+  .fxid{font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted)}
+  .acc{display:flex;gap:10px;align-items:center;padding:9px 16px;font-size:13px;color:var(--body);cursor:pointer}
+  .closed .fxc{opacity:.85}.closed .fxh{border-bottom:none}
+  .prevsel{width:100%;margin-top:6px;background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;font:inherit}
   .fix2>h3{font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em;color:var(--muted);margin-bottom:12px}
   .fxc{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
   .fxh{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface2,#333b49);border-bottom:1px solid var(--border2);font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;color:var(--ink)}
@@ -326,6 +342,8 @@
           <div class="chips" id="chips"></div>
           <label class="fl" for="sys" data-i18n="new_label"></label>
           <textarea id="sys" data-i18n-ph="new_ph"></textarea>
+          <label class="fl" for="prevSel" data-i18n="prev_label"></label>
+          <select id="prevSel" class="prevsel"></select>
           <label class="consent"><input type="checkbox" id="agree"><span data-i18n="consent_txt"></span></label>
           <div class="actions"><button class="cta" id="run" data-i18n="run_btn"></button><span class="safe" data-i18n="safe_txt"></span></div>
           <div class="load" id="load"><span class="spin"></span><span data-i18n="load_txt"></span></div>
@@ -429,7 +447,7 @@ const I18N={
   rep_weak:"Слабое звено",rep_battery:"Батарея по агентам",rep_system:"Системные проверки",
   rep_matched:"Совпало с библиотекой сбоев",rep_attack:"Атака · цепочка эксплойта",
   rep_comp:"Соответствие",rep_cert:"Сертификат надёжности",rep_fix:"Что укрепить",
-  rep_fix2:"Как исправить — по каждой находке",rep_pdf:"Скачать отчёт (PDF)",rep_pdf_hint:"В окне печати выбери «Сохранить как PDF».",fx_do:"Что сделать",fx_how:"Как",fx_check:"Как проверить",
+  rep_fix2:"Как исправить — по каждой находке",fin_title:"Финишная черта",fin_p1:"Нет открытых находок P1",fin_score:"Балл от 8.5",fin_p2:"Каждая P2 закрыта или принята осознанно",fin_left:"осталось {n}",fin_now:"сейчас {n}",fin_done:"Готово: система пересекла финишную черту. P3 — укрепление по желанию.",fin_todo:"До финиша: закройте отмеченные пункты и пройдите повторную проверку по этому же списку.",rt_title:"Повторная проверка по тому же реестру",rt_closed:"закрыто",rt_open:"осталось",rt_new:"новых",st_new:"новая",st_open:"осталась",st_closed:"закрыта",rep_closed:"Закрыто с прошлой проверки",acc_txt:"Принимаю этот риск осознанно",prev_label:"Повторная проверка",prev_none:"Первая проверка — новый реестр",prev_opt:"По отчёту «{name}» от {date} · балл {score}",rep_pdf:"Скачать отчёт (PDF)",rep_pdf_hint:"В окне печати выбери «Сохранить как PDF».",fx_do:"Что сделать",fx_how:"Как",fx_check:"Как проверить",
   rep_disc:"Второе мнение и проверка надёжности, а не гарантия. Финальное решение по системе остаётся за человеком. Architect Systems AI."
  },
  en:{
@@ -500,7 +518,7 @@ const I18N={
   rep_weak:"Weak link",rep_battery:"Per-agent battery",rep_system:"System checks",
   rep_matched:"Matched failure library",rep_attack:"Attack · exploit chain",
   rep_comp:"Compliance",rep_cert:"Reliability certificate",rep_fix:"What to harden",
-  rep_fix2:"How to fix — per finding",rep_pdf:"Download report (PDF)",rep_pdf_hint:"In the print window choose “Save as PDF”.",fx_do:"What to do",fx_how:"How",fx_check:"How to verify",
+  rep_fix2:"How to fix — per finding",fin_title:"Finish line",fin_p1:"No open P1 findings",fin_score:"Score 8.5 or higher",fin_p2:"Every P2 fixed or consciously accepted",fin_left:"{n} left",fin_now:"now {n}",fin_done:"Done: the system has crossed the finish line. P3 is optional hardening.",fin_todo:"To finish: fix the marked items and run a retest against this same list.",rt_title:"Retest against the same registry",rt_closed:"fixed",rt_open:"still open",rt_new:"new",st_new:"new",st_open:"still open",st_closed:"fixed",rep_closed:"Fixed since the last check",acc_txt:"I accept this risk consciously",prev_label:"Retest",prev_none:"First check — new registry",prev_opt:"Against “{name}” from {date} · score {score}",rep_pdf:"Download report (PDF)",rep_pdf_hint:"In the print window choose “Save as PDF”.",fx_do:"What to do",fx_how:"How",fx_check:"How to verify",
   rep_disc:"A second opinion and reliability check, not a guarantee. The final decision on the system stays with a human. Architect Systems AI."
  }
 };
@@ -550,6 +568,10 @@ const DEMO={
   ]}
 };
 
+// Демо показывает повторную проверку: было 5.1 → стало 6.4, одна находка закрыта
+[['ru','Убрать ключ из текста промпта','Ключ перенесён в переменные окружения — в промпте его больше нет.'],['en','Remove the key from the prompt text','The key moved to environment variables and is no longer in the prompt.']].forEach(([l,t,d])=>{
+  const D=DEMO[l];D.prev_score=5.1;D.hardening.forEach((h,i)=>{h.id='F'+(i+2);h.st=i===3?'new':'open';});
+  D.hardening.push({id:'F1',st:'closed',p:'P1',t,do:d,how:'',check:''});});
 let lang = (function(){try{return localStorage.getItem('asa_lang')||'ru';}catch(e){return 'ru';}})();
 let curView='overview';
 function t(k){return (I18N[lang]&&I18N[lang][k]!=null)?I18N[lang][k]:(I18N.ru[k]||k);}
@@ -567,6 +589,9 @@ function buildTables(){
       return `<div class="tr" data-i="${i}" style="cursor:pointer"><span class="name">${x.rep.name}</span><span><i class="badge ${cls}">${x.rep.verdict}</i></span><span class="sc">${s}</span><span class="dt">${x.date}</span></div>`;}).join('')
     :`<div class="tr" style="grid-template-columns:1fr"><span class="dt">${t('empty_reports')}</span></div>`);
   $$('#reportsTable .tr[data-i]').forEach(el=>el.onclick=()=>{isDemo=false;render(reps[+el.dataset.i].rep);});
+  const sel=$('#prevSel'),was=sel.value;
+  sel.innerHTML=`<option value="">${t('prev_none')}</option>`+reps.map((x,i)=>`<option value="${i}">${t('prev_opt').replace('{name}',x.rep.name).replace('{date}',x.date).replace('{score}',x.rep.score)}</option>`).join('');
+  sel.value=was;
   $('#labTable').innerHTML=`<div class="tr head" style="grid-template-columns:1fr 130px"><span>${t('lab_pattern')}</span><span>${t('lab_stage')}</span></div>`+
     LAB[lang].map(r=>`<div class="tr" style="grid-template-columns:1fr 130px"><span class="name">${r[0]}</span><span class="dt">${t(r[1])}</span></div>`).join('');
 }
@@ -600,16 +625,32 @@ function graphSVG(g){
     return `<rect x="${p.x}" y="${p.y}" width="${nw}" height="${nh}" rx="3" fill="${n.io?'#232935':'#333b49'}" stroke="${st}" stroke-width="${leak?2:1}"/><text x="${p.x+nw/2}" y="${p.y+nh/2+4}" fill="#f1f3f3" font-size="13" text-anchor="middle" font-family="Manrope" font-weight="600">${n.label}</text>${tag}`;}).join('');
   return `<svg viewBox="0 0 ${W} ${H}" height="118" preserveAspectRatio="xMinYMid meet" style="min-width:${W}px">${edges}${nodes}</svg>`;
 }
+// Принятые осознанно P2 — отметка клиента на этом устройстве, ключ — код проверки
+let accMem={};
+const accKey=r=>r._code||'demo';
+function accOf(r){try{return JSON.parse(localStorage.getItem('ap_acc')||'{}')[accKey(r)]||[]}catch(e){return accMem[accKey(r)]||[]}}
+function accSet(r,a){accMem[accKey(r)]=a;try{const m=JSON.parse(localStorage.getItem('ap_acc')||'{}');m[accKey(r)]=a;localStorage.setItem('ap_acc',JSON.stringify(m))}catch(e){}}
 function render(r){
   const pct=s=>Math.round(s/5*100);
   const bat=r.battery.map(b=>`<div class="metric"><div class="rowt"><span class="lb">${b.t}</span><span class="sc">${b.s}/5</span></div><div class="nt">${b.n}</div><div class="track"><i style="width:${pct(b.s)}%"></i></div></div>`).join('');
   const sys=r.system.map(s=>`<div class="item"><div class="k">${s.t}</div><div class="v">${s.n}</div></div>`).join('');
   const steps=(r.steps||[]).map(s=>`<li>${s}</li>`).join('');
-  const hard=(r.hardening||[]).map(h=>`<div class="fxc"><div class="fxh">${h.p?`<span class="fxp">${h.p}</span>`:''}<span class="fxt">${h.t||''}</span></div>`+
+  const H=r.hardening||[], rt=r.prev_score!=null, acc=accOf(r);
+  const open=H.filter(h=>h.st!=='closed'), closed=H.filter(h=>h.st==='closed');
+  const p1=open.filter(h=>h.p==='P1').length, p2=open.filter(h=>h.p==='P2'&&!acc.includes(h.id)).length, sOk=r.score>=8.5, done=!p1&&!p2&&sOk;
+  const row=(ok,txt,n)=>`<div class="fl3 ${ok?'ok':''}"><span class="mk">${ok?'✓':'·'}</span><span>${txt}</span><span class="nw">${n}</span></div>`;
+  const finish=H.length||r.score!=null?`<div class="finish ${done?'done':''}"><h3>${t('fin_title')}</h3>`+
+    row(!p1,t('fin_p1'),p1?t('fin_left').replace('{n}',p1):'')+row(sOk,t('fin_score'),t('fin_now').replace('{n}',r.score))+row(!p2,t('fin_p2'),p2?t('fin_left').replace('{n}',p2):'')+
+    `<div class="fin">${t(done?'fin_done':'fin_todo')}</div></div>`:'';
+  const retest=rt?`<div class="retest"><h3>${t('rt_title')}</h3><div class="bs">${r.prev_score}<em>→</em>${r.score}</div><div class="cnt"><span><b>${closed.length}</b>${t('rt_closed')}</span><span><b>${H.filter(h=>h.st==='open').length}</b>${t('rt_open')}</span><span><b>${H.filter(h=>h.st==='new').length}</b>${t('rt_new')}</span></div></div>`:'';
+  const stTag=h=>rt?`<span class="fxs ${h.st==='open'?'open':''}">${t('st_'+h.st)}</span>`:'';
+  const hard=open.map(h=>`<div class="fxc"><div class="fxh">${h.p?`<span class="fxp">${h.p}</span>`:''}${h.id?`<span class="fxid">${h.id}</span>`:''}<span class="fxt">${h.t||''}</span>${stTag(h)}</div>`+
     (h.do?`<div class="fxr"><span class="fxk">${t('fx_do')}</span><span class="fxv">${h.do}</span></div>`:'')+
     (h.how?`<div class="fxr"><span class="fxk">${t('fx_how')}</span><span class="fxv">${h.how}</span></div>`:'')+
     (h.check?`<div class="fxr"><span class="fxk">${t('fx_check')}</span><span class="fxv">${h.check}</span></div>`:'')+
+    (h.p==='P2'&&h.id?`<label class="acc"><input type="checkbox" data-acc="${h.id}" ${acc.includes(h.id)?'checked':''}><span>${t('acc_txt')}</span></label>`:'')+
     `</div>`).join('');
+  const closedHtml=closed.length?`<div class="fix2 closed"><h3>${t('rep_closed')}</h3>`+closed.map(h=>`<div class="fxc"><div class="fxh">${h.p?`<span class="fxp">${h.p}</span>`:''}<span class="fxid">${h.id}</span><span class="fxt">${h.t||''}</span>${stTag(h)}</div>${h.do?`<div class="fxr"><span class="fxk">${t('fx_check')}</span><span class="fxv">${h.do}</span></div>`:''}</div>`).join('')+`</div>`:'';
   const tags=(r.matched||[]).map(m=>`<span class="tag">${m}</span>`).join('');
   const fill=(s,o)=>s.replace(/\{(\w+)\}/g,(_,k)=>o[k]==null?'':k==='date'?new Date(o[k]).toLocaleDateString(lang==='en'?'en':'ru'):typeof o[k]==='number'?o[k].toLocaleString(lang==='en'?'en':'ru'):o[k]);
   const b=r.basis, trunc=b&&b.total>b.checked;
@@ -621,6 +662,7 @@ function render(r){
       <span class="nm">${r.name||''}</span>
       <span class="scorechip"><span class="dot"></span><b>${r.score}<em> / 10</em></b><s>${r.verdict}</s></span>
     </div>
+    ${retest}${finish}
     <div class="graphwrap">
       <h3>${t('rep_mapTitle')}</h3>
       <div class="scroll">${graphSVG(r.graph)}</div>
@@ -634,7 +676,7 @@ function render(r){
     ${r.exploit?`<div class="block" style="margin-top:16px"><h3>${t('rep_attack')}</h3><div class="chain">${chain}</div><div style="color:var(--muted);font-size:12.5px;margin-top:11px">${r.exploit.note}</div></div>`:''}
     ${r.compliance?`<div class="block comp" style="margin-top:16px"><h3>${t('rep_comp')} · ${r.compliance.ref}</h3>${comp}</div>`:''}
     ${r.cert?`<div class="cert"><div class="seal"><b>${r.score}</b></div><div class="info"><b>${t('rep_cert')}</b><div class="m">Architect Systems AI · ${r.cert.id} · ${r.cert.valid} · ${r.cert.level}</div></div></div>`:''}
-    ${hard?`<div class="fix2"><h3>${t('rep_fix2')}</h3>${hard}</div>`:(steps?`<div class="fix"><h3>${t('rep_fix')}</h3><ol>${steps}</ol></div>`:'')}
+    ${hard?`<div class="fix2"><h3>${t('rep_fix2')}</h3>${hard}</div>`:(steps&&!H.length?`<div class="fix"><h3>${t('rep_fix')}</h3><ol>${steps}</ol></div>`:'')}${closedHtml}
     ${b?`<div class="basis"><b>${t('rep_basis')}.</b> ${fill(t('basis_txt'),{...b,rubric:r.rubric||''})}</div>`:''}
     <div class="disc">${t('rep_disc')}</div>
     <div class="dl"><a class="cta" href="https://t.me/arsysai_bot?start=agentproof" target="_blank" rel="noopener">${t('rep_talk')}</a><span>${t('rep_talk_hint')}</span></div>
@@ -651,8 +693,9 @@ function render(r){
       try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'feedback',code:r._code,lang,feedback:{stars,text:$('#fbText').value.trim(),help,share:$('#fbShare').checked,score:r.score}})});
         if(!res.ok)throw 0;$('#fb').innerHTML=`<div class="fbdone">${t('fb_thanks')}${help?t('fb_thanks_help'):''}</div>`;}
       catch(e){$('#fbSend').disabled=false;$('#fbMsg').textContent=t('fb_err');}};}
+  $$('#report [data-acc]').forEach(c=>c.onchange=()=>{const a=accOf(r).filter(x=>x!==c.dataset.acc);if(c.checked)a.push(c.dataset.acc);accSet(r,a);const y=window.scrollY;render(r);window.scrollTo({top:y});});
   $('#pdfBtn').onclick=()=>{const old=document.title;document.title='AgentProof — '+(r.name||'отчёт').replace(/<[^>]*>/g,'');window.print();document.title=old;};
-  show('report');
+  if(curView!=='report')show('report');
 }
 
 function applyLang(){
@@ -735,7 +778,9 @@ $('#run').addEventListener('click',async()=>{
   if(!$('#agree').checked){$('#err').textContent=t('consent_need');$('#err').style.display='block';return;}
   const code=getCode(); if(!code){gateView();return;}
   $('#run').disabled=true; $('#load').style.display='flex'; $('#err').textContent=t('err_txt');
-  try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'audit',code,system,lang})});
+  const pr=$('#prevSel').value!==''?loadReps()[+$('#prevSel').value]:null;
+  const prev=pr?{score:pr.rep.score,items:(pr.rep.hardening||[]).map((h,i)=>({id:h.id||`F${i+1}`,p:h.p,t:h.t}))}:null;
+  try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'audit',code,system,lang,prev})});
     if(res.status===401||res.status===410){setCode('');gateView();gateMsg(res.status===410?'code_expired':'code_bad');return;}
     if(res.status===409){const j=await res.json().catch(()=>({}));if(j.error==='used'){setCode('');gateView();gateMsg('code_used');return;}$('#err').textContent=t('err_running');throw 0;}
     if(!res.ok)throw 0;
