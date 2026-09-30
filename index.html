@@ -150,6 +150,15 @@
     .fxc,.block,.weak,.graphwrap{break-inside:avoid}
   }
   .fix2{margin-top:16px}
+  .strongb{border-color:var(--border)}
+  .chs .chr{display:grid;grid-template-columns:150px 110px 1fr;gap:12px;padding:8px 0;border-top:1px solid var(--border2);font-size:13.5px;color:var(--body)}
+  .chs .chr:first-of-type{border-top:none}.chs .st-closed{color:var(--mint)}.chs .st-open{color:var(--ink);font-weight:600}.chs .st-unknown{color:var(--muted)}
+  .gaps li{color:var(--body);font-size:13.5px;padding:4px 0}
+  .fxb{font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);border:1px solid var(--border2);border-radius:var(--r);padding:1px 7px}
+  .flagb{margin-left:8px;background:none;border:none;color:var(--muted);font:inherit;font-size:11px;cursor:pointer;text-decoration:underline}
+  .comp .ev{color:var(--muted);font-size:12.5px;margin-left:28px}
+  .spread{color:var(--muted);font-size:12px;margin:-4px 0 10px}
+  @media(max-width:600px){.chs .chr{grid-template-columns:1fr 90px}.chs .chr span:last-child{grid-column:1/-1}}
   .finish{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;margin-top:16px}
   .finish.done{border-color:var(--mint)}
   .finish h3,.retest h3{font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em;color:var(--muted);margin-bottom:12px}
@@ -346,7 +355,7 @@
           <select id="prevSel" class="prevsel"></select>
           <label class="consent"><input type="checkbox" id="agree"><span data-i18n="consent_txt"></span></label>
           <div class="actions"><button class="cta" id="run" data-i18n="run_btn"></button><span class="safe" data-i18n="safe_txt"></span></div>
-          <div class="load" id="load"><span class="spin"></span><span data-i18n="load_txt"></span></div>
+          <div class="load" id="load"><span class="spin"></span><span><span id="loadMsg" data-i18n="load_txt"></span><br><small data-i18n="load_hint"></small></span></div>
           <div class="errbox" id="err" data-i18n="err_txt"></div>
           </div>
         </div>
@@ -400,12 +409,12 @@ const I18N={
   c6k:"Дрейф при смене модели",c6v:"Держит ли качество, когда модель меняется.",
   how_h2:"Как это работает",
   s1h:"Загрузи систему",s1p:"Промпты агентов и трейс прогона — файлами или текстом.",
-  s2h:"Аудитор проверяет",s2p:"Строит карту, гоняет батарею и системные проверки в изолированной среде.",
+  s2h:"Аудитор проверяет",s2p:"Строит карту, гоняет батарею по каждому агенту и системные проверки, сверяет с библиотекой из 54 классов сбоев. У модели нет инструментов и доступа в сеть, описание нигде не сохраняется.",
   s3h:"Получаешь отчёт",s3p:"Карта с разрывом, слабое звено, балл и шаги укрепления.",
   strong_h2:"Что делает аудит сильным",
-  st1h:"Активная атака",st1p:"Сами строим цепочку эксплойта: инъекция → права → утечка. Не пассивные логи, а проверка на прочность.",
-  st2h:"Соответствие EU AI Act",st2p:"Отчёт как доказательство устойчивости для регулятора. С августа 2026 это требование к high-risk AI.",
-  st3h:"Сертификат надёжности",st3p:"Публичный знак «Проверено Architect Systems AI» с баллом, ID и сроком.",
+  st1h:"Цепочка атаки",st1p:"Собираем цепочку атаки: вход → права → утечка — и показываем, на каком звене обрывается защита. Подтверждение вживую — на стенде, следующая ступень.",
+  st2h:"Соответствие EU AI Act",st2p:"Таблица по статьям 9, 12, 14 и 15: что выполнено и чем подтверждено — по описанию. Для high-risk систем (Annex III) требования применяются со 2 декабря 2027.",
+  st3h:"Сертификат надёжности",st3p:"Знак «Проверено Architect Systems AI» с баллом, ID и сроком выдаётся после проверки живой системы на стенде — следующая ступень.",
   cta_h3:"Проверь свою систему",cta_p:"Загрузи агентов и получи карту с баллом надёжности.",cta_btn:"Начать аудит",
   drop_t1:"Перетащи описание проекта",drop_t2:"Файл agentproof-package.md или файлы проекта. Или нажми, чтобы выбрать",
   dir_btn:"Выбрать папку проекта",pkg_link:"Подготовка проекта к аудиту",
@@ -413,7 +422,7 @@ const I18N={
   file_err:"Файл «{f}» не прочитался — пересохрани его как .docx и загрузи ещё раз.",
   new_label:"Или впиши систему вручную",
   new_ph:"Опиши простыми словами: какие у тебя боты или агенты, что делает каждый, кто кому что передаёт, где принимают оплату или выдают доступ, какие ключи и сервисы подключены. Например: «Бот в Telegram отвечает ученицам и после оплаты выдаёт ссылку на уроки. Второй бот пишет посты из комментариев. Оба на одном ключе ChatGPT».",
-  run_btn:"Проверить систему",safe_txt:"Секреты и ключи вычищаются до проверки.",load_txt:"Аудитор строит карту и гоняет проверки — до 5 минут. Держи страницу открытой",
+  run_btn:"Проверить систему",safe_txt:"Секреты и ключи вычищаются до проверки.",load_txt:"Шаг 1 из 3 · аудитор строит карту системы",
   err_429:"Много проверок подряд. Следующая откроется через 10 минут.",
   rep_axes:"Баллы по осям",rep_basis:"На чём основан вывод",
   basis_txt:"Проверено описание системы: {checked} знаков · {date} · модель {model} · рубрика {rubric}. Живую систему проверяют на стенде — это следующая ступень.",
@@ -439,7 +448,7 @@ const I18N={
   err_txt:"Аудит сейчас не собрался. Попробуй ещё раз через минуту — или напиши нам в t.me/arsysai_bot, разберём вручную.",
   kb:"КБ",
   th_sys:"Система",th_status:"Статус",th_score:"Балл",th_date:"Дата",
-  lab_intro:"Каталог известных паттернов отказа. Каждый аудит сверяется с этой базой.",
+  lab_intro:"Библиотека сбоев: 54 класса уязвимостей агентных систем из реальных инцидентов. Каждый аудит сверяет систему с этой базой, и она пополняется новыми инцидентами.",
   lab_pattern:"Паттерн сбоя",lab_stage:"Стадия",st_agent:"агент",st_system:"система",
   footer_sub:"AgentProof · Architect Systems AI",
   rep_mapTitle:"Карта системы и разрыв",
@@ -447,6 +456,7 @@ const I18N={
   rep_weak:"Слабое звено",rep_battery:"Батарея по агентам",rep_system:"Системные проверки",
   rep_matched:"Совпало с библиотекой сбоев",rep_attack:"Атака · цепочка эксплойта",
   rep_comp:"Соответствие",rep_cert:"Сертификат надёжности",rep_fix:"Что укрепить",
+  load_map:"Шаг 1 из 3 · аудитор строит карту системы",load_probe:"Шаг 2 из 3 · батарея по агентам, системные проверки, сверка с библиотекой",load_final:"Шаг 3 из 3 · реестр находок, план и оценка осей",load_hint:"Обычно несколько минут. Держи страницу открытой.",rep_strong:"Сильное место",rep_channels:"Каналы выхода",ch_closed:"закрыт",ch_open:"открыт",ch_unknown:"нет данных",ch_sum:"закрыто {n} из {m}",rep_gaps:"Чего не хватило в описании",rep_spread:"разброс трёх независимых оценок: ±{n}",cs_yes:"выполнено",cs_partial:"частично",cs_no:"барьера нет",cs_unknown:"нет данных",b_fact:"факт из описания",b_hyp:"гипотеза",flag_btn:"Неточно?",flag_q:"Что здесь неточно? Это поможет движку учиться.",flag_ok:"Спасибо, записано",lib_code:"Код",lib_class:"Класс сбоя",
   rep_fix2:"Как исправить — по каждой находке",fin_title:"Финишная черта",fin_p1:"Нет открытых находок P1",fin_score:"Балл от 8.5",fin_p2:"Каждая P2 закрыта или принята осознанно",fin_left:"осталось {n}",fin_now:"сейчас {n}",fin_done:"Готово: система пересекла финишную черту. P3 — укрепление по желанию.",fin_todo:"До финиша: закройте отмеченные пункты и пройдите повторную проверку по этому же списку.",rt_title:"Повторная проверка по тому же реестру",rt_closed:"закрыто",rt_open:"осталось",rt_new:"новых",st_new:"новая",st_open:"осталась",st_closed:"закрыта",rep_closed:"Закрыто с прошлой проверки",acc_txt:"Принимаю этот риск осознанно",prev_label:"Повторная проверка",prev_none:"Первая проверка — новый реестр",prev_opt:"По отчёту «{name}» от {date} · балл {score}",rep_pdf:"Скачать отчёт (PDF)",rep_pdf_hint:"В окне печати выбери «Сохранить как PDF».",fx_do:"Что сделать",fx_how:"Как",fx_check:"Как проверить",
   rep_disc:"Второе мнение и проверка надёжности, а не гарантия. Финальное решение по системе остаётся за человеком. Architect Systems AI."
  },
@@ -471,12 +481,12 @@ const I18N={
   c6k:"Model drift",c6v:"Whether quality holds when the model changes.",
   how_h2:"How it works",
   s1h:"Load the system",s1p:"Agent prompts and a run trace, as files or text.",
-  s2h:"The auditor checks",s2p:"Builds the map, runs the battery and system checks in an isolated sandbox.",
+  s2h:"The auditor checks",s2p:"Builds the map, runs the per-agent battery and system checks, matches against a library of 54 failure classes. The model has no tools and no network access; the description is stored nowhere.",
   s3h:"Get the report",s3p:"Map with the break, weak link, score and hardening steps.",
   strong_h2:"What makes the audit strong",
-  st1h:"Active attack",st1p:"We build the exploit chain ourselves: injection → privileges → leak. Not passive logs, a real stress test.",
-  st2h:"EU AI Act compliance",st2p:"The report as evidence of robustness for the regulator. Since August 2026 this is required for high-risk AI.",
-  st3h:"Reliability certificate",st3p:"A public mark, Verified by Architect Systems AI, with a score, ID and validity.",
+  st1h:"Attack chain",st1p:"We assemble the attack chain: entry → privileges → leak — and show at which link protection breaks. Live confirmation happens on a test stand, the next stage.",
+  st2h:"EU AI Act compliance",st2p:"A table for Articles 9, 12, 14 and 15: what is in place and what proves it — from the description. For high-risk systems (Annex III) the requirements apply from 2 December 2027.",
+  st3h:"Reliability certificate",st3p:"The “Verified by Architect Systems AI” mark with a score, ID and validity is issued after the live system is checked on a test stand — the next stage.",
   cta_h3:"Check your system",cta_p:"Load your agents and get a map with a reliability score.",cta_btn:"Start audit",
   drop_t1:"Drop the project description",drop_t2:"The agentproof-package.md file or project files. Or click to choose",
   dir_btn:"Choose project folder",pkg_link:"Preparing a project for audit",
@@ -484,7 +494,7 @@ const I18N={
   file_err:"The file “{f}” could not be read — save it again as .docx and upload once more.",
   new_label:"Or describe the system by hand",
   new_ph:"Describe it in plain words: which bots or agents you have, what each one does, who passes what to whom, where payments are taken or access is granted, which keys and services are connected. For example: “A Telegram bot answers students and sends the lessons link after payment. A second bot writes posts from comments. Both run on one ChatGPT key”.",
-  run_btn:"Check system",safe_txt:"Secrets and keys are stripped before the check.",load_txt:"The auditor is building the map and running checks — up to 5 minutes. Keep this page open",
+  run_btn:"Check system",safe_txt:"Secrets and keys are stripped before the check.",load_txt:"Step 1 of 3 · the auditor is building the system map",
   err_429:"Many checks in a row. The next one opens in 10 minutes.",
   rep_axes:"Scores by axis",rep_basis:"What the verdict is based on",
   basis_txt:"Checked: the system description, {checked} characters · {date} · model {model} · rubric {rubric}. A live system is checked on a test stand — that is the next step.",
@@ -510,7 +520,7 @@ const I18N={
   err_txt:"The audit did not come together this time. Try again in a minute — or message t.me/arsysai_bot and we will run it by hand.",
   kb:"KB",
   th_sys:"System",th_status:"Status",th_score:"Score",th_date:"Date",
-  lab_intro:"A catalog of known failure patterns. Every audit is checked against it.",
+  lab_intro:"Failure library: 54 vulnerability classes of agent systems drawn from real incidents. Every audit matches the system against it, and it grows with new incidents.",
   lab_pattern:"Failure pattern",lab_stage:"Stage",st_agent:"agent",st_system:"system",
   footer_sub:"AgentProof · Architect Systems AI",
   rep_mapTitle:"System map and break",
@@ -518,6 +528,7 @@ const I18N={
   rep_weak:"Weak link",rep_battery:"Per-agent battery",rep_system:"System checks",
   rep_matched:"Matched failure library",rep_attack:"Attack · exploit chain",
   rep_comp:"Compliance",rep_cert:"Reliability certificate",rep_fix:"What to harden",
+  load_map:"Step 1 of 3 · the auditor is building the system map",load_probe:"Step 2 of 3 · per-agent battery, system checks, library matching",load_final:"Step 3 of 3 · findings registry, plan and axis scores",load_hint:"Usually a few minutes. Keep this page open.",rep_strong:"Strong point",rep_channels:"Egress channels",ch_closed:"closed",ch_open:"open",ch_unknown:"no data",ch_sum:"{n} of {m} closed",rep_gaps:"What the description was missing",rep_spread:"spread of three independent scores: ±{n}",cs_yes:"in place",cs_partial:"partial",cs_no:"no barrier",cs_unknown:"no data",b_fact:"fact from the description",b_hyp:"hypothesis",flag_btn:"Inaccurate?",flag_q:"What is inaccurate here? This helps the engine learn.",flag_ok:"Thanks, recorded",lib_code:"Code",lib_class:"Failure class",
   rep_fix2:"How to fix — per finding",fin_title:"Finish line",fin_p1:"No open P1 findings",fin_score:"Score 8.5 or higher",fin_p2:"Every P2 fixed or consciously accepted",fin_left:"{n} left",fin_now:"now {n}",fin_done:"Done: the system has crossed the finish line. P3 is optional hardening.",fin_todo:"To finish: fix the marked items and run a retest against this same list.",rt_title:"Retest against the same registry",rt_closed:"fixed",rt_open:"still open",rt_new:"new",st_new:"new",st_open:"still open",st_closed:"fixed",rep_closed:"Fixed since the last check",acc_txt:"I accept this risk consciously",prev_label:"Retest",prev_none:"First check — new registry",prev_opt:"Against “{name}” from {date} · score {score}",rep_pdf:"Download report (PDF)",rep_pdf_hint:"In the print window choose “Save as PDF”.",fx_do:"What to do",fx_how:"How",fx_check:"How to verify",
   rep_disc:"A second opinion and reliability check, not a guarantee. The final decision on the system stays with a human. Architect Systems AI."
  }
@@ -525,8 +536,8 @@ const I18N={
 
 // table data (bilingual)
 const LAB={
- ru:[["Выдуманный вызов инструмента","st_agent"],["Потеря контекста на стыке","st_system"],["Инъекция из найденного текста","st_agent"],["Отравление контекста в памяти","st_system"],["Утечка ключа между агентами","st_system"]],
- en:[["Fabricated tool call","st_agent"],["Context loss at handoff","st_system"],["Injection from retrieved text","st_agent"],["Context poisoning in memory","st_system"],["Key leak between agents","st_system"]]
+ ru:[["A01.1", "Отложенная инъекция через публичные формы и записи (лиды, заявки, тикеты)"], ["A01.2", "Инъекция через письма, документы и коннекторы (RAG без клика)"], ["A01.3", "Инъекция через веб-страницы в агентах-браузерах"], ["A01.4", "Инъекция через issue, PR, README и код репозитория"], ["A02.1", "«Токсичная комбинация»: каждый вызов разрешён, вместе они дают утечку"], ["A02.2", "Разрешённые команды проверяются по строке, а не по смыслу"], ["A02.3", "Служебная функция случайно открыта модели как инструмент"], ["A02.4", "Упорство при отказе: агент ищет обход закрытого ресурса"], ["A03.1", "Токен шире задачи, «запутанный заместитель»"], ["A03.2", "Засвеченные и продакшен-учётки в среде агента; облачные метаданные"], ["A03.3", "Приложение само отдаёт токен наружу"], ["A03.4", "Подмена пользователя или агента через API"], ["A03.5", "Смежный: кража и перепродажа доступа к AI-аккаунтам"], ["A04.1", "Пакет или MCP-сервер меняет поведение после набора доверия («rug pull»)"], ["A04.2", "Удалённый MCP-сервер как недоверенный собеседник"], ["A04.3", "Автозагрузка проектных конфигов и хуков из чужого репозитория"], ["A04.4", "Компрометация конвейера сборки и использование установленных AI-инструментов"], ["A05.1", "Открытый эндпоинт исполнения кода в визуальных конструкторах агентов"], ["A05.2", "Вывод модели попадает в eval или десериализацию"], ["A05.3", "Граница пути или песочницы проверяется по строке"], ["A05.4", "Молчаливый откат на слабую песочницу; агент отключает свою изоляцию"], ["A05.5", "Агент-исполнитель: агент применяет техники атак к чужим системам"], ["A05.6", "Локальный инструмент разработчика без аутентификации"], ["A06.1", "Отравление долговременной памяти"], ["A06.2", "Отравленное общее состояние между агентами (планы, сводки, кэш)"], ["A06.3", "Смежный: подделка внутренних данных, которым доверяет система одобрения"], ["A07.1", "Сообщения между агентами без аутентификации, подмена отправителя"], ["A07.2", "Второй порядок через обнаружение агентов: слабый агент нанимает сильного"], ["A07.3", "Вывод субагента = доверенный вход оркестратора"], ["A07.4", "Скрытые каналы и несанкционированная координация"], ["A07.5", "Протокольные слабости A2A: неподписанные карточки агентов, отравление метаданных"], ["A07.6", "Самовоспроизводящаяся инъекция между агентами"], ["A08.1", "Цепочка средних находок складывается в критическую"], ["A08.2", "Эскалация «задача → атака» из-за недоопределённой цели"], ["A08.3", "Небоевые сбои мультиагентных систем: повторы, рассогласование, отсутствие проверки"], ["A08.4", "Компрометация одного узла расходится по связям"], ["A09.1", "Человек одобряет то, чего не видит целиком"], ["A09.2", "Действие от имени человека без подтверждения"], ["A09.3", "Сообщения от имени агента без указания, кто их вызвал"], ["A09.4", "Приватные данные показаны не тому человеку"], ["A10.1", "Агент выгружает данные наружу без ведома владельца"], ["A10.2", "«Агентский спам»: публикация на чужих сайтах"], ["A10.3", "Самовольная эскалация и сокрытие следов"], ["D1", "Денежный контур и вебхуки"], ["D2", "Каналы выхода (полный перечень)"], ["D3", "Секреты в контексте агента"], ["D4", "Расход и зацикливание (denial of wallet)"], ["D5", "Передача доверия из песочницы наружу"], ["D6", "Подмена описаний инструментов после одобрения"], ["D7", "Автоодобрение и усталость подтверждений"], ["D8", "Доверие к «разрешённым» доменам"], ["D9", "Регресс исправлений"], ["D10", "Обнаружение без остановки"], ["D11", "Операторская плоскость и админ-команды"]],
+ en:[["A01.1", "Delayed injection via public forms and records (leads, requests, tickets)"], ["A01.2", "Injection via emails, documents and connectors (zero-click RAG)"], ["A01.3", "Injection via web pages in browser agents"], ["A01.4", "Injection via issues, PRs, READMEs and repository code"], ["A02.1", "“Toxic combination”: each call allowed, together they leak"], ["A02.2", "Allowed commands checked by string, not meaning"], ["A02.3", "Internal function accidentally exposed to the model as a tool"], ["A02.4", "Persistence after refusal: the agent looks for a way around a closed resource"], ["A03.1", "Token broader than the task, “confused deputy”"], ["A03.2", "Exposed and production credentials in the agent environment; cloud metadata"], ["A03.3", "The app itself sends a token outside"], ["A03.4", "User or agent impersonation via API"], ["A03.5", "Adjacent: theft and resale of AI account access"], ["A04.1", "Package or MCP server changes behaviour after earning trust (“rug pull”)"], ["A04.2", "Remote MCP server as an untrusted counterpart"], ["A04.3", "Auto-loading project configs and hooks from a foreign repository"], ["A04.4", "Build pipeline compromise and abuse of installed AI tools"], ["A05.1", "Open code-execution endpoint in visual agent builders"], ["A05.2", "Model output reaches eval or deserialization"], ["A05.3", "Path or sandbox boundary checked by string"], ["A05.4", "Silent fallback to a weak sandbox; the agent disables its own isolation"], ["A05.5", "Agent as executor: the agent applies attack techniques to third-party systems"], ["A05.6", "Local developer tool without authentication"], ["A06.1", "Long-term memory poisoning"], ["A06.2", "Poisoned shared state between agents (plans, summaries, cache)"], ["A06.3", "Adjacent: forged internal data trusted by the approval system"], ["A07.1", "Unauthenticated inter-agent messages, sender spoofing"], ["A07.2", "Second-order via agent discovery: a weak agent recruits a strong one"], ["A07.3", "Subagent output = trusted orchestrator input"], ["A07.4", "Covert channels and unauthorised coordination"], ["A07.5", "A2A protocol weaknesses: unsigned agent cards, metadata poisoning"], ["A07.6", "Self-replicating injection between agents"], ["A08.1", "A chain of medium findings adds up to a critical one"], ["A08.2", "“Task → attack” escalation from an underspecified goal"], ["A08.3", "Non-adversarial multi-agent failures: repeats, misalignment, missing verification"], ["A08.4", "Compromise of one node spreads along its links"], ["A09.1", "A human approves what they cannot fully see"], ["A09.2", "Action on behalf of a human without confirmation"], ["A09.3", "Messages on behalf of an agent without saying who triggered them"], ["A09.4", "Private data shown to the wrong person"], ["A10.1", "The agent exports data without the owner knowing"], ["A10.2", "“Agent spam”: publishing on third-party sites"], ["A10.3", "Unauthorised escalation and covering tracks"], ["D1", "Money flow and webhooks"], ["D2", "Egress channels (full inventory)"], ["D3", "Secrets in the agent context"], ["D4", "Spend and loops (denial of wallet)"], ["D5", "Trust handoff from the sandbox to the host"], ["D6", "Tool description swap after approval"], ["D7", "Auto-approval and confirmation fatigue"], ["D8", "Trust in “allowed” domains"], ["D9", "Fix regression"], ["D10", "Detection without stopping"], ["D11", "Operator plane and admin commands"]]
 };
 
 const DEMO={
@@ -571,7 +582,19 @@ const DEMO={
 // Демо показывает повторную проверку: было 5.1 → стало 6.4, одна находка закрыта
 [['ru','Убрать ключ из текста промпта','Ключ перенесён в переменные окружения — в промпте его больше нет.'],['en','Remove the key from the prompt text','The key moved to environment variables and is no longer in the prompt.']].forEach(([l,t,d])=>{
   const D=DEMO[l];D.prev_score=5.1;D.hardening.forEach((h,i)=>{h.id='F'+(i+2);h.st=i===3?'new':'open';});
-  D.hardening.push({id:'F1',st:'closed',p:'P1',t,do:d,how:'',check:''});});
+  D.hardening.push({id:'F1',st:'closed',p:'P1',t,do:d,how:'',check:''});
+  delete D.cert; D.spread=1;
+  const cls=['A07.3','A01.2','D4','D3','D3'];D.hardening.forEach((h,i)=>{h.cls=cls[i];h.basis=i===1?'hypothesis':'fact';});
+  const ru=l==='ru';
+  D.strong=ru?'Оплату проводит код по подписанному уведомлению — модель к деньгам доступа не имеет.':'Payments are processed by code from a signed notification — the model has no access to money.';
+  D.channels=[['HTTPS к API модели','closed'],['DNS','unknown'],['Картинки в markdown','closed'],['Превью ссылок в мессенджере','open'],['Вебхук оплаты','closed'],['Ответ клиенту','open']].map(([c,st])=>({ch:ru?c:{'HTTPS к API модели':'HTTPS to model API','DNS':'DNS','Картинки в markdown':'Markdown images','Превью ссылок в мессенджере':'Messenger link previews','Вебхук оплаты':'Payment webhook','Ответ клиенту':'Reply to client'}[c],state:st,n:''}));
+  D.gaps=ru?['Нет данных, закрыт ли DNS в среде бота','Не описан лимит обращений к модели на пользователя']:['No data on whether DNS is closed in the bot environment','The per-user model call limit is not described'];
+  D.matched=['A07.3 · '+(ru?'Вывод субагента = доверенный вход оркестратора':'Subagent output = trusted orchestrator input'),'D3 · '+(ru?'Секреты в контексте агента':'Secrets in the agent context'),'D4 · '+(ru?'Расход и зацикливание':'Spend and loops')];
+  D.compliance={ref:ru?'EU AI Act · по описанию, не юридическое заключение':'EU AI Act · from the description, not a legal opinion',items:[
+    {t:ru?'Ст. 9 — система управления рисками':'Art. 9 — risk management system',st:'partial',ok:false,ev:'F2, F3'},
+    {t:ru?'Ст. 12 — журналирование событий':'Art. 12 — record-keeping (logs)',st:'yes',ok:true,ev:ru?'Журнал оплат и действий описан':'Payment and action log is described'},
+    {t:ru?'Ст. 14 — надзор человека':'Art. 14 — human oversight',st:'partial',ok:false,ev:'F4'},
+    {t:ru?'Ст. 15 — точность, устойчивость, кибербезопасность':'Art. 15 — accuracy, robustness, cybersecurity',st:'no',ok:false,ev:'F2, F5'}]};});
 let lang = (function(){try{return localStorage.getItem('asa_lang')||'ru';}catch(e){return 'ru';}})();
 let curView='overview';
 function t(k){return (I18N[lang]&&I18N[lang][k]!=null)?I18N[lang][k]:(I18N.ru[k]||k);}
@@ -592,8 +615,8 @@ function buildTables(){
   const sel=$('#prevSel'),was=sel.value;
   sel.innerHTML=`<option value="">${t('prev_none')}</option>`+reps.map((x,i)=>`<option value="${i}">${t('prev_opt').replace('{name}',x.rep.name).replace('{date}',x.date).replace('{score}',x.rep.score)}</option>`).join('');
   sel.value=was;
-  $('#labTable').innerHTML=`<div class="tr head" style="grid-template-columns:1fr 130px"><span>${t('lab_pattern')}</span><span>${t('lab_stage')}</span></div>`+
-    LAB[lang].map(r=>`<div class="tr" style="grid-template-columns:1fr 130px"><span class="name">${r[0]}</span><span class="dt">${t(r[1])}</span></div>`).join('');
+  $('#labTable').innerHTML=`<div class="tr head" style="grid-template-columns:70px 1fr"><span>${t('lib_code')}</span><span>${t('lib_class')}</span></div>`+
+    LAB[lang].map(r=>`<div class="tr" style="grid-template-columns:70px 1fr"><span class="dt">${r[0]}</span><span class="name">${r[1]}</span></div>`).join('');
 }
 
 const HEROG={
@@ -645,6 +668,7 @@ function render(r){
   const retest=rt?`<div class="retest"><h3>${t('rt_title')}</h3><div class="bs">${r.prev_score}<em>→</em>${r.score}</div><div class="cnt"><span><b>${closed.length}</b>${t('rt_closed')}</span><span><b>${H.filter(h=>h.st==='open').length}</b>${t('rt_open')}</span><span><b>${H.filter(h=>h.st==='new').length}</b>${t('rt_new')}</span></div></div>`:'';
   const stTag=h=>rt?`<span class="fxs ${h.st==='open'?'open':''}">${t('st_'+h.st)}</span>`:'';
   const hard=open.map(h=>`<div class="fxc"><div class="fxh">${h.p?`<span class="fxp">${h.p}</span>`:''}${h.id?`<span class="fxid">${h.id}</span>`:''}<span class="fxt">${h.t||''}</span>${stTag(h)}</div>`+
+    (h.cls||h.basis?`<div class="fxr"><span class="fxk">${h.cls&&h.cls!=='NEW'?h.cls:''}</span><span class="fxv"><span class="fxb">${t(h.basis==='fact'?'b_fact':'b_hyp')}</span>${!isDemo&&r._code?`<button class="flagb" data-flag="${h.id}">${t('flag_btn')}</button>`:''}</span></div>`:'')+
     (h.do?`<div class="fxr"><span class="fxk">${t('fx_do')}</span><span class="fxv">${h.do}</span></div>`:'')+
     (h.how?`<div class="fxr"><span class="fxk">${t('fx_how')}</span><span class="fxv">${h.how}</span></div>`:'')+
     (h.check?`<div class="fxr"><span class="fxk">${t('fx_check')}</span><span class="fxv">${h.check}</span></div>`:'')+
@@ -652,11 +676,14 @@ function render(r){
     `</div>`).join('');
   const closedHtml=closed.length?`<div class="fix2 closed"><h3>${t('rep_closed')}</h3>`+closed.map(h=>`<div class="fxc"><div class="fxh">${h.p?`<span class="fxp">${h.p}</span>`:''}<span class="fxid">${h.id}</span><span class="fxt">${h.t||''}</span>${stTag(h)}</div>${h.do?`<div class="fxr"><span class="fxk">${t('fx_check')}</span><span class="fxv">${h.do}</span></div>`:''}</div>`).join('')+`</div>`:'';
   const tags=(r.matched||[]).map(m=>`<span class="tag">${m}</span>`).join('');
+  const chs=r.channels||[], chClosed=chs.filter(c=>c.state==='closed').length;
+  const chHtml=chs.length?`<div class="block chs" style="margin-top:16px"><h3>${t('rep_channels')} · ${t('ch_sum').replace('{n}',chClosed).replace('{m}',chs.length)}</h3>`+chs.map(c=>`<div class="chr"><span>${c.ch}</span><span class="st-${c.state}">${t('ch_'+c.state)}</span><span>${c.n||''}</span></div>`).join('')+`</div>`:'';
+  const gapsHtml=(r.gaps||[]).length?`<div class="block gaps" style="margin-top:16px"><h3>${t('rep_gaps')}</h3><ul>${r.gaps.map(g=>`<li>${g}</li>`).join('')}</ul></div>`:'';
   const fill=(s,o)=>s.replace(/\{(\w+)\}/g,(_,k)=>o[k]==null?'':k==='date'?new Date(o[k]).toLocaleDateString(lang==='en'?'en':'ru'):typeof o[k]==='number'?o[k].toLocaleString(lang==='en'?'en':'ru'):o[k]);
   const b=r.basis, trunc=b&&b.total>b.checked;
   const axes=(r.axes||[]).map(a=>`<div class="metric"><div class="rowt"><span class="lb">${a.t}</span><span class="sc">${a.s}/10</span></div><div class="nt">${a.why}</div><div class="track"><i style="width:${a.s*10}%"></i></div></div>`).join('');
   const chain=((r.exploit&&r.exploit.path)||[]).map((s,i)=>`${i?'<span class="ar">→</span>':''}<span class="st">${s}</span>`).join('');
-  const comp=((r.compliance&&r.compliance.items)||[]).map(c=>`<div class="cl"><span class="mk ${c.ok?'ok':''}">${c.ok?'✓':'·'}</span><span class="t">${c.t}</span></div>`).join('');
+  const comp=((r.compliance&&r.compliance.items)||[]).map(c=>`<div class="cl"><span class="mk ${c.ok?'ok':''}">${c.ok?'✓':'·'}</span><span class="t">${c.t}${c.st?` · ${t('cs_'+c.st)}`:''}</span></div>${c.ev?`<div class="ev">${c.ev}</div>`:''}`).join('');
   $('#report').innerHTML=`
     <div class="rtop">
       <span class="nm">${r.name||''}</span>
@@ -670,8 +697,10 @@ function render(r){
     </div>
     ${trunc?`<div class="warnbox">${fill(t('trunc_txt'),b)}</div>`:''}
     <div class="weak"><div class="k">${t('rep_weak')}</div><div class="v">${r.weak}</div></div>
-    ${axes?`<div class="block" style="margin-top:16px"><h3>${t('rep_axes')}</h3>${axes}</div>`:''}
+    ${r.strong?`<div class="weak strongb"><div class="k">${t('rep_strong')}</div><div class="v">${r.strong}</div></div>`:''}
+    ${axes?`<div class="block" style="margin-top:16px"><h3>${t('rep_axes')}</h3>${r.spread?`<div class="spread">${t('rep_spread').replace('{n}',r.spread)}</div>`:''}${axes}</div>`:''}
     <div class="cols"><div class="block"><h3>${t('rep_battery')}</h3>${bat}</div><div class="block"><h3>${t('rep_system')}</h3>${sys}</div></div>
+    ${chHtml}${gapsHtml}
     ${tags?`<div class="matched"><h3>${t('rep_matched')}</h3><div class="tags">${tags}</div></div>`:''}
     ${r.exploit?`<div class="block" style="margin-top:16px"><h3>${t('rep_attack')}</h3><div class="chain">${chain}</div><div style="color:var(--muted);font-size:12.5px;margin-top:11px">${r.exploit.note}</div></div>`:''}
     ${r.compliance?`<div class="block comp" style="margin-top:16px"><h3>${t('rep_comp')} · ${r.compliance.ref}</h3>${comp}</div>`:''}
@@ -694,6 +723,10 @@ function render(r){
         if(!res.ok)throw 0;$('#fb').innerHTML=`<div class="fbdone">${t('fb_thanks')}${help?t('fb_thanks_help'):''}</div>`;}
       catch(e){$('#fbSend').disabled=false;$('#fbMsg').textContent=t('fb_err');}};}
   $$('#report [data-acc]').forEach(c=>c.onchange=()=>{const a=accOf(r).filter(x=>x!==c.dataset.acc);if(c.checked)a.push(c.dataset.acc);accSet(r,a);const y=window.scrollY;render(r);window.scrollTo({top:y});});
+  $$('#report [data-flag]').forEach(b=>b.onclick=async()=>{const h=(r.hardening||[]).find(x=>x.id===b.dataset.flag);if(!h)return;
+    const why=window.prompt(t('flag_q'),'');if(why===null)return;b.disabled=true;
+    try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'flag',code:r._code,lang,flag:{rubric:r.rubric,lib:r.lib,cls:h.cls,p:h.p,t:h.t,why}})});if(!res.ok)throw 0;b.textContent=t('flag_ok');}
+    catch(e){b.disabled=false;}});
   $('#pdfBtn').onclick=()=>{const old=document.title;document.title='AgentProof — '+(r.name||'отчёт').replace(/<[^>]*>/g,'');window.print();document.title=old;};
   if(curView!=='report')show('report');
 }
@@ -779,13 +812,20 @@ $('#run').addEventListener('click',async()=>{
   const code=getCode(); if(!code){gateView();return;}
   $('#run').disabled=true; $('#load').style.display='flex'; $('#err').textContent=t('err_txt');
   const pr=$('#prevSel').value!==''?loadReps()[+$('#prevSel').value]:null;
-  const prev=pr?{score:pr.rep.score,items:(pr.rep.hardening||[]).map((h,i)=>({id:h.id||`F${i+1}`,p:h.p,t:h.t}))}:null;
-  try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'audit',code,system,lang,prev})});
-    if(res.status===401||res.status===410){setCode('');gateView();gateMsg(res.status===410?'code_expired':'code_bad');return;}
-    if(res.status===409){const j=await res.json().catch(()=>({}));if(j.error==='used'){setCode('');gateView();gateMsg('code_used');return;}$('#err').textContent=t('err_running');throw 0;}
-    if(!res.ok)throw 0;
-    const rep=await res.json(); rep._code=code; isDemo=false; saveRep(rep); setCode(''); gateView(); render(rep);}
-  catch(e){$('#err').style.display='block';}
+  const prev=pr?{score:pr.rep.score,items:(pr.rep.hardening||[]).map((h,i)=>({id:h.id||`F${i+1}`,p:h.p,cls:h.cls||'',t:h.t}))}:null;
+  // Три шага; описание уходит на каждом шаге заново и нигде не хранится. Сбой шага — один повтор.
+  const step=async(extra,msg)=>{$('#loadMsg').textContent=t(msg);
+    for(let i=0;i<2;i++){const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,system,lang,...extra})});
+      if(res.status===401||res.status===410){setCode('');gateView();gateMsg(res.status===410?'code_expired':'code_bad');throw 'stop';}
+      if(res.status===429){$('#err').textContent=t('err_429');throw 0;}
+      if(res.status===409){const j=await res.json().catch(()=>({}));if(j.error==='used'){setCode('');gateView();gateMsg('code_used');throw 'stop';}$('#err').textContent=t('err_running');throw 0;}
+      if(res.ok)return res.json();
+      if(extra.action==='map'||i)throw 0;}};
+  try{let sealed=await step({action:'map'},'load_map');
+    sealed=await step({action:'probe',sealed},'load_probe');
+    const rep=await step({action:'final',sealed,prev},'load_final');
+    rep._code=code; isDemo=false; saveRep(rep); setCode(''); gateView(); render(rep);}
+  catch(e){if(e!=='stop')$('#err').style.display='block';}
   finally{$('#run').disabled=false;$('#load').style.display='none';}
 });
 $('#delReps').onclick=()=>{if(!confirm(t('del_ok')))return;try{localStorage.removeItem('ap_reports')}catch(e){}buildTables();};
