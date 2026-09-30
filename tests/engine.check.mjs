@@ -17,4 +17,15 @@ const r2 = m.normalize(map, probe, { ...fin, hardening: [{ ...fin.hardening[0], 
 ok(r2.score === 10 && r2.hardening[1].id === 'F2' && r2.hardening[1].st === 'open', 'ретест: закрытая P1 снимает потолок, пропущенная находка остаётся открытой');
 const s = m.sealState('k', { a: 1 });
 ok(m.openState('k', s).a === 1 && m.openState('k', { ...s, state: s.state.replace('1', '2') }) === null && m.openState('x', s) === null, 'подпись состояния');
+// Секрет-Стиратель + ПДн
+const sc = m.scrub('ключ sk-ant-abcdefghijklmnopqrstuv почта ivan@mail.com тел +7 912 345-67-89 карта 4111 1111 1111 1111 версия 3.12.5');
+ok(sc.found.secrets === 1 && sc.found.pii === 3 && !sc.text.includes('ivan@') && sc.text.includes('3.12.5'), 'вырезаны секрет и ПДн, версия цела');
+// Обещание-Калькулятор: запрещённое обещание убирается, обычный текст остаётся
+const h = { n: 0 };
+ok(m.guardPromises('Система собрана аккуратно. Утечек нет по описанию.', h) === 'Система собрана аккуратно.' && h.n === 1, 'убрано «утечек нет»');
+ok(m.guardPromises('Лимит гарантирует одно начисление.', { n: 0 }) === 'Лимит гарантирует одно начисление.', 'инженерное «гарантирует» не трогаем');
+// Возврат-Детектив, прогноз, три шага
+const r3 = m.normalize(map, probe, fin, top, 'ru', { prev: { score: 8, items: [{ id: 'F9', p: 'P2', cls: 'D2', st: 'closed', t: 'z' }] } });
+ok(r3.hardening.find(x => x.id === 'F1').ret === 1, 'находка закрытого ранее класса отмечена «вернулась»');
+ok(r3.forecast === 10 && r3.top3[0].p === 'P1', 'прогноз без потолков и три главных шага');
 console.log('engine checks ok');
