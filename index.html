@@ -395,7 +395,7 @@
           <div class="ready" id="ready"></div>
           <label class="fl" for="prevSel" data-i18n="prev_label"></label>
           <select id="prevSel" class="prevsel"></select>
-          <label class="consent"><input type="checkbox" id="agree"><span data-i18n="consent_txt"></span></label>
+          <label class="consent"><input type="checkbox" id="agree"><span data-i18n-html="consent_txt"></span></label>
           <div class="actions"><button class="cta" id="run" data-i18n="run_btn"></button><span class="safe" data-i18n="safe_txt"></span></div>
           <div class="load" id="load"><span class="spin"></span><span><span id="loadMsg" data-i18n="load_txt"></span><br><small data-i18n="load_hint"></small></span></div>
           <div class="errbox" id="err" data-i18n="err_txt"></div>
@@ -480,7 +480,7 @@ const I18N={
   code_expired:"Срок кода закончился. Напиши в @arsysai_bot — выдадим новый.",
   code_used:"Этот код уже дал свою проверку. Отчёт — в разделе «Отчёты» на устройстве, где она проходила.",
   code_off:"Проверка сейчас недоступна. Напиши в @arsysai_bot — разберёмся.",
-  consent_txt:"Я заменила пароли и ключи на [СЕКРЕТ] и согласна на проверку. Документ уходит на проверку в Claude (Anthropic), проверяется в памяти и сразу забывается — мы его не храним. В обезличенную статистику попадают только балл, число агентов и коды классов находок.",
+  consent_txt:"Я заменила пароли и ключи на [СЕКРЕТ] и принимаю <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">условия проверки</a>. Документ уходит на проверку в Claude (Anthropic), проверяется в памяти и сразу забывается — мы его не храним. В обезличенную статистику попадают только балл, число агентов и коды классов находок.",
   consent_need:"Отметь согласие — и запускай проверку.",
   err_running:"Проверка по этому коду уже идёт. Дождись отчёта на той вкладке, где запустила.",
   fb_title:"Как тебе проверка?",fb_ph:"Что было полезно, что неточно — по желанию",
@@ -560,7 +560,7 @@ const I18N={
   code_expired:"This code has expired. Message @arsysai_bot and we will issue a new one.",
   code_used:"This code has already given its check. The report is under “Reports” on the device where it ran.",
   code_off:"Checks are unavailable right now. Message @arsysai_bot and we will sort it out.",
-  consent_txt:"I replaced passwords and keys with [SECRET] and agree to the check. The document goes to Claude (Anthropic), is checked in memory and forgotten right away — we keep nothing. Only the score, the number of agents and finding class codes go into anonymised statistics.",
+  consent_txt:"I replaced passwords and keys with [SECRET] and accept the <a href=\"terms.html\" target=\"_blank\" rel=\"noopener\">check terms</a>. The document goes to Claude (Anthropic), is checked in memory and forgotten right away — we keep nothing. Only the score, the number of agents and finding class codes go into anonymised statistics.",
   consent_need:"Tick the consent box to start the check.",
   err_running:"A check with this code is already running. Wait for the report in the tab where you started it.",
   fb_title:"How was the check?",fb_ph:"What helped, what was off — optional",

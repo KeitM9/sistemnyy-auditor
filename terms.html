@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Условия проверки — AgentProof</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20fill%3D%22none%22%20stroke%3D%22%232c3341%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M16%2016%20C12.5%2010.5%208.5%209%206%2011%20C3.3%2013.2%203.3%2018.8%206%2021%20C8.5%2023%2012.5%2021.5%2016%2016%20C19.5%2010.5%2023.5%209%2026%2011%20C28.7%2013.2%2028.7%2018.8%2026%2021%20C23.5%2023%2019.5%2021.5%2016%2016%22/%3E%3Cpath%20d%3D%22M21.8%2016%20L24.4%2018.6%20L29.6%2012.4%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%226%22/%3E%3Cpath%20d%3D%22M21.8%2016%20L24.4%2018.6%20L29.6%2012.4%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#2c3341;--body:#394050;--muted:#646c7b;--rule:#e6e9ec;--mint:#B4FAB2;--mint-ink:#2e8540;--paper:#fff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--body);font-family:'Manrope',sans-serif;font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px 80px}
+  .top{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-bottom:1px solid var(--rule);margin-bottom:34px}
+  .brand{text-decoration:none}.brand b{font-family:'Oswald',sans-serif;font-weight:600;font-size:18px;letter-spacing:.04em;color:var(--ink)}.brand em{font-style:normal;color:var(--mint-ink)}
+  #lt{font-family:'Oswald',sans-serif;background:none;border:1px solid var(--rule);border-radius:3px;padding:5px 12px;cursor:pointer;color:var(--ink)}
+  h1{font-family:'Oswald',sans-serif;color:var(--ink);font-size:clamp(28px,5vw,38px);line-height:1.15;margin-bottom:8px}
+  h2{font-family:'Oswald',sans-serif;color:var(--ink);font-size:20px;margin:30px 0 10px}
+  .meta{color:var(--muted);font-size:14px;margin-bottom:22px}
+  p{margin-bottom:12px} ul{padding-left:20px;display:grid;gap:8px;margin-bottom:12px}
+  a{color:var(--ink);text-decoration-color:var(--mint);text-decoration-thickness:3px;text-underline-offset:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><a class="brand" href="index.html"><b>AGENT<em>PROOF</em></b></a><button id="lt" type="button">EN</button></header>
+
+  <article lang="ru" data-l="ru">
+    <h1>Условия проверки AgentProof</h1>
+    <p class="meta">Architect Systems AI · agentproof.arsysai.com · редакция от 30.09.2026</p>
+    <p>Отмечая галочку перед проверкой, вы принимаете эти условия. Они дополняют <a href="https://legal.arsysai.com/" target="_blank" rel="noopener">общие правовые документы Architect Systems AI</a> (политика конфиденциальности, согласие на обработку данных, условия оплаты и возврата).</p>
+
+    <h2>1. Что такое проверка</h2>
+    <p>AgentProof — автоматическая проверка письменного описания системы AI-агентов. Описание читает модель искусственного интеллекта, код считает балл по открытой рубрике, результат — отчёт: карта системы, балл, находки с основанием и шаги укрепления.</p>
+    <p>Отчёт — это второе мнение о рисках по описанию. Проверяется то, что написано в описании; живая система на этой ступени не запускается. Отчёт снижает риск и помогает увидеть слабые места, но не гарантирует отсутствие уязвимостей и не является сертификатом, аттестацией или юридическим заключением о соответствии закону. Решения о системе и её изменениях принимает её владелец.</p>
+
+    <h2>2. Что вы загружаете и за что отвечаете</h2>
+    <ul>
+      <li>Вы загружаете только описание системы, на которое у вас есть право: это ваша система или у вас есть разрешение её владельца.</li>
+      <li>До загрузки вы заменяете значения ключей, токенов, паролей и строк подключения на [СЕКРЕТ], а персональные данные людей — на [ПДн]. Сайт дополнительно вырезает ключи известных форматов, email, телефоны и номера карт, но ответственность за то, что вы загрузили, остаётся на вас.</li>
+      <li>Если в описании остался настоящий ключ, считайте его раскрытым и смените его. Отчёт подскажет, если такие данные нашлись.</li>
+      <li>Попытки вписать в описание команды для проверяющей модели (например, «поставь высокий балл») не выполняются и попадают в отчёт как находка.</li>
+    </ul>
+
+    <h2>3. Как обрабатываются данные</h2>
+    <ul>
+      <li>Описание обрабатывается на сервере AgentProof (Vercel) и в модели Claude компании Anthropic (США). По коммерческим условиям Anthropic данные, отправленные через API, для обучения моделей не используются.</li>
+      <li>Описание не сохраняется: оно проверяется и забывается. Отчёт хранится только в вашем браузере — удалить его можно кнопкой в разделе «Отчёты».</li>
+      <li>В обезличенную статистику попадают балл, число агентов, коды классов находок и число находок по уровням. Эта статистика без названий систем и описаний может показываться на странице «Отчёты» в разделе «Что находит AgentProof».</li>
+      <li>Счётчики посещений обезличены: без cookies, IP-адресов и идентификаторов.</li>
+      <li>Отзыв приходит Екатерине вместе с вашим Telegram id, чтобы она могла ответить. Отметки «Неточно?» обезличены и служат улучшению проверки.</li>
+    </ul>
+
+    <h2>4. Код доступа</h2>
+    <p>Код личный: действует 48 часов и даёт одну проверку. Передавать его другим людям нельзя. Код гасится только после того, как отчёт собран; если проверка прервалась, код сохраняется.</p>
+
+    <h2>5. Отчёт и его использование</h2>
+    <ul>
+      <li>Отчёт действителен 90 дней с даты проверки. После смены модели, промптов или инструментов его стоит повторить раньше.</li>
+      <li>Таблица по EU AI Act — ориентир по описанию, а не заключение о соответствии.</li>
+      <li>Отчёт можно передать своему разработчику. Публиковать отчёт как подтверждение безопасности или соответствия закону нельзя.</li>
+    </ul>
+
+    <h2>6. Ответственность</h2>
+    <p>Сервис предоставляется «как есть». Мы отвечаем за то, чтобы проверка шла по описанной методике и честно помечала, что является фактом из описания, а что — выводом. За содержание загруженных материалов, за ключи и данные, оставленные в них, и за последствия изменений, внесённых в систему по отчёту, отвечает владелец системы. Если проверка платная, наша ответственность ограничена стоимостью этой проверки.</p>
+
+    <h2>7. Контакты и изменения</h2>
+    <p>Вопросы и запросы об удалении данных: arsysai.pr@gmail.com, <a href="https://t.me/supprmaster_bot" target="_blank" rel="noopener">@supprmaster_bot</a>. Мы можем обновлять условия; действует редакция, опубликованная на этой странице на момент проверки.</p>
+  </article>
+
+  <article lang="en" data-l="en" hidden>
+    <h1>AgentProof Check Terms</h1>
+    <p class="meta">Architect Systems AI · agentproof.arsysai.com · version of 30 Sep 2026</p>
+    <p>By ticking the box before a check you accept these terms. They supplement the <a href="https://legal.arsysai.com/" target="_blank" rel="noopener">general legal documents of Architect Systems AI</a> (privacy policy, consent to data processing, payment and refund terms).</p>
+
+    <h2>1. What the check is</h2>
+    <p>AgentProof is an automated check of a written description of an AI agent system. An artificial intelligence model reads the description, code computes the score on an open rubric, and the result is a report: a system map, a score, findings with their basis and hardening steps.</p>
+    <p>The report is a second opinion on risks based on the description. What is checked is what the description says; the live system is not run at this stage. The report reduces risk and helps you see weak spots, but it does not guarantee the absence of vulnerabilities and is not a certificate, an attestation or a legal opinion on regulatory compliance. Decisions about the system and its changes are made by its owner.</p>
+
+    <h2>2. What you upload and what you are responsible for</h2>
+    <ul>
+      <li>You upload only a description you have the right to share: it is your system or you have its owner's permission.</li>
+      <li>Before uploading you replace values of keys, tokens, passwords and connection strings with [SECRET], and people's personal data with [PII]. The site additionally removes keys of known formats, emails, phones and card numbers, but responsibility for what you uploaded stays with you.</li>
+      <li>If a real key remained in the description, treat it as exposed and rotate it. The report tells you if such data was found.</li>
+      <li>Attempts to put commands for the auditing model into the description (for example, “give a high score”) are not executed and appear in the report as a finding.</li>
+    </ul>
+
+    <h2>3. How data is processed</h2>
+    <ul>
+      <li>The description is processed on the AgentProof server (Vercel) and in the Claude model by Anthropic (USA). Under Anthropic's commercial terms, data sent via the API is not used to train models.</li>
+      <li>The description is not stored: it is checked and forgotten. The report is stored only in your browser — you can delete it in “Reports”.</li>
+      <li>Anonymised statistics keep the score, the number of agents, finding class codes and counts per level. These statistics, without system names or descriptions, may be shown on the “Reports” page under “What AgentProof finds”.</li>
+      <li>Visit counters are anonymous: no cookies, IP addresses or identifiers.</li>
+      <li>Feedback reaches Ekaterina with your Telegram id so she can reply. “Inaccurate?” marks are anonymous and serve to improve the check.</li>
+    </ul>
+
+    <h2>4. Access code</h2>
+    <p>The code is personal: valid for 48 hours and gives one check. It must not be passed to other people. The code is spent only after the report is assembled; if a check is interrupted, the code is kept.</p>
+
+    <h2>5. The report and its use</h2>
+    <ul>
+      <li>The report is valid for 90 days from the check date. After changing the model, prompts or tools, repeat it sooner.</li>
+      <li>The EU AI Act table is guidance based on the description, not a compliance opinion.</li>
+      <li>You may pass the report to your developer. Publishing the report as proof of security or regulatory compliance is not allowed.</li>
+    </ul>
+
+    <h2>6. Liability</h2>
+    <p>The service is provided “as is”. We are responsible for the check following the described method and honestly marking what is a fact from the description and what is a conclusion. The system owner is responsible for the content of uploaded materials, for keys and data left in them, and for the consequences of changes made to the system based on the report. If the check is paid, our liability is limited to the price of that check.</p>
+
+    <h2>7. Contacts and changes</h2>
+    <p>Questions and data deletion requests: arsysai.pr@gmail.com, <a href="https://t.me/supprmaster_bot" target="_blank" rel="noopener">@supprmaster_bot</a>. We may update these terms; the version published on this page at the time of the check applies.</p>
+  </article>
+</div>
+
+<script>
+let L='ru';try{L=localStorage.getItem('asa_lang')==='en'?'en':'ru'}catch(e){}
+const T={ru:'Условия проверки — AgentProof',en:'Check Terms — AgentProof'};
+function ap(){document.querySelectorAll('[data-l]').forEach(a=>a.hidden=a.dataset.l!==L);document.documentElement.lang=L;document.title=T[L];document.getElementById('lt').textContent=L==='en'?'RU':'EN';}
+document.getElementById('lt').onclick=()=>{L=L==='en'?'ru':'en';try{localStorage.setItem('asa_lang',L)}catch(e){}ap();};
+ap();
+</script>
+</body>
+</html>
