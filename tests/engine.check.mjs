@@ -1,4 +1,5 @@
 // Самопроверка логики движка без обращения к модели: node tests/engine.check.mjs
+import crypto from 'node:crypto';
 import * as m from '../api/audit.js';
 const A = s => Object.fromEntries(['secrets', 'injection', 'tools', 'plan', 'joints', 'economy'].map(k => [k, { score: s, why: 'w' }]));
 const ok = (c, msg) => { if (!c) { console.error('FAIL', msg); process.exit(1); } };
@@ -30,6 +31,15 @@ ok(r3.hardening.find(x => x.id === 'F1').ret === 1, 'находка закрыт
 ok(r3.forecast === 10 && r3.top3[0].p === 'P1', 'прогноз без потолков и три главных шага');
 // Адвокат Дьявола: снятая P1 уходит из реестра, ослабленная становится P2, потолок P1 снимается
 const finA = { ...fin, hardening: [{ ...fin.hardening[0], id: 'F1', p: 'P1' }, { ...fin.hardening[0], id: 'F2', p: 'P1' }] };
-const r4 = m.normalize(map, probe, finA, top, 'ru', {}, { p1: [{ id: 'F1', verdict: 'removed', why: 'барьер описан', question: '' }, { id: 'F2', verdict: 'downgraded', why: 'слабое основание', question: 'Есть ли лимит?' }] });
+const r4 = m.normalize(map, probe, { ...finA, hardening: finA.hardening.map(h => ({ ...h, cls: 'A01.1' })) }, top, 'ru', {}, { p1: [{ id: 'F1', verdict: 'removed', arg: 'A2', quote: 'у агента нет инструмента', residual: '', rejected: [], why: 'барьер описан', question: '', prereg: '', bench: '' }, { id: 'F2', verdict: 'downgraded', arg: 'A6', quote: 'лимит 5', residual: 'остаток', rejected: [], why: 'слабое основание', question: 'Есть ли лимит?', prereg: 'да → P3', bench: '' }] });
 ok(r4.refuted.length === 1 && r4.hardening.length === 1 && r4.hardening[0].p === 'P2' && r4.score === 10 && r4.gaps.some(g => g.includes('Есть ли лимит')), 'адвокат дьявола');
+// Адвокат без контраргумента и цитаты не может снять находку; структурную (D3) снять нельзя
+ok(m.lawfulDevil({ verdict: 'removed', arg: 'none', quote: '' }, 'A01.1') === 'stands', 'снятие без A-аргумента запрещено');
+ok(m.lawfulDevil({ verdict: 'removed', arg: 'A1', quote: 'ключ в прокси' }, 'D3') === 'downgraded', 'структурная P1 только понижается');
+// Журнал на дозапись: правка записи рвёт цепочку
+
+const H = x => crypto.createHash('sha256').update(x).digest('hex');
+const j1 = JSON.stringify({ ev: 'map', prev: '0' }), h1 = H(j1), j2 = JSON.stringify({ ev: 'report', prev: h1 }), h2 = H(j2);
+ok(m.verifyJournal([j1 + ' ' + h1, j2 + ' ' + h2]).ok, 'целая цепочка журнала');
+ok(!m.verifyJournal([j1.replace('map', 'MAP') + ' ' + h1, j2 + ' ' + h2]).ok, 'правка записи видна');
 console.log('engine checks ok');
