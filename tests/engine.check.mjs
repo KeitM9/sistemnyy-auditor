@@ -28,4 +28,8 @@ ok(m.guardPromises('Лимит гарантирует одно начислен�
 const r3 = m.normalize(map, probe, fin, top, 'ru', { prev: { score: 8, items: [{ id: 'F9', p: 'P2', cls: 'D2', st: 'closed', t: 'z' }] } });
 ok(r3.hardening.find(x => x.id === 'F1').ret === 1, 'находка закрытого ранее класса отмечена «вернулась»');
 ok(r3.forecast === 10 && r3.top3[0].p === 'P1', 'прогноз без потолков и три главных шага');
+// Адвокат Дьявола: снятая P1 уходит из реестра, ослабленная становится P2, потолок P1 снимается
+const finA = { ...fin, hardening: [{ ...fin.hardening[0], id: 'F1', p: 'P1' }, { ...fin.hardening[0], id: 'F2', p: 'P1' }] };
+const r4 = m.normalize(map, probe, finA, top, 'ru', {}, { p1: [{ id: 'F1', verdict: 'removed', why: 'барьер описан', question: '' }, { id: 'F2', verdict: 'downgraded', why: 'слабое основание', question: 'Есть ли лимит?' }] });
+ok(r4.refuted.length === 1 && r4.hardening.length === 1 && r4.hardening[0].p === 'P2' && r4.score === 10 && r4.gaps.some(g => g.includes('Есть ли лимит')), 'адвокат дьявола');
 console.log('engine checks ok');

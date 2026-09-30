@@ -154,6 +154,8 @@
   .chs .chr{display:grid;grid-template-columns:150px 110px 1fr;gap:12px;padding:8px 0;border-top:1px solid var(--border2);font-size:13.5px;color:var(--body)}
   .chs .chr:first-of-type{border-top:none}.chs .st-closed{color:var(--mint)}.chs .st-open{color:var(--ink);font-weight:600}.chs .st-unknown{color:var(--muted)}
   .top3l{margin:0;padding-left:18px}.top3l li{color:var(--body);font-size:14px;padding:5px 0}
+  .ready{margin-top:14px;font-size:13px;color:var(--body)}.ready b{font-family:'Oswald',sans-serif;color:var(--ink)}
+  .ready .rd{display:inline-block;margin:6px 8px 0 0;padding:2px 8px;border:1px solid var(--border2);border-radius:var(--r);color:var(--muted)}.ready .rd.on{border-color:var(--mint);color:var(--mint)}
   .gaps li{color:var(--body);font-size:13.5px;padding:4px 0}
   .fxb{font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);border:1px solid var(--border2);border-radius:var(--r);padding:1px 7px}
   .flagb{margin-left:8px;background:none;border:none;color:var(--muted);font:inherit;font-size:11px;cursor:pointer;text-decoration:underline}
@@ -352,6 +354,7 @@
           <div class="chips" id="chips"></div>
           <label class="fl" for="sys" data-i18n="new_label"></label>
           <textarea id="sys" data-i18n-ph="new_ph"></textarea>
+          <div class="ready" id="ready"></div>
           <label class="fl" for="prevSel" data-i18n="prev_label"></label>
           <select id="prevSel" class="prevsel"></select>
           <label class="consent"><input type="checkbox" id="agree"><span data-i18n="consent_txt"></span></label>
@@ -423,7 +426,7 @@ const I18N={
   file_err:"Файл «{f}» не прочитался — пересохрани его как .docx и загрузи ещё раз.",
   new_label:"Или впиши систему вручную",
   new_ph:"Опиши простыми словами: какие у тебя боты или агенты, что делает каждый, кто кому что передаёт, где принимают оплату или выдают доступ, какие ключи и сервисы подключены. Например: «Бот в Telegram отвечает ученицам и после оплаты выдаёт ссылку на уроки. Второй бот пишет посты из комментариев. Оба на одном ключе ChatGPT».",
-  run_btn:"Проверить систему",safe_txt:"Секреты и ключи вычищаются до проверки.",load_txt:"Шаг 1 из 3 · аудитор строит карту системы",
+  run_btn:"Проверить систему",safe_txt:"Секреты и ключи вычищаются до проверки.",load_txt:"Шаг 1 из 4 · аудитор строит карту системы",
   err_429:"Много проверок подряд. Следующая откроется через 10 минут.",
   rep_axes:"Баллы по осям",rep_basis:"На чём основан вывод",
   basis_txt:"Проверено описание системы: {checked} знаков · {date} · модель {model} · рубрика {rubric}. Живую систему проверяют на стенде — это следующая ступень.",
@@ -437,7 +440,7 @@ const I18N={
   code_expired:"Срок кода закончился. Напиши в @arsysai_bot — выдадим новый.",
   code_used:"Этот код уже дал свою проверку. Отчёт — в разделе «Отчёты» на устройстве, где она проходила.",
   code_off:"Проверка сейчас недоступна. Напиши в @arsysai_bot — разберёмся.",
-  consent_txt:"Я заменила пароли и ключи на [СЕКРЕТ] и согласна на проверку. Документ уходит на проверку в Claude (Anthropic), проверяется в памяти и сразу забывается — мы его не храним.",
+  consent_txt:"Я заменила пароли и ключи на [СЕКРЕТ] и согласна на проверку. Документ уходит на проверку в Claude (Anthropic), проверяется в памяти и сразу забывается — мы его не храним. В обезличенную статистику попадают только балл, число агентов и коды классов находок.",
   consent_need:"Отметь согласие — и запускай проверку.",
   err_running:"Проверка по этому коду уже идёт. Дождись отчёта на той вкладке, где запустила.",
   fb_title:"Как тебе проверка?",fb_ph:"Что было полезно, что неточно — по желанию",
@@ -457,8 +460,9 @@ const I18N={
   rep_weak:"Слабое звено",rep_battery:"Батарея по агентам",rep_system:"Системные проверки",
   rep_matched:"Совпало с библиотекой сбоев",rep_attack:"Атака · цепочка эксплойта",
   rep_comp:"Соответствие",rep_cert:"Сертификат надёжности",rep_fix:"Что укрепить",
-  load_map:"Шаг 1 из 3 · аудитор строит карту системы",load_probe:"Шаг 2 из 3 · батарея по агентам, системные проверки, сверка с библиотекой",load_final:"Шаг 3 из 3 · реестр находок, план и оценка осей",load_hint:"Обычно несколько минут. Держи страницу открытой.",rep_strong:"Сильное место",rep_channels:"Каналы выхода",ch_closed:"закрыт",ch_open:"открыт",ch_unknown:"нет данных",ch_sum:"закрыто {n} из {m}",rep_gaps:"Чего не хватило в описании",rep_spread:"разброс трёх независимых оценок: ±{n}",cs_yes:"выполнено",cs_partial:"частично",cs_no:"барьера нет",cs_unknown:"нет данных",b_fact:"факт из описания",b_hyp:"гипотеза",flag_btn:"Неточно?",flag_q:"Что здесь неточно? Это поможет движку учиться.",flag_ok:"Спасибо, записано",lib_code:"Код",lib_class:"Класс сбоя",
+  load_map:"Шаг 1 из 4 · аудитор строит карту системы",load_probe:"Шаг 2 из 4 · батарея по агентам, системные проверки, сверка с библиотекой",load_final:"Шаг 3 из 4 · полный реестр находок и план исправления",load_hint:"Обычно несколько минут. Держи страницу открытой.",rep_strong:"Сильное место",rep_channels:"Каналы выхода",ch_closed:"закрыт",ch_open:"открыт",ch_unknown:"нет данных",ch_sum:"закрыто {n} из {m}",rep_gaps:"Чего не хватило в описании",rep_spread:"разброс трёх независимых оценок: ±{n}",cs_yes:"выполнено",cs_partial:"частично",cs_no:"барьера нет",cs_unknown:"нет данных",b_fact:"факт из описания",b_hyp:"гипотеза",flag_btn:"Неточно?",flag_q:"Что здесь неточно? Это поможет движку учиться.",flag_ok:"Спасибо, записано",lib_code:"Код",lib_class:"Класс сбоя",
   rep_top3:"Три главных шага",rep_forecast:"Если закрыть P1 и причины потолков, балл по осям — до {n} (оценка по описанию)",rep_cov:"Опора карты: прямо в описании — {d}, выведено — {i}, нет данных — {u}",rep_red:"В описании были открытые данные: секретов — {s}, личных данных — {p}. Они вырезаны до проверки и к модели не ушли. Если это настоящие ключи — смените их: они уже побывали в файле.",rep_links:"Стыки между агентами",fmt_schema:"строгая схема",fmt_json:"JSON без схемы",fmt_free_text:"свободный текст",fmt_unknown:"нет данных",rep_bounds:"Границы доверия · куда дотягивается чужой текст",rep_xray:"Промпт-Рентген · где текст может стать командой",rep_unch:"Что не проверялось",st_ret:"вернулась",err_503:"Проверка временно недоступна. Твой код сохранён — попробуй через час или напиши в @arsysai_bot.",
+  load_verify:"Шаг 4 из 4 · адвокат дьявола проверяет каждую P1, три независимые оценки осей",rep_devil:"Адвокат дьявола проверил {c} находок P1: выстояли {s}, понижены до P2 {d}, сняты {r}",rep_refuted:"Сняты после проверки адвоката дьявола",rd_title:"Готовность описания",rd_ok:"есть",rd_miss:"не хватает",rd_hint:"Чем полнее описание, тем точнее отчёт. Недостающее можно дописать в поле ниже.",rd_1:"агенты",rd_2:"промпты",rd_3:"инструменты",rd_4:"ключи и права",rd_5:"передачи между агентами",rd_6:"каналы наружу",rd_7:"деньги и доступ",rd_8:"примеры работы",
   rep_fix2:"Как исправить — по каждой находке",fin_title:"Финишная черта",fin_p1:"Нет открытых находок P1",fin_score:"Балл от 8.5",fin_p2:"Каждая P2 закрыта или принята осознанно",fin_left:"осталось {n}",fin_now:"сейчас {n}",fin_done:"Готово: система пересекла финишную черту. P3 — укрепление по желанию.",fin_todo:"До финиша: закройте отмеченные пункты и пройдите повторную проверку по этому же списку.",rt_title:"Повторная проверка по тому же реестру",rt_closed:"закрыто",rt_open:"осталось",rt_new:"новых",st_new:"новая",st_open:"осталась",st_closed:"закрыта",rep_closed:"Закрыто с прошлой проверки",acc_txt:"Принимаю этот риск осознанно",prev_label:"Повторная проверка",prev_none:"Первая проверка — новый реестр",prev_opt:"По отчёту «{name}» от {date} · балл {score}",rep_pdf:"Скачать отчёт (PDF)",rep_pdf_hint:"В окне печати выбери «Сохранить как PDF».",fx_do:"Что сделать",fx_how:"Как",fx_check:"Как проверить",
   rep_disc:"Второе мнение и проверка надёжности, а не гарантия. Финальное решение по системе остаётся за человеком. Architect Systems AI."
  },
@@ -496,7 +500,7 @@ const I18N={
   file_err:"The file “{f}” could not be read — save it again as .docx and upload once more.",
   new_label:"Or describe the system by hand",
   new_ph:"Describe it in plain words: which bots or agents you have, what each one does, who passes what to whom, where payments are taken or access is granted, which keys and services are connected. For example: “A Telegram bot answers students and sends the lessons link after payment. A second bot writes posts from comments. Both run on one ChatGPT key”.",
-  run_btn:"Check system",safe_txt:"Secrets and keys are stripped before the check.",load_txt:"Step 1 of 3 · the auditor is building the system map",
+  run_btn:"Check system",safe_txt:"Secrets and keys are stripped before the check.",load_txt:"Step 1 of 4 · the auditor is building the system map",
   err_429:"Many checks in a row. The next one opens in 10 minutes.",
   rep_axes:"Scores by axis",rep_basis:"What the verdict is based on",
   basis_txt:"Checked: the system description, {checked} characters · {date} · model {model} · rubric {rubric}. A live system is checked on a test stand — that is the next step.",
@@ -510,7 +514,7 @@ const I18N={
   code_expired:"This code has expired. Message @arsysai_bot and we will issue a new one.",
   code_used:"This code has already given its check. The report is under “Reports” on the device where it ran.",
   code_off:"Checks are unavailable right now. Message @arsysai_bot and we will sort it out.",
-  consent_txt:"I replaced passwords and keys with [SECRET] and agree to the check. The document goes to Claude (Anthropic), is checked in memory and forgotten right away — we keep nothing.",
+  consent_txt:"I replaced passwords and keys with [SECRET] and agree to the check. The document goes to Claude (Anthropic), is checked in memory and forgotten right away — we keep nothing. Only the score, the number of agents and finding class codes go into anonymised statistics.",
   consent_need:"Tick the consent box to start the check.",
   err_running:"A check with this code is already running. Wait for the report in the tab where you started it.",
   fb_title:"How was the check?",fb_ph:"What helped, what was off — optional",
@@ -530,8 +534,9 @@ const I18N={
   rep_weak:"Weak link",rep_battery:"Per-agent battery",rep_system:"System checks",
   rep_matched:"Matched failure library",rep_attack:"Attack · exploit chain",
   rep_comp:"Compliance",rep_cert:"Reliability certificate",rep_fix:"What to harden",
-  load_map:"Step 1 of 3 · the auditor is building the system map",load_probe:"Step 2 of 3 · per-agent battery, system checks, library matching",load_final:"Step 3 of 3 · findings registry, plan and axis scores",load_hint:"Usually a few minutes. Keep this page open.",rep_strong:"Strong point",rep_channels:"Egress channels",ch_closed:"closed",ch_open:"open",ch_unknown:"no data",ch_sum:"{n} of {m} closed",rep_gaps:"What the description was missing",rep_spread:"spread of three independent scores: ±{n}",cs_yes:"in place",cs_partial:"partial",cs_no:"no barrier",cs_unknown:"no data",b_fact:"fact from the description",b_hyp:"hypothesis",flag_btn:"Inaccurate?",flag_q:"What is inaccurate here? This helps the engine learn.",flag_ok:"Thanks, recorded",lib_code:"Code",lib_class:"Failure class",
+  load_map:"Step 1 of 4 · the auditor is building the system map",load_probe:"Step 2 of 4 · per-agent battery, system checks, library matching",load_final:"Step 3 of 4 · full findings registry and fix plan",load_hint:"Usually a few minutes. Keep this page open.",rep_strong:"Strong point",rep_channels:"Egress channels",ch_closed:"closed",ch_open:"open",ch_unknown:"no data",ch_sum:"{n} of {m} closed",rep_gaps:"What the description was missing",rep_spread:"spread of three independent scores: ±{n}",cs_yes:"in place",cs_partial:"partial",cs_no:"no barrier",cs_unknown:"no data",b_fact:"fact from the description",b_hyp:"hypothesis",flag_btn:"Inaccurate?",flag_q:"What is inaccurate here? This helps the engine learn.",flag_ok:"Thanks, recorded",lib_code:"Code",lib_class:"Failure class",
   rep_top3:"Three main steps",rep_forecast:"If P1 and the causes of ceilings are fixed, the axis score is up to {n} (estimate from the description)",rep_cov:"Map basis: stated in the description — {d}, inferred — {i}, no data — {u}",rep_red:"The description contained open data: secrets — {s}, personal data — {p}. They were removed before the check and never reached the model. If these are real keys, rotate them: they have already been in the file.",rep_links:"Handoffs between agents",fmt_schema:"strict schema",fmt_json:"JSON without schema",fmt_free_text:"free text",fmt_unknown:"no data",rep_bounds:"Trust boundaries · where untrusted text can reach",rep_xray:"Prompt X-ray · where text can become a command",rep_unch:"Not checked",st_ret:"returned",err_503:"The check is temporarily unavailable. Your code is saved — try again in an hour or write to @arsysai_bot.",
+  load_verify:"Step 4 of 4 · devil’s advocate challenges every P1, three independent axis scores",rep_devil:"Devil’s advocate checked {c} P1 findings: held {s}, downgraded to P2 {d}, removed {r}",rep_refuted:"Removed after the devil’s advocate check",rd_title:"Description readiness",rd_ok:"present",rd_miss:"missing",rd_hint:"The fuller the description, the more precise the report. Add what is missing in the field below.",rd_1:"agents",rd_2:"prompts",rd_3:"tools",rd_4:"keys and permissions",rd_5:"handoffs between agents",rd_6:"outbound channels",rd_7:"money and access",rd_8:"examples of work",
   rep_fix2:"How to fix — per finding",fin_title:"Finish line",fin_p1:"No open P1 findings",fin_score:"Score 8.5 or higher",fin_p2:"Every P2 fixed or consciously accepted",fin_left:"{n} left",fin_now:"now {n}",fin_done:"Done: the system has crossed the finish line. P3 is optional hardening.",fin_todo:"To finish: fix the marked items and run a retest against this same list.",rt_title:"Retest against the same registry",rt_closed:"fixed",rt_open:"still open",rt_new:"new",st_new:"new",st_open:"still open",st_closed:"fixed",rep_closed:"Fixed since the last check",acc_txt:"I accept this risk consciously",prev_label:"Retest",prev_none:"First check — new registry",prev_opt:"Against “{name}” from {date} · score {score}",rep_pdf:"Download report (PDF)",rep_pdf_hint:"In the print window choose “Save as PDF”.",fx_do:"What to do",fx_how:"How",fx_check:"How to verify",
   rep_disc:"A second opinion and reliability check, not a guarantee. The final decision on the system stays with a human. Architect Systems AI."
  }
@@ -688,6 +693,9 @@ function render(r){
   const linksHtml=(r.links||[]).length?`<div class="block chs" style="margin-top:16px"><h3>${t('rep_links')}</h3>`+r.links.map(l=>`<div class="chr"><span>${l.f} → ${l.t}</span><span class="st-${l.format==='schema'?'closed':l.format==='unknown'?'unknown':'open'}">${t('fmt_'+l.format)}</span><span>${l.payload||''}</span></div>`).join('')+`</div>`:'';
   const boundsHtml=(r.boundaries||[]).length?`<div class="block gaps" style="margin-top:16px"><h3>${t('rep_bounds')}</h3><ul>${r.boundaries.map(b=>`<li><b>${b.src}</b> → ${b.enters}${b.reaches&&b.reaches.length?` → ${b.reaches.join(', ')}`:''}</li>`).join('')}</ul></div>`:'';
   const xrayHtml=(r.xray||[]).length?`<div class="block gaps" style="margin-top:16px"><h3>${t('rep_xray')}</h3><ul>${r.xray.map(x=>`<li><span class="fxb">${x.px}</span> <b>${x.agent}</b>: «${x.quote}» — ${x.why}</li>`).join('')}</ul></div>`:'';
+  const dv=r.devil;
+  const devilHtml=dv&&dv.checked?`<div class="spread" style="margin-top:8px">${t('rep_devil').replace('{c}',dv.checked).replace('{s}',dv.stands).replace('{d}',dv.down).replace('{r}',dv.removed)}</div>`:'';
+  const refHtml=(r.refuted||[]).length?`<div class="block gaps" style="margin-top:16px"><h3>${t('rep_refuted')}</h3><ul>${r.refuted.map(x=>`<li><span class="fxid">${x.id}</span> ${x.t} — ${x.why}</li>`).join('')}</ul></div>`:'';
   const unchHtml=(r.unchecked||[]).length?`<div class="block gaps" style="margin-top:16px"><h3>${t('rep_unch')}</h3><ul>${r.unchecked.map(g=>`<li>${g}</li>`).join('')}</ul></div>`:'';
   const gapsHtml=(r.gaps||[]).length?`<div class="block gaps" style="margin-top:16px"><h3>${t('rep_gaps')}</h3><ul>${r.gaps.map(g=>`<li>${g}</li>`).join('')}</ul></div>`:'';
   const fill=(s,o)=>s.replace(/\{(\w+)\}/g,(_,k)=>o[k]==null?'':k==='date'?new Date(o[k]).toLocaleDateString(lang==='en'?'en':'ru'):typeof o[k]==='number'?o[k].toLocaleString(lang==='en'?'en':'ru'):o[k]);
@@ -716,7 +724,7 @@ function render(r){
     ${r.exploit?`<div class="block" style="margin-top:16px"><h3>${t('rep_attack')}</h3><div class="chain">${chain}</div><div style="color:var(--muted);font-size:12.5px;margin-top:11px">${r.exploit.note}</div></div>`:''}
     ${r.compliance?`<div class="block comp" style="margin-top:16px"><h3>${t('rep_comp')} · ${r.compliance.ref}</h3>${comp}</div>`:''}
     ${r.cert?`<div class="cert"><div class="seal"><b>${r.score}</b></div><div class="info"><b>${t('rep_cert')}</b><div class="m">Architect Systems AI · ${r.cert.id} · ${r.cert.valid} · ${r.cert.level}</div></div></div>`:''}
-    ${hard?`<div class="fix2"><h3>${t('rep_fix2')}</h3>${hard}</div>`:(steps&&!H.length?`<div class="fix"><h3>${t('rep_fix')}</h3><ol>${steps}</ol></div>`:'')}${closedHtml}${unchHtml}
+    ${hard?`<div class="fix2"><h3>${t('rep_fix2')}</h3>${hard}</div>`:(steps&&!H.length?`<div class="fix"><h3>${t('rep_fix')}</h3><ol>${steps}</ol></div>`:'')}${devilHtml}${closedHtml}${refHtml}${unchHtml}
     ${b?`<div class="basis"><b>${t('rep_basis')}.</b> ${fill(t('basis_txt'),{...b,rubric:r.rubric||''})}</div>`:''}
     <div class="disc">${t('rep_disc')}</div>
     <div class="dl"><a class="cta" href="https://t.me/arsysai_bot?start=agentproof" target="_blank" rel="noopener">${t('rep_talk')}</a><span>${t('rep_talk_hint')}</span></div>
@@ -787,7 +795,7 @@ function addFiles(list){
     if(!text.trim())return fileErr(f.name);
     const size=store.reduce((s,x)=>s+x.text.length,0)+text.length;
     if(size>MAX_TOTAL)return note('too_big','');
-    store.push({name:f.webkitRelativePath||f.name,text});renderChips();
+    store.push({name:f.webkitRelativePath||f.name,text});renderChips();readyView();
   }catch(e){fileErr(f.name);}
 });}
 const drop=$('#drop'),fi=$('#file');
@@ -835,12 +843,20 @@ $('#run').addEventListener('click',async()=>{
       if(extra.action==='map'||i)throw 0;}};
   try{let sealed=await step({action:'map'},'load_map');
     sealed=await step({action:'probe',sealed},'load_probe');
-    const rep=await step({action:'final',sealed,prev},'load_final');
+    sealed=await step({action:'final',sealed,prev},'load_final');
+    const rep=await step({action:'verify',sealed,prev},'load_verify');
     rep._code=code; isDemo=false; saveRep(rep); setCode(''); gateView(); render(rep);}
   catch(e){if(e!=='stop')$('#err').style.display='block';}
   finally{$('#run').disabled=false;$('#load').style.display='none';}
 });
 $('#delReps').onclick=()=>{if(!confirm(t('del_ok')))return;try{localStorage.removeItem('ap_reports')}catch(e){}buildTables();};
+
+// Собиратель Входа: есть ли в описании то, без чего проверки слепнут (эвристика по словам, до траты кода)
+const RD=[/агент|agent|бот|bot|ассистент|assistant/i,/промпт|prompt|system ?message|инструкци/i,/инструмент|tool|mcp|функци|function|api/i,/ключ|токен|token|секрет|secret|права|доступ|permission|scope/i,
+  /передаёт|передает|передач|→|->|handoff|orchestrat|оркестр|subagent|субагент/i,/webhook|вебхук|http|dns|почт|email|telegram|slack|отправля|публику/i,/оплат|плат[её]ж|деньг|tribute|stripe|refund|возврат|доступ выда/i,/пример|лог|log|trace|трейс|диалог|сбой/i];
+function readyView(){const text=[$('#sys').value,...store.map(f=>f.text)].join('\n');const el=$('#ready');if(!text.trim()){el.innerHTML='';return;}
+  const hits=RD.map(re=>re.test(text));el.innerHTML=`<b>${t('rd_title')}: ${hits.filter(Boolean).length} / ${RD.length}</b><br>`+hits.map((h,i)=>`<span class="rd ${h?'on':''}">${t('rd_'+(i+1))}</span>`).join('')+(hits.every(Boolean)?'':`<div class="spread" style="margin-top:6px">${t('rd_hint')}</div>`);}
+$('#sys').addEventListener('input',readyView);
 
 // reveal on scroll
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});

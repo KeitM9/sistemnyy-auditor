@@ -1,5 +1,35 @@
 {
-  "g1-support-bot.md": { "must": ["A01.2", "D1", "D3", "D2", "D4"], "min_score": 0, "max_score": 5.5 },
-  "g2-content-crew.md": { "must": ["A06.1", "A07.1", "A04.1", "D6"], "min_score": 0, "max_score": 7 },
-  "g3-solid.md": { "must": [], "min_score": 7.5, "max_score": 10, "max_p1": 0 }
+  "g1-support-bot.md": {
+    "must": [
+      "A01.2",
+      "D1",
+      "D3",
+      "D2",
+      "D4"
+    ],
+    "min_score": 0,
+    "max_score": 5.5
+  },
+  "g2-content-crew.md": {
+    "must": [
+      "A06.1",
+      "A07.1",
+      "A04.1",
+      "D6"
+    ],
+    "min_score": 0,
+    "max_score": 7
+  },
+  "g3-solid.md": {
+    "must": [],
+    "min_score": 7.5,
+    "max_score": 10,
+    "max_p1": 0
+  },
+  "self-agentproof.md": {
+    "must": [],
+    "min_score": 0,
+    "max_score": 10,
+    "note": "Аудитор Аудитора: наш собственный балл, публикуется после прогона"
+  }
 }
