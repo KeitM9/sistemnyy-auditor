@@ -324,6 +324,30 @@
         <div class="lead-sec reveal" id="bugs"></div>
 
         <div class="lead-sec reveal">
+          <h2 data-i18n="data_h2"></h2>
+          <div class="checklist">
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="data_1k"></div><div class="v" data-i18n="data_1v"></div></div></div>
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="data_2k"></div><div class="v" data-i18n="data_2v"></div></div></div>
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="data_3k"></div><div class="v" data-i18n="data_3v"></div></div></div>
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="data_4k"></div><div class="v" data-i18n="data_4v"></div></div></div>
+            <div class="ck"><span class="b"></span><div><div class="k" data-i18n="data_5k"></div><div class="v" data-i18n="data_5v"></div></div></div>
+          </div>
+        </div>
+
+        <div class="lead-sec reveal">
+          <h2 data-i18n="self_h2"></h2>
+          <ul class="bgl" style="margin-left:18px">
+            <li data-i18n="self_1"></li>
+            <li data-i18n="self_2"></li>
+            <li data-i18n="self_3"></li>
+            <li data-i18n="self_4"></li>
+            <li data-i18n="self_5"></li>
+            <li data-i18n="self_6"></li>
+            <li data-i18n="self_7"></li>
+          </ul>
+        </div>
+
+        <div class="lead-sec reveal">
           <h2 data-i18n="how_h2"></h2>
           <div class="steps">
             <div class="step"><div class="n">1</div><h4 data-i18n="s1h"></h4><p data-i18n="s1p"></p></div>
@@ -484,6 +508,7 @@ const I18N={
   rep_json:"Скачать отчёт файлом",rep_json_hint:"Файл можно открыть здесь же, в «Отчётах», или переслать разработчику.",imp_btn:"Открыть отчёт из файла",imp_err:"Этот файл не похож на отчёт AgentProof.",
   pl_P1:"Критично",pl_P2:"Важно",pl_P3:"Укрепление",pl_legend:"Критично — путь к деньгам, доступу или ключам. Важно — ослабляет защиту. Укрепление — делает систему прочнее, по желанию.",sc_all:"Показать все находки",sc_closed:"закрыто",sc_titles_note:"",
   fx_ev:"Основание",bugs_h2:"Какие баги ловит AgentProof",bugs_sub:"54 класса уязвимостей агентных систем из реальных инцидентов 2025–2026, 13 багов в промптах, 6 проверок каждого агента и 12 системных проверок. Нажмите на класс — откроются признаки, барьер и реальные случаи.",bugs_px:"Баги в промптах агентов · Промпт-Рентген",bugs_bat:"Проверки каждого AI-агента",bugs_sys:"Системные проверки",bugs_cases:"Реальные случаи",bugs_det:"Как видно по описанию",bugs_bar:"Что закрывает",bugs_n:"классов",
+  dev_btn:"Задачи для разработчика (.md)",dev_hint:"Список исправлений с основанием, шагами и проверкой — передайте программисту или своему AI-агенту.",exp_txt:"Отчёт действителен до {d}. Сменили модель, промпты или инструменты — перепроверьте раньше.",exp_old:"пора перепроверить",data_h2:"Как мы обращаемся с вашими данными",data_1k:"Что загружается",data_1v:"Только описание вашей системы — текст и файлы, которые вы сами выбрали. Ключи и личные данные лучше заменить на [СЕКРЕТ] и [ПДн] заранее.",data_2k:"Что вырезается до проверки",data_2v:"Код сам убирает ключи известных форматов, email, телефоны и номера карт — до того, как текст уйдёт модели. Если такие данные нашлись, отчёт скажет об этом.",data_3k:"Где обрабатывается",data_3v:"На сервере AgentProof (Vercel) и в модели Claude компании Anthropic (США). По коммерческим условиям Anthropic данные, отправленные через API, для обучения моделей не используются.",data_4k:"Что хранится",data_4v:"Описание — нигде: оно проверяется и забывается. Отчёт — только в вашем браузере. В обезличенную статистику попадают балл, число агентов и коды классов находок.",data_5k:"Кто видит ваш отзыв",data_5v:"Отзыв и отметки «Неточно?» приходят Екатерине; отзыв — с вашим Telegram id, чтобы она могла ответить. Отметки «Неточно?» обезличены.",self_h2:"Мы проверяем сами себя",self_1:"У модели-аудитора нет инструментов и доступа в сеть: описание не может заставить её что-то сделать.",self_2:"Данные клиента подаются внутри метки со случайной частью — текст описания не может «закрыть» её изнутри.",self_3:"Код доступа одноразовый и подписан; промежуточные шаги аудита подписаны сервером — балл нельзя подделать.",self_4:"Стоп-Кран: у каждого аудита и у каждого дня потолок расхода — аудит останавливается сам, код клиента не сгорает.",self_5:"Журнал аудитов на дозапись: каждая запись связана хешем с предыдущей, правка видна при сверке.",self_6:"Эталонный набор систем с заложенными дырами: новая версия движка выходит, только если находит их.",self_7:"Честно о пробелах: изолированного стенда и прокси с лимитом на ключ модели пока нет — это следующая ступень.",ch_hint:"Открытый канал — путь, по которому данные могут уйти наружу.",
   rep_fix2:"Как исправить — по каждой находке",fin_title:"Финишная черта",fin_p1:"Нет открытых критичных находок",fin_score:"Балл от 8.5",fin_p2:"Каждая важная находка закрыта или принята осознанно",fin_left:"осталось {n}",fin_now:"сейчас {n}",fin_done:"Готово: система пересекла финишную черту. Укрепление — по желанию.",fin_todo:"До финиша: закройте отмеченные пункты и пройдите повторную проверку по этому же списку.",rt_title:"Повторная проверка по тому же реестру",rt_closed:"закрыто",rt_open:"осталось",rt_new:"новых",st_new:"новая",st_open:"осталась",st_closed:"закрыта",rep_closed:"Закрыто с прошлой проверки",acc_txt:"Принимаю этот риск осознанно",prev_label:"Повторная проверка",prev_none:"Первая проверка — новый реестр",prev_opt:"По отчёту «{name}» от {date} · балл {score}",rep_pdf:"Скачать отчёт (PDF)",rep_pdf_hint:"В окне печати выбери «Сохранить как PDF».",fx_do:"Что сделать",fx_how:"Как",fx_check:"Как проверить",
   rep_disc:"Второе мнение и проверка надёжности, а не гарантия. Финальное решение по системе остаётся за человеком. Architect Systems AI."
  },
@@ -563,6 +588,7 @@ const I18N={
   rep_json:"Download report file",rep_json_hint:"Open it here in “Reports” or send it to your developer.",imp_btn:"Open a report from a file",imp_err:"This file does not look like an AgentProof report.",
   pl_P1:"Critical",pl_P2:"Important",pl_P3:"Hardening",pl_legend:"Critical — a path to money, access or keys. Important — weakens protection. Hardening — makes the system stronger, optional.",sc_all:"Show all findings",sc_closed:"fixed",sc_titles_note:"Finding titles are shown in the original language of the report.",
   fx_ev:"Basis",bugs_h2:"Which bugs AgentProof catches",bugs_sub:"54 vulnerability classes of agent systems from real 2025–2026 incidents, 13 prompt bugs, 6 checks for every agent and 12 system checks. Tap a class to see signs, the barrier and real cases.",bugs_px:"Prompt bugs · Prompt X-ray",bugs_bat:"Checks of every AI agent",bugs_sys:"System checks",bugs_cases:"Real cases",bugs_det:"How it shows in a description",bugs_bar:"What closes it",bugs_n:"classes",
+  dev_btn:"Developer tasks (.md)",dev_hint:"A fix list with basis, steps and verification — hand it to your developer or your AI agent.",exp_txt:"The report is valid until {d}. Changed the model, prompts or tools — recheck earlier.",exp_old:"time to recheck",data_h2:"How we handle your data",data_1k:"What is uploaded",data_1v:"Only the description of your system — text and files you chose. Replace keys and personal data with [SECRET] and [PII] beforehand.",data_2k:"What is removed before the check",data_2v:"The code removes keys of known formats, emails, phones and card numbers before the text reaches the model. If such data was found, the report says so.",data_3k:"Where it is processed",data_3v:"On the AgentProof server (Vercel) and in the Claude model by Anthropic (USA). Under Anthropic’s commercial terms, data sent via the API is not used to train models.",data_4k:"What is stored",data_4v:"The description — nowhere: it is checked and forgotten. The report — only in your browser. Anonymised statistics keep the score, the number of agents and finding class codes.",data_5k:"Who sees your feedback",data_5v:"Feedback and “Inaccurate?” marks go to Ekaterina; feedback comes with your Telegram id so she can reply. “Inaccurate?” marks are anonymised.",self_h2:"We check ourselves",self_1:"The auditor model has no tools and no network access: a description cannot make it do anything.",self_2:"Client data is wrapped in a marker with a random part — the description cannot “close” it from inside.",self_3:"Access codes are single-use and signed; intermediate audit steps are signed by the server — the score cannot be forged.",self_4:"Stop switch: every audit and every day has a spend ceiling — the audit stops itself, the client code is kept.",self_5:"Append-only audit journal: each entry is chained by hash to the previous one, edits show up on verification.",self_6:"A reference set of systems with planted holes: a new engine version ships only if it finds them.",self_7:"Honest gaps: an isolated test stand and a spend-limited proxy for the model key are not in place yet — the next stage.",ch_hint:"An open channel is a path through which data can leave.",
   rep_fix2:"How to fix — per finding",fin_title:"Finish line",fin_p1:"No open critical findings",fin_score:"Score 8.5 or higher",fin_p2:"Every important finding fixed or consciously accepted",fin_left:"{n} left",fin_now:"now {n}",fin_done:"Done: the system has crossed the finish line. Hardening is optional.",fin_todo:"To finish: fix the marked items and run a retest against this same list.",rt_title:"Retest against the same registry",rt_closed:"fixed",rt_open:"still open",rt_new:"new",st_new:"new",st_open:"still open",st_closed:"fixed",rep_closed:"Fixed since the last check",acc_txt:"I accept this risk consciously",prev_label:"Retest",prev_none:"First check — new registry",prev_opt:"Against “{name}” from {date} · score {score}",rep_pdf:"Download report (PDF)",rep_pdf_hint:"In the print window choose “Save as PDF”.",fx_do:"What to do",fx_how:"How",fx_check:"How to verify",
   rep_disc:"A second opinion and reliability check, not a guarantee. The final decision on the system stays with a human. Architect Systems AI."
  }
@@ -651,6 +677,9 @@ function renderShowcase(){const P=PUB||{audits:0,findings:0,p1:0,withOpenChannel
     <div class="scc"><div class="minetitle" style="margin:0 0 6px">${t('sc_feed')}</div>${P.recent.length?P.recent.map(r=>`<div class="scf"><span>${r.d}</span><span><b>${r.score}</b></span><span>${r.agents} ${t('sc_agents')} · ${t('pl_P1')} ${r.p1} · ${t('pl_P2')} ${r.p2} · ${t('pl_P3')} ${r.p3}${r.ch?` · ${t('sc_ch')} ${r.ch}`:''}${r.retest?` · ${t('sc_retest')}`:''}<br>${r.classes.map(c=>lib[c]||c).join(' · ')}</span></div>`).join(''):`<div class="spread">${t('sc_empty')}</div>`}</div>
     <div class="spread">${t('sc_note')}</div></div>`;}
 
+// Обезличенные счётчики воронки (без cookies и идентификаторов)
+function hit(ev){try{fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'hit',ev}),keepalive:true}).catch(()=>{});}catch(e){}}
+const expDate=d=>{const x=new Date(d);x.setDate(x.getDate()+90);return x.toLocaleDateString(lang==='en'?'en':'ru');};
 let lang = (function(){try{return localStorage.getItem('asa_lang')||'ru';}catch(e){return 'ru';}})();
 let curView='overview';
 function t(k){return (I18N[lang]&&I18N[lang][k]!=null)?I18N[lang][k]:(I18N.ru[k]||k);}
@@ -665,7 +694,7 @@ function buildTables(){
   const reps=loadReps();
   $('#reportsTable').innerHTML=`<div class="tr head"><span>${t('th_sys')}</span><span>${t('th_status')}</span><span>${t('th_score')}</span><span>${t('th_date')}</span></div>`+
     (reps.length?reps.map((x,i)=>{const s=x.rep.score,cls=s>=7.5?'ok':s<5?'low':'';
-      return `<div class="tr" data-i="${i}" style="cursor:pointer"><span class="name">${x.rep.name}</span><span><i class="badge ${cls}">${x.rep.verdict}</i></span><span class="sc">${s}</span><span class="dt">${x.date}</span></div>`;}).join('')
+      return `<div class="tr" data-i="${i}" style="cursor:pointer"><span class="name">${x.rep.name}</span><span><i class="badge ${cls}">${x.rep.verdict}</i></span><span class="sc">${s}</span><span class="dt">${x.date}${x.rep.basis&&x.rep.basis.date&&(Date.now()-new Date(x.rep.basis.date))>90*864e5?` · <b style="color:var(--mint)">${t('exp_old')}</b>`:''}</span></div>`;}).join('')
     :`<div class="tr" style="grid-template-columns:1fr"><span class="dt">${t('empty_reports')}</span></div>`);
   $$('#reportsTable .tr[data-i]').forEach(el=>el.onclick=()=>{isDemo=false;render(reps[+el.dataset.i].rep);});
   const sel=$('#prevSel'),was=sel.value;
@@ -778,9 +807,11 @@ function render(r){
     ${r.cert?`<div class="cert"><div class="seal"><b>${r.score}</b></div><div class="info"><b>${t('rep_cert')}</b><div class="m">Architect Systems AI · ${r.cert.id} · ${r.cert.valid} · ${r.cert.level}</div></div></div>`:''}
     ${hard?`<div class="fix2"><h3>${t('rep_fix2')}</h3>${hard}</div>`:(steps&&!H.length?`<div class="fix"><h3>${t('rep_fix')}</h3><ol>${steps}</ol></div>`:'')}${devilHtml}${lossHtml}${closedHtml}${refHtml}${unchHtml}
     ${b?`<div class="basis"><b>${t('rep_basis')}.</b> ${fill(t('basis_txt'),{...b,rubric:r.rubric||''})}</div>`:''}
+    ${b&&b.date?`<div class="basis">${t('exp_txt').replace('{d}',expDate(b.date))}</div>`:''}
     <div class="disc">${t('rep_disc')}</div>
-    <div class="dl"><a class="cta" href="https://t.me/arsysai_bot?start=agentproof" target="_blank" rel="noopener">${t('rep_talk')}</a><span>${t('rep_talk_hint')}</span></div>
+    <div class="dl"><a class="cta" href="https://t.me/arsysai_bot?start=agentproof" target="_blank" rel="noopener" onclick="hit('talk')">${t('rep_talk')}</a><span>${t('rep_talk_hint')}</span></div>
     <div class="dl"><button class="langbtn" id="pdfBtn">${t('rep_pdf')}</button><span>${t('rep_pdf_hint')}</span></div>
+    <div class="dl"><button class="langbtn" id="devBtn">${t('dev_btn')}</button><span>${t('dev_hint')}</span></div>
     <div class="dl"><button class="langbtn" id="jsonBtn">${t('rep_json')}</button><span>${t('rep_json_hint')}</span></div>
     ${r._code&&!isDemo?`<div class="fb" id="fb"><h3>${t('fb_title')}</h3>
       <div class="stars">${[1,2,3,4,5].map(n=>`<button type="button" data-s="${n}">${n}</button>`).join('')}</div>
@@ -799,7 +830,14 @@ function render(r){
     const why=window.prompt(t('flag_q'),'');if(why===null)return;b.disabled=true;
     try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'flag',code:r._code,lang,flag:{rubric:r.rubric,lib:r.lib,cls:h.cls,p:h.p,t:h.t,why}})});if(!res.ok)throw 0;b.textContent=t('flag_ok');}
     catch(e){b.disabled=false;}});
-  $('#jsonBtn').onclick=()=>{const {_code,...clean}=r;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(clean)],{type:'application/json'}));a.download='AgentProof-'+String(r.name||'report').replace(/<[^>]*>|[^\wА-Яа-яЁё -]/g,'').slice(0,40)+'-'+((r.basis&&r.basis.date)||'')+'.json';a.click();URL.revokeObjectURL(a.href);};
+  $('#devBtn').onclick=()=>{hit('dev');const lib=Object.fromEntries(LAB[lang]);const un=x=>String(x||'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"');
+    const open=(r.hardening||[]).filter(h=>h.st!=='closed').sort((a,c)=>a.p.localeCompare(c.p));
+    const md=[`# ${un(r.name)} — задачи по отчёту AgentProof`,`Балл ${r.score}/10 · ${un(r.verdict)} · ${(r.basis&&r.basis.date)||''} · рубрика ${r.rubric||''}`,'',
+      ...open.map(h=>[`## [ ] ${h.id} · ${pl(h.p)} · ${h.cls&&h.cls!=='NEW'?h.cls+' '+(lib[h.cls]||''):''}`,`**${un(h.t)}**`,h.ev?`- Основание: ${un(h.ev)}`:'',h.do?`- Что сделать: ${un(h.do)}`:'',h.how?`- Как: ${un(h.how)}`:'',h.check?`- Как проверить: ${un(h.check)}`:'',''].filter(Boolean).join('\n')),
+      (r.gaps||[]).length?'## Что уточнить в описании\n'+r.gaps.map(g=>'- '+un(g)).join('\n'):'',
+      '\nПосле исправлений — повторная проверка по этому же списку на agentproof.arsysai.com.'].join('\n');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown'}));a.download='AgentProof-задачи-'+(((r.basis&&r.basis.date))||'')+'.md';a.click();URL.revokeObjectURL(a.href);};
+  $('#jsonBtn').onclick=()=>{hit('json');const {_code,...clean}=r;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(clean)],{type:'application/json'}));a.download='AgentProof-'+String(r.name||'report').replace(/<[^>]*>|[^\wА-Яа-яЁё -]/g,'').slice(0,40)+'-'+((r.basis&&r.basis.date)||'')+'.json';a.click();URL.revokeObjectURL(a.href);};
   $('#pdfBtn').onclick=()=>{const old=document.title;document.title='AgentProof — '+(r.name||'отчёт').replace(/<[^>]*>/g,'');window.print();document.title=old;};
   if(curView!=='report')show('report');
 }
@@ -872,7 +910,7 @@ $('#codeBtn').onclick=async()=>{const code=$('#codeIn').value.trim(); if(!code){
   try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'check',code,lang})});
     if(res.status===401)return gateMsg('code_bad'); if(res.status===410)return gateMsg('code_expired'); if(!res.ok)return gateMsg('code_off');
     const j=await res.json(); if(j.used)return gateMsg('code_used');
-    setCode(code); gateMsg('gate_help');
+    setCode(code); gateMsg('gate_help'); hit('code_ok');
     $('#codeOk').textContent=t('code_ok').replace('{d}',new Date(j.expires*1000).toLocaleString(lang==='en'?'en':'ru',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}));
     gateView();}
   catch(e){gateMsg('code_off');} finally{$('#codeBtn').disabled=false;}};
@@ -897,11 +935,12 @@ $('#run').addEventListener('click',async()=>{
       if(res.status===409){const j=await res.json().catch(()=>({}));if(j.error==='used'){setCode('');gateView();gateMsg('code_used');throw 'stop';}$('#err').textContent=t('err_running');throw 0;}
       if(res.ok)return res.json();
       if(extra.action==='map'||i)throw 0;}};
+  hit('start');
   try{let sealed=await step({action:'map'},'load_map');
     sealed=await step({action:'probe',sealed},'load_probe');
     sealed=await step({action:'final',sealed,prev},'load_final');
     const rep=await step({action:'verify',sealed,prev},'load_verify');
-    rep._code=code; isDemo=false; saveRep(rep); setCode(''); gateView(); render(rep);}
+    rep._code=code; isDemo=false; saveRep(rep); setCode(''); gateView(); render(rep); hit('report');}
   catch(e){if(e!=='stop')$('#err').style.display='block';}
   finally{$('#run').disabled=false;$('#load').style.display='none';}
 });
@@ -925,6 +964,7 @@ $$('.reveal').forEach(el=>io.observe(el));
 
 // hero graph container lives inside herovals? no — it's the video. heroGraph goes to #heroViz if present.
 applyLang();
+hit('view');
 </script>
 </body>
 </html>

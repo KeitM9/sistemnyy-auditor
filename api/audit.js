@@ -536,6 +536,15 @@ export default async function handler(req, res) {
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'x';
   const action = body.action;
 
+  // Счётчики воронки: только число событий за день, без IP, cookies и tg — видно, где люди уходят
+  const HIT_EVENTS = ['view', 'code_ok', 'start', 'report', 'talk', 'dev', 'json'];
+  if (action === 'hit') {
+    if (!HIT_EVENTS.includes(body.ev) || await overLimit(ip, 'hit', 120, 600)) return res.status(204).end();
+    const key = `ap:hits:${new Date().toISOString().slice(0, 10)}:${body.ev}`;
+    await redis(['INCR', key]); await redis(['EXPIRE', key, String(400 * 86400)]);
+    return res.status(204).end();
+  }
+
   // Публичная витрина «Что находит AgentProof»: только обезличенная статистика (балл, число агентов,
   // коды классов, счётчики P1–P3), без описаний, имён и tg. Код доступа не нужен.
   if (action === 'public') {
@@ -689,11 +698,14 @@ export default async function handler(req, res) {
     // Мета-флаг калибровки адвоката: снято больше трети P1 — шум на ступени «по описанию»
     if (report.devil.checked >= 3 && report.devil.removed * 3 > report.devil.checked) await tell(`калибровка: адвокат снял ${report.devil.removed} из ${report.devil.checked} P1 — шум на ступени по описанию, посмотреть реестр (run ${st.run.slice(0, 8)})`);
     const sec = Math.round((Date.now() - st.t0) / 1000);
+    const day = new Date().toISOString().slice(0, 10);
+    const funnel = await Promise.all(HIT_EVENTS.map(e => redis(['GET', `ap:hits:${day}:${e}`]).then(v => Number(v) || 0)));
     await tell(`проверка прошла · tg ${code.tg} · балл ${report.score} (${report.verdict}) · разброс осей ±${report.spread} · ` +
       `адвокат: P1 ${report.devil.checked}, выстояли ${report.devil.stands}, понижены ${report.devil.down}, сняты ${report.devil.removed} · ` +
       `${meta.checked.toLocaleString('ru')} знаков · ${st.model} · ${sec} с · токены: вход ${total.input_tokens || 0}, ` +
       `из кеша ${total.cache_read_input_tokens || 0}, запись в кеш ${total.cache_creation_input_tokens || 0}, выход ${total.output_tokens || 0} (усл. ${Math.round(weight(total))})` +
-      (hits.n ? ` · убрано запрещённых обещаний: ${hits.n}` : '') + (found.secrets || found.pii ? ` · вырезано: секретов ${found.secrets}, ПДн ${found.pii}` : ''));
+      (hits.n ? ` · убрано запрещённых обещаний: ${hits.n}` : '') + (found.secrets || found.pii ? ` · вырезано: секретов ${found.secrets}, ПДн ${found.pii}` : '') +
+      `\nВоронка за сегодня: открыли сайт ${funnel[0]} · код принят ${funnel[1]} · запустили ${funnel[2]} · отчёт ${funnel[3]} · «помощь с исправлением» ${funnel[4]} · задачи разработчику ${funnel[5]}`);
     return res.status(200).json(report);
   } catch (e) {
     console.error('audit fail', action, String(e).slice(0, 200));
