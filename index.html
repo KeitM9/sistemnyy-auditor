@@ -157,6 +157,14 @@
   .ready{margin-top:14px;font-size:13px;color:var(--body)}.ready b{font-family:'Oswald',sans-serif;color:var(--ink)}
   .ready .rd{display:inline-block;margin:6px 8px 0 0;padding:2px 8px;border:1px solid var(--border2);border-radius:var(--r);color:var(--muted)}.ready .rd.on{border-color:var(--mint);color:var(--mint)}
   .lossc{padding:10px 0;border-top:1px solid var(--border2);font-size:13.5px;color:var(--body)}.lossc:first-of-type{border-top:none}.lossc b{color:var(--ink)}
+  .sc{margin-bottom:28px}.sc h2{font-family:'Oswald',sans-serif;font-size:22px;color:var(--ink);margin-bottom:14px;text-transform:uppercase}
+  .scn{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:18px}.scn div{font-size:13px;color:var(--muted)}.scn b{display:block;font-family:'Oswald',sans-serif;font-size:32px;color:var(--mint);line-height:1.1}
+  .scc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;margin-bottom:16px}
+  .scc .path{font-family:'Oswald',sans-serif;font-size:20px;color:var(--ink);margin:6px 0 12px}.scc .path em{font-style:normal;color:var(--muted);margin:0 6px}
+  .sci{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--border2);font-size:13.5px;color:var(--body)}.sci span:last-child b{color:var(--mint);font-weight:600}
+  .scf{display:grid;grid-template-columns:90px 60px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--border2);font-size:13px;color:var(--body)}
+  .minetitle{font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em;color:var(--muted);margin:8px 0 12px}
+  @media(max-width:600px){.scf{grid-template-columns:80px 50px 1fr}.scn b{font-size:26px}}
   .gaps li{color:var(--body);font-size:13.5px;padding:4px 0}
   .fxb{font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);border:1px solid var(--border2);border-radius:var(--r);padding:1px 7px}
   .flagb{margin-left:8px;background:none;border:none;color:var(--muted);font:inherit;font-size:11px;cursor:pointer;text-decoration:underline}
@@ -371,8 +379,10 @@
 
       <!-- REPORTS -->
       <section class="view" data-view="reports">
+        <div id="showcase"></div>
+        <h3 class="minetitle" data-i18n="reports_mine"></h3>
         <div class="table" id="reportsTable"></div>
-        <div class="dl"><button class="langbtn" id="delReps" data-i18n="del_reps"></button></div>
+        <div class="dl"><button class="langbtn" id="impBtn" data-i18n="imp_btn"></button><input type="file" id="impFile" accept=".json" hidden><button class="langbtn" id="delReps" data-i18n="del_reps"></button><span id="impMsg"></span></div>
       </section>
 
       <!-- LAB -->
@@ -465,6 +475,8 @@ const I18N={
   rep_top3:"Три главных шага",rep_forecast:"Если закрыть P1 и причины потолков, балл по осям — до {n} (оценка по описанию)",rep_cov:"Опора карты: прямо в описании — {d}, выведено — {i}, нет данных — {u}",rep_red:"В описании были открытые данные: секретов — {s}, личных данных — {p}. Они вырезаны до проверки и к модели не ушли. Если это настоящие ключи — смените их: они уже побывали в файле.",rep_links:"Стыки между агентами",fmt_schema:"строгая схема",fmt_json:"JSON без схемы",fmt_free_text:"свободный текст",fmt_unknown:"нет данных",rep_bounds:"Границы доверия · куда дотягивается чужой текст",rep_xray:"Промпт-Рентген · где текст может стать командой",rep_unch:"Что не проверялось",st_ret:"вернулась",err_503:"Проверка временно недоступна. Твой код сохранён — попробуй через час или напиши в @arsysai_bot.",
   load_verify:"Шаг 4 из 4 · адвокат дьявола проверяет каждую P1, три независимые оценки осей",rep_devil:"Адвокат дьявола проверил {c} находок P1: выстояли {s}, понижены до P2 {d}, сняты {r}",rep_refuted:"Сняты после проверки адвоката дьявола",rd_title:"Готовность описания",rd_ok:"есть",rd_miss:"не хватает",rd_hint:"Чем полнее описание, тем точнее отчёт. Недостающее можно дописать в поле ниже.",rd_1:"агенты",rd_2:"промпты",rd_3:"инструменты",rd_4:"ключи и права",rd_5:"передачи между агентами",rd_6:"каналы наружу",rd_7:"деньги и доступ",rd_8:"примеры работы",
   rep_loss:"Цена аварии · порядок убытка, если цепочка сработает",loss_band_C:"правдоподобно: хотя бы одно звено — гипотеза по описанию",loss_band_D:"теоретически: несколько неподтверждённых звеньев",loss_inputs:"Для суммы в деньгах нужны ваши числа",loss_analog:"Похожий публичный случай",loss_buckets:"Что задето",dv_ok:"выстояла проверку адвоката",dv_down:"понижена адвокатом",rep_back:"Почему вернулась",
+  sc_title:"Что находит AgentProof",sc_audits:"аудитов",sc_find:"находок",sc_p1:"критических (P1)",sc_open:"систем с открытым каналом наружу",sc_case:"Кейс Architect Systems AI · бот-продавец, боты оплаты, приложения и выплат",sc_case_sub:"8 аудитов подряд: каждая находка закрыта барьером в коде, повторная проверка — по тому же списку",sc_found:"нашли",sc_fixed:"закрыли",sc_top:"Чаще всего встречается",sc_feed:"Последние аудиты · обезличенно",sc_note:"Названия систем, описания и ключи не публикуются. В витрину попадают только балл, число агентов и коды классов ошибок.",sc_retest:"повторная",sc_ch:"каналы закрыты",sc_agents:"агентов",sc_empty:"Лента начнёт заполняться с первыми аудитами клиентов.",reports_mine:"Мои проверки на этом устройстве",
+  rep_json:"Скачать отчёт файлом",rep_json_hint:"Файл можно открыть здесь же, в «Отчётах», или переслать разработчику.",imp_btn:"Открыть отчёт из файла",imp_err:"Этот файл не похож на отчёт AgentProof.",
   rep_fix2:"Как исправить — по каждой находке",fin_title:"Финишная черта",fin_p1:"Нет открытых находок P1",fin_score:"Балл от 8.5",fin_p2:"Каждая P2 закрыта или принята осознанно",fin_left:"осталось {n}",fin_now:"сейчас {n}",fin_done:"Готово: система пересекла финишную черту. P3 — укрепление по желанию.",fin_todo:"До финиша: закройте отмеченные пункты и пройдите повторную проверку по этому же списку.",rt_title:"Повторная проверка по тому же реестру",rt_closed:"закрыто",rt_open:"осталось",rt_new:"новых",st_new:"новая",st_open:"осталась",st_closed:"закрыта",rep_closed:"Закрыто с прошлой проверки",acc_txt:"Принимаю этот риск осознанно",prev_label:"Повторная проверка",prev_none:"Первая проверка — новый реестр",prev_opt:"По отчёту «{name}» от {date} · балл {score}",rep_pdf:"Скачать отчёт (PDF)",rep_pdf_hint:"В окне печати выбери «Сохранить как PDF».",fx_do:"Что сделать",fx_how:"Как",fx_check:"Как проверить",
   rep_disc:"Второе мнение и проверка надёжности, а не гарантия. Финальное решение по системе остаётся за человеком. Architect Systems AI."
  },
@@ -540,6 +552,8 @@ const I18N={
   rep_top3:"Three main steps",rep_forecast:"If P1 and the causes of ceilings are fixed, the axis score is up to {n} (estimate from the description)",rep_cov:"Map basis: stated in the description — {d}, inferred — {i}, no data — {u}",rep_red:"The description contained open data: secrets — {s}, personal data — {p}. They were removed before the check and never reached the model. If these are real keys, rotate them: they have already been in the file.",rep_links:"Handoffs between agents",fmt_schema:"strict schema",fmt_json:"JSON without schema",fmt_free_text:"free text",fmt_unknown:"no data",rep_bounds:"Trust boundaries · where untrusted text can reach",rep_xray:"Prompt X-ray · where text can become a command",rep_unch:"Not checked",st_ret:"returned",err_503:"The check is temporarily unavailable. Your code is saved — try again in an hour or write to @arsysai_bot.",
   load_verify:"Step 4 of 4 · devil’s advocate challenges every P1, three independent axis scores",rep_devil:"Devil’s advocate checked {c} P1 findings: held {s}, downgraded to P2 {d}, removed {r}",rep_refuted:"Removed after the devil’s advocate check",rd_title:"Description readiness",rd_ok:"present",rd_miss:"missing",rd_hint:"The fuller the description, the more precise the report. Add what is missing in the field below.",rd_1:"agents",rd_2:"prompts",rd_3:"tools",rd_4:"keys and permissions",rd_5:"handoffs between agents",rd_6:"outbound channels",rd_7:"money and access",rd_8:"examples of work",
   rep_loss:"Cost of failure · order of loss if the chain fires",loss_band_C:"plausible: at least one link is a hypothesis from the description",loss_band_D:"theoretical: several unconfirmed links",loss_inputs:"For a money figure we need your numbers",loss_analog:"Similar public case",loss_buckets:"What is hit",dv_ok:"held against the devil’s advocate",dv_down:"downgraded by the advocate",rep_back:"Why it came back",
+  sc_title:"What AgentProof finds",sc_audits:"audits",sc_find:"findings",sc_p1:"critical (P1)",sc_open:"systems with an open outbound channel",sc_case:"Architect Systems AI case · sales bot, payment, app and payout bots",sc_case_sub:"8 audits in a row: every finding closed by a barrier in code, each retest against the same list",sc_found:"found",sc_fixed:"fixed",sc_top:"Most frequent",sc_feed:"Recent audits · anonymised",sc_note:"System names, descriptions and keys are never published. Only the score, the number of agents and failure class codes are shown.",sc_retest:"retest",sc_ch:"channels closed",sc_agents:"agents",sc_empty:"The feed fills up with the first client audits.",reports_mine:"My checks on this device",
+  rep_json:"Download report file",rep_json_hint:"Open it here in “Reports” or send it to your developer.",imp_btn:"Open a report from a file",imp_err:"This file does not look like an AgentProof report.",
   rep_fix2:"How to fix — per finding",fin_title:"Finish line",fin_p1:"No open P1 findings",fin_score:"Score 8.5 or higher",fin_p2:"Every P2 fixed or consciously accepted",fin_left:"{n} left",fin_now:"now {n}",fin_done:"Done: the system has crossed the finish line. P3 is optional hardening.",fin_todo:"To finish: fix the marked items and run a retest against this same list.",rt_title:"Retest against the same registry",rt_closed:"fixed",rt_open:"still open",rt_new:"new",st_new:"new",st_open:"still open",st_closed:"fixed",rep_closed:"Fixed since the last check",acc_txt:"I accept this risk consciously",prev_label:"Retest",prev_none:"First check — new registry",prev_opt:"Against “{name}” from {date} · score {score}",rep_pdf:"Download report (PDF)",rep_pdf_hint:"In the print window choose “Save as PDF”.",fx_do:"What to do",fx_how:"How",fx_check:"How to verify",
   rep_disc:"A second opinion and reliability check, not a guarantee. The final decision on the system stays with a human. Architect Systems AI."
  }
@@ -606,12 +620,26 @@ const DEMO={
     {t:ru?'Ст. 12 — журналирование событий':'Art. 12 — record-keeping (logs)',st:'yes',ok:true,ev:ru?'Журнал оплат и действий описан':'Payment and action log is described'},
     {t:ru?'Ст. 14 — надзор человека':'Art. 14 — human oversight',st:'partial',ok:false,ev:'F4'},
     {t:ru?'Ст. 15 — точность, устойчивость, кибербезопасность':'Art. 15 — accuracy, robustness, cybersecurity',st:'no',ok:false,ev:'F2, F5'}]};});
+// Витрина: кейс собственной системы (все находки закрыты) + обезличенная лента аудитов клиентов с движка
+const CASE={path:[6,6.7,7.7,7.9,8,8.3,8.4,8.7],audits:8,findings:73,p1:3,items:{ru:[["P1", "Платный доступ выдавался по одному общему коду из ссылки", "одноразовые подписанные коды на каждого покупателя"], ["P1", "Оплата проводилась без проверки подписи платежа", "подпись каждой оплаты сервером и реестр id платежей"], ["P1", "Захват аккаунта администратора давал доступ к деньгам", "второй фактор и дневные потолки ручных команд"], ["P2", "Все боты и ключи жили в одном процессе", "три сервиса, у каждого свой узкий ключ"], ["P2", "AI-агент видел таблицы, которые ему не нужны", "права базы только на переписку и счётчики"], ["P2", "Помощник мог назвать неверную цену или статус оплаты", "цены и статусы только из кода, ответ под охраной"], ["P2", "Возврат денег прошёл бы как новая покупка", "автовозврат по типу события в подписи"], ["P2", "Не было лимита обращений к модели на человека", "лимиты в базе и потолок на ключе"], ["P2", "Не было резервных копий и внешнего сторожа", "копия базы раз в неделю, сторож каждые 15 минут"], ["P3", "Защита не проверялась атаками регулярно", "ночной прогон 50 атак и 3 многоходовых"]],en:[["P1", "Paid access was granted by one shared code in a link", "one-time signed codes per buyer"], ["P1", "Payments were credited without verifying the payment signature", "server signature on every payment and a payment id registry"], ["P1", "Taking over the admin account gave access to money", "second factor and daily caps on manual commands"], ["P2", "All bots and keys lived in one process", "three services, each with its own narrow key"], ["P2", "The AI agent could see tables it did not need", "database rights limited to chat history and counters"], ["P2", "The assistant could state a wrong price or payment status", "prices and statuses only from code, guarded reply"], ["P2", "A refund would have been processed as a new purchase", "automatic refund by event type in the signature"], ["P2", "No per-person limit on model calls", "limits in the database and a cap on the key"], ["P2", "No backups and no external watchdog", "weekly database copy, watchdog every 15 minutes"], ["P3", "Protection was not regularly tested with attacks", "nightly run of 50 attacks and 3 multi-step ones"]]}};
+let PUB=null;
+async function loadShowcase(){if(!PUB){try{const r=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'public'})});if(r.ok)PUB=await r.json();}catch(e){}}renderShowcase();}
+function renderShowcase(){const P=PUB||{audits:0,findings:0,p1:0,withOpenChannel:0,top:[],recent:[]};const lib=Object.fromEntries(LAB[lang]);
+  const n=(v,k)=>`<div><b>${v}</b>${t(k)}</div>`;
+  $('#showcase').innerHTML=`<div class="sc"><h2>${t('sc_title')}</h2>
+    <div class="scn">${n(CASE.audits+P.audits,'sc_audits')}${n(CASE.findings+P.findings,'sc_find')}${n(CASE.p1+P.p1,'sc_p1')}${P.audits?n(`${P.withOpenChannel} / ${P.audits}`,'sc_open'):''}</div>
+    <div class="scc"><div class="minetitle" style="margin:0">${t('sc_case')}</div><div class="path">${CASE.path.join('<em>→</em>')}</div><div class="spread">${t('sc_case_sub')}</div>
+      ${CASE.items[lang].map(x=>`<div class="sci"><span class="fxp">${x[0]}</span><span>${t('sc_found')}: ${x[1]} · <b>${t('sc_fixed')}:</b> ${x[2]}</span></div>`).join('')}</div>
+    ${P.top.length?`<div class="matched"><h3>${t('sc_top')}</h3><div class="tags">${P.top.map(([c,k])=>`<span class="tag">${c} · ${lib[c]||c} · ${k}</span>`).join('')}</div></div>`:''}
+    <div class="scc"><div class="minetitle" style="margin:0 0 6px">${t('sc_feed')}</div>${P.recent.length?P.recent.map(r=>`<div class="scf"><span>${r.d}</span><span><b>${r.score}</b></span><span>${r.agents} ${t('sc_agents')} · P1 ${r.p1} · P2 ${r.p2} · P3 ${r.p3}${r.ch?` · ${t('sc_ch')} ${r.ch}`:''}${r.retest?` · ${t('sc_retest')}`:''} · ${r.classes.join(', ')}</span></div>`).join(''):`<div class="spread">${t('sc_empty')}</div>`}</div>
+    <div class="spread">${t('sc_note')}</div></div>`;}
+
 let lang = (function(){try{return localStorage.getItem('asa_lang')||'ru';}catch(e){return 'ru';}})();
 let curView='overview';
 function t(k){return (I18N[lang]&&I18N[lang][k]!=null)?I18N[lang][k]:(I18N.ru[k]||k);}
 
 const TITLES={overview:'t_overview',new:'t_new',report:'t_report',reports:'t_reports',lab:'t_lab'};
-function show(v){curView=v;$$('.view').forEach(x=>x.classList.toggle('on',x.dataset.view===v));$$('.nav').forEach(x=>x.classList.toggle('on',x.dataset.v===v));$('#title').textContent=t(TITLES[v]||'t_overview');$('#side').classList.remove('open');window.scrollTo({top:0});}
+function show(v){if(v==='reports')loadShowcase();curView=v;$$('.view').forEach(x=>x.classList.toggle('on',x.dataset.view===v));$$('.nav').forEach(x=>x.classList.toggle('on',x.dataset.v===v));$('#title').textContent=t(TITLES[v]||'t_overview');$('#side').classList.remove('open');window.scrollTo({top:0});}
 
 // Мои проверки — только на этом устройстве (localStorage). Сбой хранилища не ломает страницу.
 function loadReps(){try{return JSON.parse(localStorage.getItem('ap_reports')||'[]')}catch(e){return []}}
@@ -734,6 +762,7 @@ function render(r){
     <div class="disc">${t('rep_disc')}</div>
     <div class="dl"><a class="cta" href="https://t.me/arsysai_bot?start=agentproof" target="_blank" rel="noopener">${t('rep_talk')}</a><span>${t('rep_talk_hint')}</span></div>
     <div class="dl"><button class="langbtn" id="pdfBtn">${t('rep_pdf')}</button><span>${t('rep_pdf_hint')}</span></div>
+    <div class="dl"><button class="langbtn" id="jsonBtn">${t('rep_json')}</button><span>${t('rep_json_hint')}</span></div>
     ${r._code&&!isDemo?`<div class="fb" id="fb"><h3>${t('fb_title')}</h3>
       <div class="stars">${[1,2,3,4,5].map(n=>`<button type="button" data-s="${n}">${n}</button>`).join('')}</div>
       <textarea id="fbText" placeholder="${t('fb_ph')}"></textarea>
@@ -751,6 +780,7 @@ function render(r){
     const why=window.prompt(t('flag_q'),'');if(why===null)return;b.disabled=true;
     try{const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'flag',code:r._code,lang,flag:{rubric:r.rubric,lib:r.lib,cls:h.cls,p:h.p,t:h.t,why}})});if(!res.ok)throw 0;b.textContent=t('flag_ok');}
     catch(e){b.disabled=false;}});
+  $('#jsonBtn').onclick=()=>{const {_code,...clean}=r;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(clean)],{type:'application/json'}));a.download='AgentProof-'+String(r.name||'report').replace(/<[^>]*>|[^\wА-Яа-яЁё -]/g,'').slice(0,40)+'-'+((r.basis&&r.basis.date)||'')+'.json';a.click();URL.revokeObjectURL(a.href);};
   $('#pdfBtn').onclick=()=>{const old=document.title;document.title='AgentProof — '+(r.name||'отчёт').replace(/<[^>]*>/g,'');window.print();document.title=old;};
   if(curView!=='report')show('report');
 }
@@ -765,6 +795,7 @@ function applyLang(){
   if($('#heroViz')) $('#heroViz').innerHTML=heroGraph();
   buildTables();
   if($('#report').classList.contains('on')&&isDemo) render(DEMO[lang]);
+  if(curView==='reports') renderShowcase();
 }
 
 // nav + controls
@@ -854,6 +885,11 @@ $('#run').addEventListener('click',async()=>{
   catch(e){if(e!=='stop')$('#err').style.display='block';}
   finally{$('#run').disabled=false;$('#load').style.display='none';}
 });
+// Открыть отчёт из файла: проверяем форму, в «Мои проверки» кладём без кода доступа
+$('#impBtn').onclick=()=>$('#impFile').click();
+$('#impFile').onchange=async()=>{const f=$('#impFile').files[0];if(!f)return;
+  try{const r=JSON.parse(await f.text());if(typeof r.score!=='number'||!Array.isArray(r.hardening)||!r.graph)throw 0;delete r._code;saveRep(r);buildTables();isDemo=false;render(r);}
+  catch(e){$('#impMsg').textContent=t('imp_err');}finally{$('#impFile').value='';}};
 $('#delReps').onclick=()=>{if(!confirm(t('del_ok')))return;try{localStorage.removeItem('ap_reports')}catch(e){}buildTables();};
 
 // Собиратель Входа: есть ли в описании то, без чего проверки слепнут (эвристика по словам, до траты кода)

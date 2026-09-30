@@ -143,7 +143,10 @@ const STEP_PROBE = `ШАГ 2 — БАТАРЕЯ, СИСТЕМНЫЕ ПРОВЕР
 const STEP_FINAL = `ШАГ 3 — РЕЕСТР НАХОДОК И ПЛАН. Карта — в <map>, проверки шага 2 — в <probe>.
 - hardening: ПОЛНЫЙ реестр — каждая находка отдельным пунктом, без ограничения числа, от самой
   важной к менее важной (p: P1 — путь к деньгам/доступу/ключам, P2 — ослабляет барьер,
-  P3 — укрепление). Разные находки не объединяй, малые включай. cls — код класса из библиотеки
+  P3 — укрепление). Разные находки не объединяй, малые включай. Находка, основанная только на
+  ОТСУТСТВИИ сведений в описании («не описано», «не указано»), — не выше P2, basis hypothesis, и её
+  вопрос клиенту обязателен в do; P1 ставь только тогда, когда путь к деньгам, доступу или ключам
+  виден из того, что в описании НАПИСАНО. cls — код класса из библиотеки
   (или NEW, если класса нет). basis — fact / hypothesis. do — одна фраза, how — до 400 знаков,
   check — одна проверка до 200 знаков. Каждая находка из matched должна дать пункт реестра.
 - id и st: первая проверка — id F1, F2… по порядку, st "new". Повторная проверка (есть блок
@@ -528,6 +531,25 @@ export default async function handler(req, res) {
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'x';
   const action = body.action;
 
+  // Публичная витрина «Что находит AgentProof»: только обезличенная статистика (балл, число агентов,
+  // коды классов, счётчики P1–P3), без описаний, имён и tg. Код доступа не нужен.
+  if (action === 'public') {
+    if (await overLimit(ip, 'public', 60, 600)) return res.status(429).json({ error: 'too many' });
+    const cached = await redis(['GET', 'ap:public']);
+    if (cached) return res.status(200).json(JSON.parse(cached));
+    const rows = (await redis(['LRANGE', 'ap:stats', '0', '499']) || []).map(x => { try { return JSON.parse(x); } catch (e) { return null; } }).filter(r => r && !r.tag);
+    const cls = {};
+    for (const r of rows) for (const c of r.classes || []) cls[c] = (cls[c] || 0) + 1;
+    const out = {
+      audits: rows.length, findings: rows.reduce((n, r) => n + (r.p1 || 0) + (r.p2 || 0) + (r.p3 || 0), 0), p1: rows.reduce((n, r) => n + (r.p1 || 0), 0),
+      withOpenChannel: rows.filter(r => r.ch_total && r.ch_closed < r.ch_total).length,
+      top: Object.entries(cls).sort((a, b) => b[1] - a[1]).slice(0, 10),
+      recent: rows.slice(0, 12).map(r => ({ d: r.d, score: r.score, agents: r.agents, p1: r.p1, p2: r.p2, p3: r.p3, ch: r.ch_total ? `${r.ch_closed}/${r.ch_total}` : '', classes: (r.classes || []).slice(0, 6), retest: !!r.retest }))
+    };
+    await redis(['SET', 'ap:public', JSON.stringify(out), 'EX', '300']);
+    return res.status(200).json(out);
+  }
+
   // Перебор кодов с одного адреса
   if (action === 'check' && await overLimit(ip, 'check', 20, 600)) return res.status(429).json({ error: 'too many' });
 
@@ -654,7 +676,9 @@ export default async function handler(req, res) {
     const cnt = p => report.hardening.filter(h => h.p === p && h.st !== 'closed').length;
     await redis(['LPUSH', 'ap:stats', JSON.stringify({ d: meta.date, rubric: RUBRIC, lib: LIB_VERSION, score: report.score, agents: (st.map.agents || []).length,
       ch_closed: report.channels.filter(c => c.state === 'closed').length, ch_total: report.channels.length, p1: cnt('P1'), p2: cnt('P2'), p3: cnt('P3'),
-      classes: [...new Set(report.hardening.map(h => h.cls).filter(c => c !== 'NEW'))], retest: !!prev, refuted: report.refuted.length })]);
+      classes: [...new Set(report.hardening.map(h => h.cls).filter(c => c !== 'NEW'))], retest: !!prev, refuted: report.refuted.length,
+      ...(body.tag ? { tag: String(body.tag).slice(0, 12) } : {}) })]);  // tag — внутренние прогоны (эталонный набор), в витрину не попадают
+    await redis(['DEL', 'ap:public']);
     await redis(['LTRIM', 'ap:stats', '0', '9999']);
     await journal({ ev: 'report', run: st.run, score: report.score, p1: cnt('P1'), refuted: report.refuted.length, promises_cut: hits.n, tokens: Math.round(weight(total)) });
     // Мета-флаг калибровки адвоката: снято больше трети P1 — шум на ступени «по описанию»
