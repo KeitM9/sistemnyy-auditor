@@ -75,7 +75,8 @@ const BASE_PROMPT = `Ты — «Системный Аудитор» AgentProof (
 находкой «инъекция в артефактах системы» (класс A01.4, если подходит).
 
 Аудит по описанию, без запуска системы. Всё, что прямо написано в описании, — «факт из описания».
-Всё, что ты выводишь сам (цепочки атак, вероятное поведение), — «гипотеза». Не выдумывай
+Всё, что ты выводишь сам (цепочки атак, вероятное поведение), — «вывод из описания»; в текстах для
+клиента слово «гипотеза» не пиши, пиши «вывод из описания» и опирайся на конкретную строку. Не выдумывай
 компоненты, которых нет в описании; если данных нет — так и скажи.
 
 Голос: спокойно, уважительно к любому агенту и его автору — «где укрепить». Крепкую систему так и
@@ -150,6 +151,9 @@ const STEP_FINAL = `ШАГ 3 — РЕЕСТР НАХОДОК И ПЛАН. Кар
   виден из того, что в описании НАПИСАНО. cls — код класса из библиотеки
   (или NEW, если класса нет). basis — fact / hypothesis. do — одна фраза, how — до 400 знаков,
   check — одна проверка до 200 знаков. Каждая находка из matched должна дать пункт реестра.
+- ev: основание — короткая дословная цитата из описания (до 200 знаков, без секретов), из которой
+  следует находка. Если находка следует из отсутствия сведений — ev: «в описании нет: <чего>». Без
+  основания находку не включай.
 - id и st: первая проверка — id F1, F2… по порядку, st "new". Повторная проверка (есть блок
   previous_registry): пройди КАЖДУЮ прежнюю находку с её прежним id, p и cls: st "closed", если
   описание явно показывает, что она устранена (в do — чем подтверждено), иначе "open". Новые — st
@@ -161,7 +165,7 @@ const STEP_FINAL = `ШАГ 3 — РЕЕСТР НАХОДОК И ПЛАН. Кар
   барьером не считается. В остальных случаях back — пустая строка.
 - steps: по одному шагу на каждый пункт open и new, в том же порядке.
 - exploit: самая опасная цепочка атаки от входа до денег, доступа или ключей — звенья коротко, это
-  гипотеза. Нет цепочки — path пустой. Без рабочих payload'ов.
+  вывод из описания. Нет цепочки — path пустой. Без рабочих payload'ов.
 - weak: слабое звено системы одной-двумя фразами.
 - unchecked: что в этом аудите не проверялось и почему (живая система не запускалась, нет промпта
   агента X, нет данных о канале Y) — коротко, по пунктам.
@@ -232,7 +236,7 @@ const ProbeS = z.object({
 const FinalS = z.object({
   weak: z.string(),
   exploit: z.object({ path: z.array(z.string()), note: z.string() }),
-  hardening: z.array(z.object({ id: z.string(), cls: z.string(), st: z.enum(['new', 'open', 'closed']), basis: z.enum(['fact', 'hypothesis']), t: z.string(), p: z.string(), do: z.string(), how: z.string(), check: z.string(), back: z.string() })),
+  hardening: z.array(z.object({ id: z.string(), cls: z.string(), st: z.enum(['new', 'open', 'closed']), basis: z.enum(['fact', 'hypothesis']), t: z.string(), p: z.string(), do: z.string(), how: z.string(), check: z.string(), back: z.string(), ev: z.string() })),
   steps: z.array(z.string()),
   unchecked: z.array(z.string()),
   loss: z.array(z.object({ scenario: z.string(), ids: z.array(z.string()), buckets: z.array(z.string()), band: z.enum(['C', 'D']), analog: z.string(), inputs: z.array(z.string()), money: z.string() })),
@@ -422,7 +426,7 @@ export function normalize(map, probe, fin, ax, lang, meta, devil = { p1: [] }) {
   let hard = (fin.hardening || []).map((h, i) => ({
     id: cut(h.id || `F${i + 1}`, 8), cls: LIB_IDS.has(h.cls) ? h.cls : 'NEW',
     st: meta.prev && ['open', 'closed'].includes(h.st) ? h.st : 'new', basis: h.basis === 'fact' ? 'fact' : 'hypothesis',
-    t: h.t || '', p: ['P1', 'P2', 'P3'].includes(h.p) ? h.p : 'P3', do: h.do || '', how: h.how || '', check: h.check || '', back: h.back || ''
+    t: h.t || '', p: ['P1', 'P2', 'P3'].includes(h.p) ? h.p : 'P3', do: h.do || '', how: h.how || '', check: h.check || '', back: h.back || '', ev: cut(h.ev || '', 240)
   }));
   const seen = new Set(hard.map(h => h.id));
   const lost = (meta.prev?.items || []).filter(h => !seen.has(h.id)).map(h => ({ id: h.id, cls: LIB_IDS.has(h.cls) ? h.cls : 'NEW', st: 'open', basis: 'hypothesis', t: h.t, p: h.p, do: '', how: '', check: '' }));
