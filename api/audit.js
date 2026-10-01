@@ -537,7 +537,7 @@ export default async function handler(req, res) {
   const action = body.action;
 
   // Счётчики воронки: только число событий за день, без IP, cookies и tg — видно, где люди уходят
-  const HIT_EVENTS = ['view', 'code_ok', 'start', 'report', 'talk', 'dev', 'json'];
+  const HIT_EVENTS = ['view', 'consent', 'code_ok', 'start', 'report', 'talk', 'dev', 'json'];
   if (action === 'hit') {
     if (!HIT_EVENTS.includes(body.ev) || await overLimit(ip, 'hit', 120, 600)) return res.status(204).end();
     const key = `ap:hits:${new Date().toISOString().slice(0, 10)}:${body.ev}`;
@@ -574,6 +574,15 @@ export default async function handler(req, res) {
 
   try {
     if (action === 'check') {
+      // Согласие с экрана «Прежде чем начать»: персональные данные и условия — обязательны, рассылка — по желанию.
+      // Запись с датой и версией документов — доказательство согласия; хранится 400 дней.
+      const c = body.consent || {};
+      if (c.pd === true && c.terms === true) {
+        const rec = { v: String(c.v || '').slice(0, 12), pd: true, terms: true, news: c.news === true, d: new Date().toISOString(), lang };
+        await redis(['SET', `ap:consent:${code.tg}`, JSON.stringify(rec), 'EX', String(400 * 86400)]);
+        await journal({ ev: 'consent', tg: code.tg, v: rec.v, news: rec.news });
+        if (rec.news) await tell(`согласие на сообщения о новых материалах · tg ${code.tg} (tg://user?id=${code.tg})`);
+      }
       const used = await redis(['GET', usedKey]);
       return res.status(200).json({ ok: !used, used: !!used, expires: code.exp });
     }
@@ -614,6 +623,7 @@ export default async function handler(req, res) {
     if (action === 'map') {
       if (await overLimit(ip, 'run', 3, 600)) return res.status(429).json({ error: 'too many' });
       if (await redis(['GET', usedKey])) return res.status(409).json({ error: 'used' });
+      if (!(await redis(['GET', `ap:consent:${code.tg}`]))) return res.status(428).json({ error: 'consent' });
       const spentToday = Number(await redis(['GET', `ap:spend:${new Date().toISOString().slice(0, 10)}`])) || 0;
       if (spentToday > DAY_CAP) {
         await tell(`СТОП-КРАН: дневной потолок токенов исчерпан (${Math.round(spentToday)} > ${DAY_CAP}). Новые аудиты сегодня не стартуют, код клиента сохранён (tg ${code.tg}).`);
@@ -699,13 +709,14 @@ export default async function handler(req, res) {
     if (report.devil.checked >= 3 && report.devil.removed * 3 > report.devil.checked) await tell(`калибровка: адвокат снял ${report.devil.removed} из ${report.devil.checked} P1 — шум на ступени по описанию, посмотреть реестр (run ${st.run.slice(0, 8)})`);
     const sec = Math.round((Date.now() - st.t0) / 1000);
     const day = new Date().toISOString().slice(0, 10);
-    const funnel = await Promise.all(HIT_EVENTS.map(e => redis(['GET', `ap:hits:${day}:${e}`]).then(v => Number(v) || 0)));
+    const fv = await Promise.all(HIT_EVENTS.map(e => redis(['GET', `ap:hits:${day}:${e}`]).then(v => Number(v) || 0)));
+    const F = Object.fromEntries(HIT_EVENTS.map((e, i) => [e, fv[i]]));
     await tell(`проверка прошла · tg ${code.tg} · балл ${report.score} (${report.verdict}) · разброс осей ±${report.spread} · ` +
       `адвокат: P1 ${report.devil.checked}, выстояли ${report.devil.stands}, понижены ${report.devil.down}, сняты ${report.devil.removed} · ` +
       `${meta.checked.toLocaleString('ru')} знаков · ${st.model} · ${sec} с · токены: вход ${total.input_tokens || 0}, ` +
       `из кеша ${total.cache_read_input_tokens || 0}, запись в кеш ${total.cache_creation_input_tokens || 0}, выход ${total.output_tokens || 0} (усл. ${Math.round(weight(total))})` +
       (hits.n ? ` · убрано запрещённых обещаний: ${hits.n}` : '') + (found.secrets || found.pii ? ` · вырезано: секретов ${found.secrets}, ПДн ${found.pii}` : '') +
-      `\nВоронка за сегодня: открыли сайт ${funnel[0]} · код принят ${funnel[1]} · запустили ${funnel[2]} · отчёт ${funnel[3]} · «помощь с исправлением» ${funnel[4]} · задачи разработчику ${funnel[5]}`);
+      `\nВоронка за сегодня: открыли сайт ${F.view} · дали согласие ${F.consent} · код принят ${F.code_ok} · запустили ${F.start} · отчёт ${F.report} · «исправить через Екатерину» ${F.talk} · задачи разработчику ${F.dev}`);
     return res.status(200).json(report);
   } catch (e) {
     console.error('audit fail', action, String(e).slice(0, 200));
