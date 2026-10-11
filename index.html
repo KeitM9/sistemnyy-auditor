@@ -397,7 +397,7 @@
           <div id="consentBox" class="csbox">
             <h2 class="csh" data-i18n="cs_h"></h2>
             <p class="cssub" data-i18n="cs_sub"></p>
-            <label class="csrow"><input type="checkbox" id="csPd"><span><b data-i18n="cs_pd"></b><small data-i18n="cs_req"></small></span><a class="csi" href="https://legal.arsysai.com/#consent" target="_blank" rel="noopener" aria-label="i">i</a></label>
+            <label class="csrow"><input type="checkbox" id="csPd"><span><b data-i18n="cs_pd"></b><small data-i18n="cs_req"></small></span><a class="csi" id="csPdLink" href="https://legal.arsysai.com/#consent" target="_blank" rel="noopener" aria-label="i">i</a></label>
             <label class="csrow"><input type="checkbox" id="csTerms"><span><b data-i18n="cs_terms"></b><small data-i18n="cs_req"></small></span><a class="csi" href="terms.html" target="_blank" rel="noopener" aria-label="i">i</a></label>
             <label class="csrow"><input type="checkbox" id="csNews"><span><b data-i18n="cs_news"></b><small data-i18n="cs_news_sub"></small></span></label>
             <button class="cta csgo" id="csGo" disabled data-i18n="cs_go"></button>
@@ -887,6 +887,7 @@ function applyLang(){
   $$('[data-i18n-ph]').forEach(e=>e.placeholder=t(e.dataset.i18nPh));
   $('#title').textContent=t(TITLES[curView]||'t_overview');
   $('#langbtn').textContent = lang==='ru'?'EN':'RU';
+  if($('#csPdLink')) $('#csPdLink').href = lang==='en' ? 'https://legal.arsysai.com/en.html#consent' : 'https://legal.arsysai.com/#consent';
   if($('#heroViz')) $('#heroViz').innerHTML=heroGraph();
   buildTables();
   if($('#report').classList.contains('on')&&isDemo) render(DEMO[lang]);
@@ -942,7 +943,7 @@ const ENGINE='https://agentproof-engine.vercel.app/api/audit';
 let memCode=''; // запас, если браузер запрещает хранилище (приватный режим)
 const getCode=()=>{try{return sessionStorage.getItem('ap_code')||memCode}catch(e){return memCode}};
 const setCode=c=>{memCode=c||'';try{c?sessionStorage.setItem('ap_code',c):sessionStorage.removeItem('ap_code')}catch(e){}};
-const CONSENT_V='2026-09-30';
+const CONSENT_V='2026-10-11';
 let memConsent=null;
 const getConsent=()=>{try{const c=JSON.parse(localStorage.getItem('ap_consent')||'null');return c&&c.v===CONSENT_V?c:memConsent}catch(e){return memConsent}};
 function gateView(){const ok=!!getConsent(),on=!!getCode();$('#consentBox').style.display=ok?'none':'block';$('#gate').style.display=ok&&!on?'block':'none';$('#formwrap').style.display=ok&&on?'block':'none';}
