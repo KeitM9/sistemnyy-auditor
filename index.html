@@ -502,6 +502,7 @@ const I18N={
   rep_axes:"Баллы по осям",rep_basis:"На чём основан вывод",
   basis_txt:"Проверено описание системы: {checked} знаков · {date} · модель {model} · рубрика {rubric}. Живую систему проверяют на стенде — это следующая ступень.",
   trunc_txt:"Документ длиннее лимита: проверено {checked} из {total} знаков. Раздели документ на части или сократи — и проверь остальное отдельно.",
+  rep_dispute:"Не согласен с отчётом",rep_dispute_hint:"Ошибка в факте подтвердится — вернём деньги за проверку. Разница мнений — бесплатно перепроверим вторым агентом. Ответ в течение 3 дней.",
   rep_talk:"Исправить через Екатерину",rep_talk_hint:"Искать разработчика не нужно — приложите файл отчёта к заявке.",
   empty_reports:"Здесь появятся твои проверки. Они хранятся только на этом устройстве.",
   gate_label:"Личный код доступа",gate_btn:"Войти",
@@ -585,6 +586,7 @@ const I18N={
   rep_axes:"Scores by axis",rep_basis:"What the verdict is based on",
   basis_txt:"Checked: the system description, {checked} characters · {date} · model {model} · rubric {rubric}. A live system is checked on a test stand — that is the next step.",
   trunc_txt:"The document is longer than the limit: {checked} of {total} characters were checked. Split or shorten it and check the rest separately.",
+  rep_dispute:"Disagree with the report",rep_dispute_hint:"If a factual error is confirmed, we refund the check. A difference of opinion — we re-check with a second agent for free. Reply within 3 days.",
   rep_talk:"Fix it with Ekaterina",rep_talk_hint:"No need to hunt for a developer — attach the report file to your request.",
   empty_reports:"Your checks will appear here. They are stored only on this device.",
   gate_label:"Personal access code",gate_btn:"Enter",
@@ -853,6 +855,7 @@ function render(r){
     <div class="dl"><button class="langbtn" id="pdfBtn">${t('rep_pdf')}</button><span>${t('rep_pdf_hint')}</span></div>
     <div class="dl"><button class="langbtn" id="devBtn">${t('dev_btn')}</button><span>${t('dev_hint')}</span></div>
     <div class="dl"><button class="langbtn" id="jsonBtn">${t('rep_json')}</button><span>${t('rep_json_hint')}</span></div>
+    <div class="dl"><a class="langbtn" href="https://t.me/arsysai_bot?start=dispute_ap" target="_blank" rel="noopener" onclick="hit('dispute')">${t('rep_dispute')}</a><span>${t('rep_dispute_hint')}</span></div>
     ${r._code&&!isDemo?`<div class="fb" id="fb"><h3>${t('fb_title')}</h3>
       <div class="stars">${[1,2,3,4,5].map(n=>`<button type="button" data-s="${n}">${n}</button>`).join('')}</div>
       <textarea id="fbText" placeholder="${t('fb_ph')}"></textarea>
