@@ -309,11 +309,11 @@ async function journal(ev) {
     const h = sha(rec);
     await redis(['RPUSH', 'ap:journal', rec + ' ' + h]);
     await redis(['SET', 'ap:journal:head', h]);
-    // срок хранения журнала — 3 года (legal.arsysai.com/privacy, раздел 3.5): самую старую запись старше срока убираем
+    // срок хранения журнала — 90 дней (legal.arsysai.com/privacy, раздел 3.5): самую старую запись старше срока убираем
     for (let i = 0; i < 100; i++) {
       const first = await redis(['LINDEX', 'ap:journal', '0']);
       const ts = first ? (JSON.parse(String(first).slice(0, String(first).lastIndexOf(' '))).ts || '') : '';
-      if (!ts || Date.now() - Date.parse(ts) <= 3 * 365 * 86400 * 1000) break;
+      if (!ts || Date.now() - Date.parse(ts) <= 90 * 86400 * 1000) break;
       await redis(['LPOP', 'ap:journal']);
     }
   } catch (e) { await tell('журнал: запись не удалась — ' + String(e).slice(0, 120)); }
@@ -541,6 +541,20 @@ export default async function handler(req, res) {
     return res.status(503).json({ error: 'not configured' });
   }
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'x';
+  // разово: старым записям (согласия, счётчики) срок 400 дней → 90 дней (решение Екатерины 12.10.2026)
+  try {
+    if (!(await redis(['GET', 'ap:mig90']))) {
+      await redis(['SET', 'ap:mig90', '1']);
+      for (const pat of ['ap:consent:*', 'ap:hits:*']) {
+        let cur = '0';
+        do {
+          const [next, keys] = await redis(['SCAN', cur, 'MATCH', pat, 'COUNT', '200']);
+          for (const k of keys) { const t = Number(await redis(['TTL', k])); if (t > 90 * 86400) await redis(['EXPIRE', k, String(90 * 86400)]); }
+          cur = String(next);
+        } while (cur !== '0');
+      }
+    }
+  } catch (e) { /* не мешаем основному запросу */ }
   const action = body.action;
 
   // Счётчики воронки: только число событий за день, без IP, cookies и tg — видно, где люди уходят
@@ -548,7 +562,7 @@ export default async function handler(req, res) {
   if (action === 'hit') {
     if (!HIT_EVENTS.includes(body.ev) || await overLimit(ip, 'hit', 120, 600)) return res.status(204).end();
     const key = `ap:hits:${new Date().toISOString().slice(0, 10)}:${body.ev}`;
-    await redis(['INCR', key]); await redis(['EXPIRE', key, String(400 * 86400)]);
+    await redis(['INCR', key]); await redis(['EXPIRE', key, String(90 * 86400)]);
     return res.status(204).end();
   }
 
@@ -582,11 +596,11 @@ export default async function handler(req, res) {
   try {
     if (action === 'check') {
       // Согласие с экрана «Прежде чем начать»: персональные данные и условия — обязательны, рассылка — по желанию.
-      // Запись с датой и версией документов — доказательство согласия; хранится 400 дней.
+      // Запись с датой и версией документов — доказательство согласия; хранится 90 дней (решение Екатерины 12.10: максимум 3 месяца).
       const c = body.consent || {};
       if (c.pd === true && c.terms === true) {
         const rec = { v: String(c.v || '').slice(0, 12), pd: true, terms: true, news: c.news === true, d: new Date().toISOString(), lang };
-        await redis(['SET', `ap:consent:${code.tg}`, JSON.stringify(rec), 'EX', String(400 * 86400)]);
+        await redis(['SET', `ap:consent:${code.tg}`, JSON.stringify(rec), 'EX', String(90 * 86400)]);
         await journal({ ev: 'consent', tg: code.tg, v: rec.v, news: rec.news });
         if (rec.news) await tell(`согласие на сообщения о новых материалах · tg ${code.tg} (tg://user?id=${code.tg})`);
       }
