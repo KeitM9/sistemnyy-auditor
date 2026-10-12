@@ -309,6 +309,13 @@ async function journal(ev) {
     const h = sha(rec);
     await redis(['RPUSH', 'ap:journal', rec + ' ' + h]);
     await redis(['SET', 'ap:journal:head', h]);
+    // срок хранения журнала — 3 года (legal.arsysai.com/privacy, раздел 3.5): самую старую запись старше срока убираем
+    for (let i = 0; i < 100; i++) {
+      const first = await redis(['LINDEX', 'ap:journal', '0']);
+      const ts = first ? (JSON.parse(String(first).slice(0, String(first).lastIndexOf(' '))).ts || '') : '';
+      if (!ts || Date.now() - Date.parse(ts) <= 3 * 365 * 86400 * 1000) break;
+      await redis(['LPOP', 'ap:journal']);
+    }
   } catch (e) { await tell('журнал: запись не удалась — ' + String(e).slice(0, 120)); }
 }
 // Сверка цепочки: node -e "…" по выгрузке ap:journal (каждая строка: запись + пробел + хеш)
@@ -537,7 +544,7 @@ export default async function handler(req, res) {
   const action = body.action;
 
   // Счётчики воронки: только число событий за день, без IP, cookies и tg — видно, где люди уходят
-  const HIT_EVENTS = ['view', 'consent', 'code_ok', 'start', 'report', 'talk', 'dev', 'json'];
+  const HIT_EVENTS = ['view', 'consent', 'code_ok', 'start', 'report', 'talk', 'dev', 'json', 'dispute'];
   if (action === 'hit') {
     if (!HIT_EVENTS.includes(body.ev) || await overLimit(ip, 'hit', 120, 600)) return res.status(204).end();
     const key = `ap:hits:${new Date().toISOString().slice(0, 10)}:${body.ev}`;

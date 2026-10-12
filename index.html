@@ -398,7 +398,7 @@
             <h2 class="csh" data-i18n="cs_h"></h2>
             <p class="cssub" data-i18n="cs_sub"></p>
             <label class="csrow"><input type="checkbox" id="csPriv"><span><b data-i18n="cs_priv"></b><small data-i18n="cs_req"></small></span><a class="csi" id="csPrivLink" href="https://legal.arsysai.com/privacy.html" target="_blank" rel="noopener" aria-label="i">i</a></label>
-            <label class="csrow"><input type="checkbox" id="csPd"><span><b data-i18n="cs_pd"></b><small data-i18n="cs_req"></small></span><a class="csi" id="csPdLink" href="https://legal.arsysai.com/consent.html" target="_blank" rel="noopener" aria-label="i">i</a></label>
+            <label class="csrow"><input type="checkbox" id="csPd"><span><b data-i18n="cs_pd"></b><small data-i18n="cs_req"></small></span><a class="csi" id="csPdLink" href="https://legal.arsysai.com/consent-agentproof.html" target="_blank" rel="noopener" aria-label="i">i</a></label>
             <label class="csrow"><input type="checkbox" id="csTerms"><span><b data-i18n="cs_terms"></b><small data-i18n="cs_req"></small></span><a class="csi" href="terms.html" target="_blank" rel="noopener" aria-label="i">i</a></label>
             <label class="csrow"><input type="checkbox" id="csNews"><span><b data-i18n="cs_news"></b><small data-i18n="cs_news_sub"></small></span><a class="csi" id="csNewsLink" href="https://legal.arsysai.com/consent.html#ads" target="_blank" rel="noopener" aria-label="i">i</a></label>
             <button class="cta csgo" id="csGo" disabled data-i18n="cs_go"></button>
@@ -894,7 +894,7 @@ function applyLang(){
   $('#langbtn').textContent = lang==='ru'?'EN':'RU';
   {const L='https://legal.arsysai.com/', en=lang==='en';
    if($('#csPrivLink')) $('#csPrivLink').href = en ? L+'en.html#policy' : L+'privacy.html';
-   if($('#csPdLink')) $('#csPdLink').href = en ? L+'en.html#consent' : L+'consent.html';
+   if($('#csPdLink')) $('#csPdLink').href = en ? L+'en.html#consent-agentproof' : L+'consent-agentproof.html';
    if($('#csNewsLink')) $('#csNewsLink').href = en ? L+'en.html#ads' : L+'consent.html#ads';}
   if($('#heroViz')) $('#heroViz').innerHTML=heroGraph();
   buildTables();
@@ -951,7 +951,7 @@ const ENGINE='https://agentproof-engine.vercel.app/api/audit';
 let memCode=''; // запас, если браузер запрещает хранилище (приватный режим)
 const getCode=()=>{try{return sessionStorage.getItem('ap_code')||memCode}catch(e){return memCode}};
 const setCode=c=>{memCode=c||'';try{c?sessionStorage.setItem('ap_code',c):sessionStorage.removeItem('ap_code')}catch(e){}};
-const CONSENT_V='2026-10-11.2';
+const CONSENT_V='2026-10-12';
 let memConsent=null;
 const getConsent=()=>{try{const c=JSON.parse(localStorage.getItem('ap_consent')||'null');return c&&c.v===CONSENT_V?c:memConsent}catch(e){return memConsent}};
 function gateView(){const ok=!!getConsent(),on=!!getCode();$('#consentBox').style.display=ok?'none':'block';$('#gate').style.display=ok&&!on?'block':'none';$('#formwrap').style.display=ok&&on?'block':'none';}
