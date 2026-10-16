@@ -1,7 +1,7 @@
 // Движок AgentProof («Системный Аудитор»). Отдельный Vercel-проект со своим ключом
 // ANTHROPIC_API_KEY. Вход — только по личному коду доступа (48 часов, одна проверка).
 // Действия (поле action): check — проверить код; map → probe → final — три шага аудита;
-// feedback — отзыв; flag — «эта находка неточна» (пополняет банк ошибок движка).
+// flag — «эта находка неточна» (пополняет банк ошибок движка).
 // Балл считает КОД (медиана трёх оценок осей + потолки), модель оценивает оси с основанием.
 // Описание клиента нигде не хранится: браузер присылает его на каждом шаге заново,
 // промежуточные результаты сервер подписывает (подделать их, чтобы поднять балл, нельзя).
@@ -602,20 +602,9 @@ export default async function handler(req, res) {
         const rec = { v: String(c.v || '').slice(0, 12), pd: true, terms: true, news: c.news === true, d: new Date().toISOString(), lang };
         await redis(['SET', `ap:consent:${code.tg}`, JSON.stringify(rec), 'EX', String(90 * 86400)]);
         await journal({ ev: 'consent', tg: code.tg, v: rec.v, news: rec.news });
-        if (rec.news) await tell(`согласие на сообщения о новых материалах · tg ${code.tg} (tg://user?id=${code.tg})`);
       }
       const used = await redis(['GET', usedKey]);
       return res.status(200).json({ ok: !used, used: !!used, expires: code.exp });
-    }
-
-    if (action === 'feedback') {
-      const f = body.feedback || {};
-      const stars = clamp(f.stars, 0, 5);
-      await tell(`отзыв · tg ${code.tg} (tg://user?id=${code.tg})\n` +
-        `Оценка: ${'★'.repeat(stars)}${'☆'.repeat(5 - stars)} · балл отчёта ${f.score ?? '—'}\n` +
-        (f.text ? `«${String(f.text).slice(0, 1500)}»\n` : '') +
-        `Нужна помощь с исправлением: ${f.help ? 'ДА' : 'нет'} · Можно показать обезличенно: ${f.share ? 'да' : 'нет'}`);
-      return res.status(200).json({ ok: true });
     }
 
     // «Эта находка неточна» — обезличенная запись в банк ошибок движка (без описания и без tg).
