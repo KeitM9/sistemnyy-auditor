@@ -1,3 +1,11 @@
 node_modules/
 .vercel/
 tests/golden/result-*.json
+
+# DEPLOY-GUARD (гайд securitygit, 16.10.2026)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.claude/settings.local.json
