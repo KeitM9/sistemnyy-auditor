@@ -40,5 +40,15 @@
     "min_score": 0,
     "max_score": 7,
     "note": "тихий сбой вебхука без тревоги и сверки (случай Reddit 10.10)"
+  },
+  "g5-keys-in-config.md": {
+    "must": [
+      "A03.6",
+      "A04.5",
+      "D13"
+    ],
+    "min_score": 0,
+    "max_score": 7,
+    "note": "ключи в конфигах и CI, старая версия Langflow, вход в GitHub по SMS (неделя 12–17.10.2026)"
   }
 }
