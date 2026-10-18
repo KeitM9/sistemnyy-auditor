@@ -402,7 +402,6 @@
             <label class="csrow"><input type="checkbox" id="csPriv"><span><b data-i18n="cs_priv"></b><small data-i18n="cs_req"></small></span><a class="csi" id="csPrivLink" href="https://legal.arsysai.com/privacy.html" target="_blank" rel="noopener" aria-label="i">i</a></label>
             <label class="csrow"><input type="checkbox" id="csPd"><span><b data-i18n="cs_pd"></b><small data-i18n="cs_req"></small></span><a class="csi" id="csPdLink" href="https://legal.arsysai.com/consent-agentproof.html" target="_blank" rel="noopener" aria-label="i">i</a></label>
             <label class="csrow"><input type="checkbox" id="csTerms"><span><b data-i18n="cs_terms"></b><small data-i18n="cs_req"></small></span><a class="csi" href="terms.html" target="_blank" rel="noopener" aria-label="i">i</a></label>
-            <label class="csrow"><input type="checkbox" id="csNews"><span><b data-i18n="cs_news"></b><small data-i18n="cs_news_sub"></small></span><a class="csi" id="csNewsLink" href="https://legal.arsysai.com/consent.html#ads" target="_blank" rel="noopener" aria-label="i">i</a></label>
             <button class="cta csgo" id="csGo" disabled data-i18n="cs_go"></button>
             <p class="cshint" data-i18n="cs_hint"></p>
           </div>
@@ -967,8 +966,8 @@ let memConsent=null;
 const getConsent=()=>{try{const c=JSON.parse(localStorage.getItem('ap_consent')||'null');return c&&c.v===CONSENT_V?c:memConsent}catch(e){return memConsent}};
 function gateView(){const ok=!!getConsent(),on=!!getCode();$('#consentBox').style.display=ok?'none':'block';$('#gate').style.display=ok&&!on?'block':'none';$('#formwrap').style.display=ok&&on?'block':'none';}
 const csSync=()=>{$('#csGo').disabled=!($('#csPriv').checked&&$('#csPd').checked&&$('#csTerms').checked);};
-['#csPriv','#csPd','#csTerms','#csNews'].forEach(id=>$(id).addEventListener('change',csSync));
-$('#csGo').onclick=()=>{const c={v:CONSENT_V,privacy:true,pd:true,terms:true,news:$('#csNews').checked,d:new Date().toISOString()};memConsent=c;try{localStorage.setItem('ap_consent',JSON.stringify(c))}catch(e){}hit('consent');gateView();};
+['#csPriv','#csPd','#csTerms'].forEach(id=>$(id).addEventListener('change',csSync));
+$('#csGo').onclick=()=>{const c={v:CONSENT_V,privacy:true,pd:true,terms:true,news:false,d:new Date().toISOString()};memConsent=c;try{localStorage.setItem('ap_consent',JSON.stringify(c))}catch(e){}hit('consent');gateView();};
 function gateMsg(k){const m=$('#gateMsg');m.innerHTML=t(k);m.classList.toggle('bad',k!=='gate_help');}
 $('#codeBtn').onclick=async()=>{const code=$('#codeIn').value.trim(); if(!code){$('#codeIn').focus();return;}
   $('#codeBtn').disabled=true;
