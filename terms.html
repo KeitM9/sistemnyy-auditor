@@ -117,6 +117,7 @@
 
 <script>
 let L='ru';try{L=localStorage.getItem('asa_lang')==='en'?'en':'ru'}catch(e){}
+if(new URLSearchParams(location.search).get('lang')==='en')L='en';
 const T={ru:'Условия проверки — AgentProof',en:'Check Terms — AgentProof'};
 function ap(){document.querySelectorAll('[data-l]').forEach(a=>a.hidden=a.dataset.l!==L);document.documentElement.lang=L;document.title=T[L];document.getElementById('lt').textContent=L==='en'?'RU':'EN';}
 document.getElementById('lt').onclick=()=>{L=L==='en'?'ru':'en';try{localStorage.setItem('asa_lang',L)}catch(e){}ap();};

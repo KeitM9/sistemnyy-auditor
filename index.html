@@ -758,6 +758,7 @@ function renderShowcase(){const P=PUB||{audits:0,findings:0,p1:0,withOpenChannel
 function hit(ev){try{fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'hit',ev}),keepalive:true}).catch(()=>{});}catch(e){}}
 const expDate=d=>{const x=new Date(d);x.setDate(x.getDate()+90);return x.toLocaleDateString(lang==='en'?'en':'ru');};
 let lang = (function(){try{return localStorage.getItem('asa_lang')||'ru';}catch(e){return 'ru';}})();
+if(new URLSearchParams(location.search).get('lang')==='en')lang='en';
 let curView='overview';
 function t(k){return (I18N[lang]&&I18N[lang][k]!=null)?I18N[lang][k]:(I18N.ru[k]||k);}
 
