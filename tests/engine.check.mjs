@@ -43,4 +43,6 @@ const H = x => crypto.createHash('sha256').update(x).digest('hex');
 const j1 = JSON.stringify({ ev: 'map', prev: '0' }), h1 = H(j1), j2 = JSON.stringify({ ev: 'report', prev: h1 }), h2 = H(j2);
 ok(m.verifyJournal([j1 + ' ' + h1, j2 + ' ' + h2]).ok, 'целая цепочка журнала');
 ok(!m.verifyJournal([j1.replace('map', 'MAP') + ' ' + h1, j2 + ' ' + h2]).ok, 'правка записи видна');
+const rD = m.normalize(map, probe, { ...fin, hardening: [{ ...fin.hardening[0], dmg: 'простой оплат' }] }, top, 'ru', {});
+ok(rD.hardening[0].dmg === 'простой оплат', 'оценка ущерба доходит до отчёта');
 console.log('engine checks ok');

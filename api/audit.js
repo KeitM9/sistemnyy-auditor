@@ -168,6 +168,7 @@ const STEP_FINAL = `ШАГ 3 — РЕЕСТР НАХОДОК И ПЛАН. Кар
   previous_registry): пройди КАЖДУЮ прежнюю находку с её прежним id, p и cls: st "closed", если
   описание явно показывает, что она устранена (в do — чем подтверждено), иначе "open". Новые — st
   "new", id со следующего номера. Прежний id не меняй и не переиспользуй. Закрытые — в конец.
+- dmg: оценка ущерба одной строкой, только для P1 и P2, до 160 знаков: чем это обернётся для бизнеса (утечка данных, ошибочные выплаты, простой, затраты на восстановление) и порядок суммы, если он следует из описания. Нет данных для суммы — назови вид ущерба без цифр. Сумму не выдумывай. Для P3 пустая строка.
 - back: только при повторной проверке — для новой находки класса, который в прошлом реестре был закрыт:
   почему вернулось (закрыли одну форму, а не класс: один канал выхода из многих; один вход чужого
   текста; один адрес списка; один агент вместо всех; барьер в промпте, а не в устройстве; версия не
@@ -246,7 +247,7 @@ const ProbeS = z.object({
 const FinalS = z.object({
   weak: z.string(),
   exploit: z.object({ path: z.array(z.string()), note: z.string() }),
-  hardening: z.array(z.object({ id: z.string(), cls: z.string(), st: z.enum(['new', 'open', 'closed']), basis: z.enum(['fact', 'hypothesis']), t: z.string(), p: z.string(), do: z.string(), how: z.string(), check: z.string(), back: z.string(), ev: z.string() })),
+  hardening: z.array(z.object({ id: z.string(), cls: z.string(), st: z.enum(['new', 'open', 'closed']), basis: z.enum(['fact', 'hypothesis']), t: z.string(), p: z.string(), do: z.string(), how: z.string(), check: z.string(), dmg: z.string(), back: z.string(), ev: z.string() })),
   steps: z.array(z.string()),
   unchecked: z.array(z.string()),
   loss: z.array(z.object({ scenario: z.string(), ids: z.array(z.string()), buckets: z.array(z.string()), band: z.enum(['C', 'D']), analog: z.string(), inputs: z.array(z.string()), money: z.string() })),
@@ -443,7 +444,7 @@ export function normalize(map, probe, fin, ax, lang, meta, devil = { p1: [] }) {
   let hard = (fin.hardening || []).map((h, i) => ({
     id: cut(h.id || `F${i + 1}`, 8), cls: LIB_IDS.has(h.cls) ? h.cls : 'NEW',
     st: meta.prev && ['open', 'closed'].includes(h.st) ? h.st : 'new', basis: h.basis === 'fact' ? 'fact' : 'hypothesis',
-    t: h.t || '', p: ['P1', 'P2', 'P3'].includes(h.p) ? h.p : 'P3', do: h.do || '', how: h.how || '', check: h.check || '', back: h.back || '', ev: cut(h.ev || '', 240)
+    t: h.t || '', p: ['P1', 'P2', 'P3'].includes(h.p) ? h.p : 'P3', do: h.do || '', how: h.how || '', check: h.check || '', dmg: cut(h.dmg || '', 160), back: h.back || '', ev: cut(h.ev || '', 240)
   }));
   const seen = new Set(hard.map(h => h.id));
   const lost = (meta.prev?.items || []).filter(h => !seen.has(h.id)).map(h => ({ id: h.id, cls: LIB_IDS.has(h.cls) ? h.cls : 'NEW', st: 'open', basis: 'hypothesis', t: h.t, p: h.p, do: '', how: '', check: '' }));
