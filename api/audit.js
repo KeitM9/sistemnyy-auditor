@@ -338,6 +338,12 @@ export function parseUnlock(secret, token) {
   return m && unlockToken(secret, m[1]) === m[0] ? m[1] : null;
 }
 
+export const paidToken = (secret, tg) => `app-${tg}-${crypto.createHmac('sha256', secret).update('paid:' + tg).digest('hex').slice(0, 24)}`;
+export function parsePaid(secret, token) {
+  const m = /^app-(\d+)-([0-9a-f]{24})$/.exec(String(token || '').trim());
+  return m && paidToken(secret, m[1]) === m[0] ? m[1] : null;
+}
+
 // ── Память «код использован», лимит частоты и банк ошибок (Upstash Redis через Vercel Marketplace)
 function redisCfg() {
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
@@ -666,6 +672,16 @@ export default async function handler(req, res) {
       await redis(['EXPIRE', `ap:full:${rid}`, String(ttl)]);
     }
     return res.status(200).json({ ttl });
+  }
+
+  // Оплата пришла, а отчёт уже удалён: человек получает новую проверку бесплатно (решение 06.11). Подпись ставит бот после кнопки Екатерины.
+  if (action === 'paid') {
+    if (await overLimit(ip, 'unlock', 20, 600)) return res.status(429).json({ error: 'too many' });
+    const tg = parsePaid(secret, body.token);
+    if (!tg) return res.status(401).json({ error: 'token' });
+    await redis(['SET', `ap:paid:${tg}`, '1', 'EX', String(ONE_FREE_TTL)]);
+    await journal({ ev: 'paid', tg });
+    return res.status(200).json({ ok: true });
   }
 
   // Код проверяется на сервере при каждом действии

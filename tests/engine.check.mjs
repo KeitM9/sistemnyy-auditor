@@ -55,7 +55,8 @@ const closedPart = JSON.stringify({ ...fv, hardening: fv.hardening.filter(h => h
 ok(!closedPart.includes('SECRET'), 'закрытая часть не уходит в браузер');
 ok(m.freeView({ hardening: [hF('F1', 'P3', 'fact')] }, 'r') === null && m.freeView({ hardening: [hF('F1', 'P1', 'fact', 'closed')] }, 'r') === null, 'крепкая система получает полный отчёт');
 const rid = '11111111-2222-3333-4444-555555555555', tok = m.unlockToken('k', rid);
-ok(m.parseUnlock('k', tok) === rid && m.parseUnlock('x', tok) === null && m.parseUnlock('k', tok.slice(0, -1) + (tok.endsWith('0') ? '1' : '0')) === null, 'токен открытия подписан');
+ok(m.parsePaid('k', m.paidToken('k', 5005)) === '5005' && m.parsePaid('x', m.paidToken('k', 5005)) === null, 'метка оплаты подписана');
+ok(m.parseUnlock('k', tok) === rid &&m.parseUnlock('x', tok) === null && m.parseUnlock('k', tok.slice(0, -1) + (tok.endsWith('0') ? '1' : '0')) === null, 'токен открытия подписан');
 const mapA = { agents: [{ name: 'Продавец' }, { name: 'Бот-оплата' }], graph: { nodes: [{ label: 'Продавец' }] } };
 const mapB = { agents: [{ name: 'бот оплата' }, { name: 'ПРОДАВЕЦ!' }], graph: { nodes: [{ label: 'продавец' }] } };
 ok(m.projectPrint(mapA) && m.projectPrint(mapA) === m.projectPrint(mapB), 'тот же проект даёт тот же отпечаток');
