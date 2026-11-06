@@ -150,7 +150,7 @@
   @media print{
     *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     html,body{background:var(--bg)!important;height:auto}
-    .side,.top,.pfoot,.dl,.view:not(#report){display:none!important}
+    .side,.top,.site-foot,.dl,.view:not(#report){display:none!important}
     .app,.main{display:block}.content{padding:0;max-width:none}
     #report{display:block!important;animation:none}
     .graphwrap .scroll{overflow:visible}
@@ -281,9 +281,6 @@
   @media(max-width:520px){.heroaside{flex-direction:column;align-items:flex-start} .heroimg{max-width:200px}}
   @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;filter:none;transition:none}}
 
-  .pfoot{padding:20px 30px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--faint);font-size:14.5px}
-  .pfoot a{color:var(--muted)} .pfoot a:hover{color:var(--mint)}
-  .pfoot .r{font-family:'Oswald',sans-serif;letter-spacing:.06em;text-transform:uppercase}
   @media(max-width:820px){
     .side{position:fixed;left:-260px;transition:left .2s;z-index:40} .side.open{left:0}
     .cols{grid-template-columns:1fr} .menu-btn{display:inline-flex!important}
@@ -475,11 +472,7 @@
       </section>
     </div>
 
-    <footer class="pfoot">
-      <span class="r"><span class="bp">AGENT<em>PROOF</em></span> · Architect Systems AI</span>
-      <span><a href="https://arsysai.com" target="_blank" rel="noopener">arsysai.com</a> · <a href="https://t.me/arsysai_bot" target="_blank" rel="noopener">t.me/arsysai_bot</a> · © 2026</span>
-    </footer>
-<div class="req-line" style="text-align:center;font-size:12px;line-height:1.6;opacity:.7;padding:8px 16px 22px">Фомина Екатерина Николаевна (Ekaterina Fomina) · плательщик налога на профессиональный доход / professional income tax payer · ИНН / Taxpayer ID 370300715475 · <a href="mailto:arsysai.pr@gmail.com" style="color:inherit">arsysai.pr@gmail.com</a> · <a href="https://legal.arsysai.com/" target="_blank" rel="noopener" style="color:inherit">Документы / Legal</a></div>
+<style>html[lang=en] .ft-ru{display:none}html:not([lang=en]) .ft-en{display:none}</style><div class="site-foot" style="display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;padding:16px;margin-top:16px;border-top:1px solid rgba(255,255,255,.12);opacity:.8"><span class="ft-ru">© 2026 ArchitectSystemsAI. Все права защищены.</span><span class="ft-ru"><a href="https://legal.arsysai.com/privacy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Политика конфиденциальности</a> | <a href="https://legal.arsysai.com/consent-agentproof" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Согласие на обработку данных</a></span><span class="ft-en">© 2026 ArchitectSystemsAI. All rights reserved.</span><span class="ft-en"><a href="https://legal.arsysai.com/en#policy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Privacy Policy</a> | <a href="https://legal.arsysai.com/en#consents" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Data Processing Consent</a></span></div>
   </div>
 </div>
 
