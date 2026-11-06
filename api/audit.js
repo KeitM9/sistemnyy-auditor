@@ -308,7 +308,14 @@ export function openState(secret, sealed) { return unseal(secret, sealed?.state)
 
 // ── Первый прогон: человек видит настоящий диагноз и одну находку целиком, остальное открывается после оплаты.
 // Крепкая система без открытых P1 и P2 получает полный отчёт: продавать там нечего (решение 06.11.2026).
-export const FULL_TTL_DAYS = 30; // срок хранения полного отчёта, утверждает Екатерина
+export const FULL_TTL_HOURS = 48; // 48 часов на решение (Екатерина, 06.11.2026)
+const ONE_FREE_TTL = 90 * 86400; // метка «бесплатная проверка уже была»: 3 месяца, отчёт в ней не хранится
+// Отпечаток проекта: имена агентов и узлов карты. Переписанный текст с теми же агентами даёт тот же отпечаток.
+export function projectPrint(map) {
+  const names = [...(map?.agents || []).map(a => a.name), ...(map?.graph?.nodes || []).map(n => n.label)]
+    .map(x => String(x || '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim()).filter(Boolean);
+  return names.length ? crypto.createHash('sha256').update([...new Set(names)].sort().join('|')).digest('hex') : '';
+}
 export function mainFinding(hardening) {
   const open = (hardening || []).filter(h => h.st !== 'closed');
   return open.find(h => h.p === 'P1' && h.basis === 'fact') || open.find(h => h.p === 'P1') || open.find(h => h.p === 'P2') || null;
@@ -319,7 +326,7 @@ export function freeView(report, rid) {
   const strip = list => (list || []).map(({ n, ...x }) => x);
   const { exploit, steps, xray, refuted, compliance, cert, ...rest } = report;
   return {
-    ...rest, free: true, rid, fullDays: FULL_TTL_DAYS,
+    ...rest, free: true, rid, fullHours: FULL_TTL_HOURS, until: new Date(Date.now() + FULL_TTL_HOURS * 3600000).toISOString(),
     loss: (report.loss || []).slice(0, 1), battery: strip(report.battery), system: strip(report.system), channels: strip(report.channels),
     hardening: report.hardening.map(h => h.id === main.id ? h : { id: h.id, cls: h.cls, st: h.st, basis: h.basis, t: h.t, p: h.p, locked: true })
   };
@@ -640,8 +647,9 @@ export default async function handler(req, res) {
     if (!rid) return res.status(401).json({ error: 'token' });
     const full = unseal(secret, await redis(['GET', `ap:full:${rid}`]));
     if (!full) return res.status(410).json({ error: 'expired' });
+    await redis(['SET', `ap:paid:${full.tg}`, '1', 'EX', String(ONE_FREE_TTL)]);
     await journal({ ev: 'unlock', run: rid });
-    return res.status(200).json(full);
+    return res.status(200).json(full.report);
   }
 
   // Код проверяется на сервере при каждом действии
@@ -690,6 +698,10 @@ export default async function handler(req, res) {
       if (await overLimit(ip, 'run', 3, 600)) return res.status(429).json({ error: 'too many' });
       if (await redis(['GET', usedKey])) return res.status(409).json({ error: 'used' });
       if (!(await redis(['GET', `ap:consent:${code.tg}`]))) return res.status(428).json({ error: 'consent' });
+      // Один человек и один проект: бесплатная проверка одна. Купивший проверяет снова по своему коду.
+      const oneFree = process.env.AP_TEASER === '1' && !(await redis(['GET', `ap:paid:${code.tg}`]));
+      if (oneFree && await redis(['GET', `ap:free:${code.tg}`])) return res.status(409).json({ error: 'already' });
+      if (oneFree && await redis(['GET', `ap:proj:${sysHash}`])) return res.status(409).json({ error: 'duplicate' });
       const spentToday = Number(await redis(['GET', `ap:spend:${new Date().toISOString().slice(0, 10)}`])) || 0;
       if (spentToday > DAY_CAP) {
         await tell(`СТОП-КРАН: дневной потолок токенов исчерпан (${Math.round(spentToday)} > ${DAY_CAP}). Новые аудиты сегодня не стартуют, код клиента сохранён (tg ${code.tg}).`);
@@ -701,6 +713,12 @@ export default async function handler(req, res) {
         const { out, model } = await ask(client, MapS, [...docBlocks(lang, system, nonce), { type: 'text', text: STEP_MAP }], 16000, 'medium', usage);
         await spend(usage);
         await journal({ ev: 'map', run, tg: code.tg, sys: sysHash.slice(0, 12), tokens: Math.round(weight(usage)) });
+        const print = projectPrint(out);
+        if (oneFree && print && await redis(['GET', `ap:proj:${print}`])) {
+          await redis(['DEL', lockKey]);
+          await tell(`повтор проекта с другого аккаунта: tg ${code.tg}, бесплатная проверка не запущена`);
+          return res.status(409).json({ error: 'duplicate' });
+        }
         const st = { v: 2, run, nonce, code: code.id, sys: sysHash, lang, step: 'map', map: out, model, usage, t0: Date.now() };
         return res.status(200).json(sealState(secret, st));
       } catch (e) { await redis(['DEL', lockKey]); throw e; }
@@ -784,9 +802,16 @@ export default async function handler(req, res) {
       (hits.n ? ` · убрано запрещённых обещаний: ${hits.n}` : '') + (found.secrets || found.pii ? ` · вырезано: секретов ${found.secrets}, ПДн ${found.pii}` : '') +
       `\nВоронка за сегодня: открыли сайт ${F.view} · дали согласие ${F.consent} · код принят ${F.code_ok} · запустили ${F.start} · отчёт ${F.report} · «исправить через Екатерину» ${F.talk} · задачи разработчику ${F.dev}`);
     // Режим первого прогона включается переменной AP_TEASER=1. Повторная проверка идёт полной.
-    const teaser = process.env.AP_TEASER === '1' && !prev ? freeView(report, st.run) : null;
+    const isFree = process.env.AP_TEASER === '1' && !prev && !(await redis(['GET', `ap:paid:${code.tg}`]));
+    if (isFree) {
+      await redis(['SET', `ap:free:${code.tg}`, '1', 'EX', String(ONE_FREE_TTL)]);
+      await redis(['SET', `ap:proj:${sysHash}`, '1', 'EX', String(ONE_FREE_TTL)]);
+      const print = projectPrint(st.map);
+      if (print) await redis(['SET', `ap:proj:${print}`, '1', 'EX', String(ONE_FREE_TTL)]);
+    }
+    const teaser = isFree ? freeView(report, st.run) : null;
     if (teaser) {
-      await redis(['SET', `ap:full:${st.run}`, seal(secret, report), 'EX', String(FULL_TTL_DAYS * 86400)]);
+      await redis(['SET', `ap:full:${st.run}`, seal(secret, { tg: code.tg, report }), 'EX', String(FULL_TTL_HOURS * 3600)]);
       return res.status(200).json(teaser);
     }
     return res.status(200).json(report);
