@@ -18,7 +18,7 @@ const r2 = m.normalize(map, probe, { ...fin, hardening: [{ ...fin.hardening[0], 
   { prev: { score: 7, items: [{ id: 'F1', p: 'P1', cls: 'D2', t: 'x' }, { id: 'F2', p: 'P2', cls: 'D3', t: 'y' }] } });
 ok(r2.score === 10 && r2.hardening[1].id === 'F2' && r2.hardening[1].st === 'open', 'ретест: закрытая P1 снимает потолок, пропущенная находка остаётся открытой');
 const s = m.sealState('k', { a: 1 });
-ok(m.openState('k', s).a === 1 && m.openState('k', { ...s, state: s.state.replace('1', '2') }) === null && m.openState('x', s) === null, 'подпись состояния');
+ok(m.openState('k', s).a === 1 && m.openState('k', { state: (s.state[0] === 'A' ? 'B' : 'A') + s.state.slice(1) }) === null && m.openState('x', s) === null, 'подпись состояния');
 // Секрет-Стиратель + ПДн
 const sc = m.scrub('ключ sk-ant-abcdefghijklmnopqrstuv почта ivan@mail.com тел +7 912 345-67-89 карта 4111 1111 1111 1111 версия 3.12.5');
 ok(sc.found.secrets === 1 && sc.found.pii === 3 && !sc.text.includes('ivan@') && sc.text.includes('3.12.5'), 'вырезаны секрет и ПДн, версия цела');
@@ -45,4 +45,15 @@ ok(m.verifyJournal([j1 + ' ' + h1, j2 + ' ' + h2]).ok, 'целая цепочк�
 ok(!m.verifyJournal([j1.replace('map', 'MAP') + ' ' + h1, j2 + ' ' + h2]).ok, 'правка записи видна');
 const rD = m.normalize(map, probe, { ...fin, hardening: [{ ...fin.hardening[0], dmg: 'простой оплат' }] }, top, 'ru', {});
 ok(rD.hardening[0].dmg === 'простой оплат', 'оценка ущерба доходит до отчёта');
+// Первый прогон: состояние зашифровано, закрытая находка не содержит исправления, открыта одна главная
+ok(!m.sealState('k', { tajna: 'SECRETFIX' }).state.includes('SECRETFIX') && !Buffer.from(m.sealState('k', { tajna: 'SECRETFIX' }).state, 'base64url').toString().includes('SECRETFIX'), 'состояние зашифровано');
+const hF = (id, p, basis, st = 'new') => ({ id, p, basis, st, cls: 'D2', t: 'T' + id, do: 'SECRETDO', how: 'SECRETHOW', check: 'SECRETCHECK', ev: 'SECRETEV', dmg: 'SECRETDMG', seen: 'SECRETSEEN' });
+const repF = { score: 4, hardening: [hF('F1', 'P2', 'fact'), hF('F2', 'P1', 'hypothesis'), hF('F3', 'P1', 'fact')], battery: [{ t: 'b', s: 3, n: 'SECRETN' }], system: [{ t: 's', n: 'SECRETN' }], channels: [{ ch: 'c', state: 'open', n: 'SECRETN' }], exploit: { path: ['SECRETX'] }, steps: ['SECRETS'], xray: [{ why: 'SECRETY' }], refuted: [{ why: 'SECRETR' }], compliance: { ev: 'SECRETC' } };
+const fv = m.freeView(repF, 'r1');
+ok(fv.free && fv.hardening.find(h => !h.locked).id === 'F3' && fv.hardening.filter(h => h.locked).length === 2, 'открыта главная находка P1 на основании факта');
+const closedPart = JSON.stringify({ ...fv, hardening: fv.hardening.filter(h => h.locked) });
+ok(!closedPart.includes('SECRET'), 'закрытая часть не уходит в браузер');
+ok(m.freeView({ hardening: [hF('F1', 'P3', 'fact')] }, 'r') === null && m.freeView({ hardening: [hF('F1', 'P1', 'fact', 'closed')] }, 'r') === null, 'крепкая система получает полный отчёт');
+const rid = '11111111-2222-3333-4444-555555555555', tok = m.unlockToken('k', rid);
+ok(m.parseUnlock('k', tok) === rid && m.parseUnlock('x', tok) === null && m.parseUnlock('k', tok.slice(0, -1) + (tok.endsWith('0') ? '1' : '0')) === null, 'токен открытия подписан');
 console.log('engine checks ok');

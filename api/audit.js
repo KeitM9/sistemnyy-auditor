@@ -288,15 +288,46 @@ export function parseCode(code, secret, now = Date.now()) {
 
 // ── Подпись промежуточного состояния аудита (живёт в браузере клиента между шагами)
 const sha = s => crypto.createHash('sha256').update(s).digest('hex');
-export function sealState(secret, state) {
-  const body = JSON.stringify(state);
-  return { state: body, sig: crypto.createHmac('sha256', secret).update('st:' + body).digest('hex') };
+// Состояние и полный отчёт шифруются: через браузер клиента идёт только шифротекст.
+const boxKey = secret => crypto.createHash('sha256').update('ap-box:' + secret).digest();
+function seal(secret, obj) {
+  const iv = crypto.randomBytes(12), c = crypto.createCipheriv('aes-256-gcm', boxKey(secret), iv);
+  const data = Buffer.concat([c.update(JSON.stringify(obj), 'utf8'), c.final()]);
+  return Buffer.concat([iv, c.getAuthTag(), data]).toString('base64url');
 }
-export function openState(secret, sealed) {
-  const body = String(sealed?.state || ''), sig = String(sealed?.sig || '');
-  const good = crypto.createHmac('sha256', secret).update('st:' + body).digest('hex');
-  if (sig.length !== good.length || !crypto.timingSafeEqual(Buffer.from(good), Buffer.from(sig))) return null;
-  try { return JSON.parse(body); } catch (e) { return null; }
+function unseal(secret, text) {
+  try {
+    const b = Buffer.from(String(text || ''), 'base64url');
+    const d = crypto.createDecipheriv('aes-256-gcm', boxKey(secret), b.subarray(0, 12));
+    d.setAuthTag(b.subarray(12, 28));
+    return JSON.parse(Buffer.concat([d.update(b.subarray(28)), d.final()]).toString('utf8'));
+  } catch (e) { return null; }
+}
+export function sealState(secret, state) { return { state: seal(secret, state) }; }
+export function openState(secret, sealed) { return unseal(secret, sealed?.state); }
+
+// ── Первый прогон: человек видит настоящий диагноз и одну находку целиком, остальное открывается после оплаты.
+// Крепкая система без открытых P1 и P2 получает полный отчёт: продавать там нечего (решение 06.11.2026).
+export const FULL_TTL_DAYS = 30; // срок хранения полного отчёта, утверждает Екатерина
+export function mainFinding(hardening) {
+  const open = (hardening || []).filter(h => h.st !== 'closed');
+  return open.find(h => h.p === 'P1' && h.basis === 'fact') || open.find(h => h.p === 'P1') || open.find(h => h.p === 'P2') || null;
+}
+export function freeView(report, rid) {
+  const main = mainFinding(report.hardening);
+  if (!main) return null;
+  const strip = list => (list || []).map(({ n, ...x }) => x);
+  const { exploit, steps, xray, refuted, compliance, cert, ...rest } = report;
+  return {
+    ...rest, free: true, rid, fullDays: FULL_TTL_DAYS,
+    loss: (report.loss || []).slice(0, 1), battery: strip(report.battery), system: strip(report.system), channels: strip(report.channels),
+    hardening: report.hardening.map(h => h.id === main.id ? h : { id: h.id, cls: h.cls, st: h.st, basis: h.basis, t: h.t, p: h.p, locked: true })
+  };
+}
+export const unlockToken = (secret, rid) => `apu-${rid}-${crypto.createHmac('sha256', secret).update('unlock:' + rid).digest('hex').slice(0, 24)}`;
+export function parseUnlock(secret, token) {
+  const m = /^apu-([0-9a-f-]{36})-([0-9a-f]{24})$/.exec(String(token || '').trim());
+  return m && unlockToken(secret, m[1]) === m[0] ? m[1] : null;
 }
 
 // ── Память «код использован», лимит частоты и банк ошибок (Upstash Redis через Vercel Marketplace)
@@ -602,6 +633,17 @@ export default async function handler(req, res) {
   // Перебор кодов с одного адреса
   if (action === 'check' && await overLimit(ip, 'check', 20, 600)) return res.status(429).json({ error: 'too many' });
 
+  // Открытие полного отчёта после оплаты: токен выдаётся после подтверждения оплаты
+  if (action === 'unlock') {
+    if (await overLimit(ip, 'unlock', 20, 600)) return res.status(429).json({ error: 'too many' });
+    const rid = parseUnlock(secret, body.token);
+    if (!rid) return res.status(401).json({ error: 'token' });
+    const full = unseal(secret, await redis(['GET', `ap:full:${rid}`]));
+    if (!full) return res.status(410).json({ error: 'expired' });
+    await journal({ ev: 'unlock', run: rid });
+    return res.status(200).json(full);
+  }
+
   // Код проверяется на сервере при каждом действии
   const code = parseCode(body.code, secret);
   if (!code.ok) return res.status(code.why === 'expired' ? 410 : 401).json({ error: code.why });
@@ -741,6 +783,12 @@ export default async function handler(req, res) {
       `из кеша ${total.cache_read_input_tokens || 0}, запись в кеш ${total.cache_creation_input_tokens || 0}, выход ${total.output_tokens || 0} (усл. ${Math.round(weight(total))})` +
       (hits.n ? ` · убрано запрещённых обещаний: ${hits.n}` : '') + (found.secrets || found.pii ? ` · вырезано: секретов ${found.secrets}, ПДн ${found.pii}` : '') +
       `\nВоронка за сегодня: открыли сайт ${F.view} · дали согласие ${F.consent} · код принят ${F.code_ok} · запустили ${F.start} · отчёт ${F.report} · «исправить через Екатерину» ${F.talk} · задачи разработчику ${F.dev}`);
+    // Режим первого прогона включается переменной AP_TEASER=1. Повторная проверка идёт полной.
+    const teaser = process.env.AP_TEASER === '1' && !prev ? freeView(report, st.run) : null;
+    if (teaser) {
+      await redis(['SET', `ap:full:${st.run}`, seal(secret, report), 'EX', String(FULL_TTL_DAYS * 86400)]);
+      return res.status(200).json(teaser);
+    }
     return res.status(200).json(report);
   } catch (e) {
     console.error('audit fail', action, String(e).slice(0, 200));
