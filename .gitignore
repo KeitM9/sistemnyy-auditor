@@ -1,6 +1,6 @@
 node_modules/
 .vercel/
-tests/golden/result-*.json
+tests/golden/result-*
 
 # DEPLOY-GUARD (гайд securitygit, 16.10.2026)
 .env
