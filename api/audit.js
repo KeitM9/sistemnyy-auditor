@@ -309,6 +309,7 @@ export function openState(secret, sealed) { return unseal(secret, sealed?.state)
 // ── Первый прогон: человек видит настоящий диагноз и одну находку целиком, остальное открывается после оплаты.
 // Крепкая система без открытых P1 и P2 получает полный отчёт: продавать там нечего (решение 06.11.2026).
 export const FULL_TTL_HOURS = 48; // 48 часов на решение (Екатерина, 06.11.2026)
+const HOLD_HOURS = 24; // запас на оплату и ручное подтверждение после нажатия кнопки в боте
 const ONE_FREE_TTL = 90 * 86400; // метка «бесплатная проверка уже была»: 3 месяца, отчёт в ней не хранится
 // Отпечаток проекта: имена агентов и узлов карты. Переписанный текст с теми же агентами даёт тот же отпечаток.
 export function projectPrint(map) {
@@ -650,6 +651,21 @@ export default async function handler(req, res) {
     await redis(['SET', `ap:paid:${full.tg}`, '1', 'EX', String(ONE_FREE_TTL)]);
     await journal({ ev: 'unlock', run: rid });
     return res.status(200).json(full.report);
+  }
+
+  // Человек нажал «Открыть полный отчёт» в боте: хранение продлевается один раз на 24 часа, чтобы оплата и ручное подтверждение успели.
+  // Отчёт здесь не отдаётся. Токен знает только бот, до подтверждения оплаты покупателю он не приходит.
+  if (action === 'hold') {
+    if (await overLimit(ip, 'unlock', 20, 600)) return res.status(429).json({ error: 'too many' });
+    const rid = parseUnlock(secret, body.token);
+    if (!rid) return res.status(401).json({ error: 'token' });
+    let ttl = Number(await redis(['TTL', `ap:full:${rid}`]));
+    if (ttl <= 0) return res.status(410).json({ error: 'expired' });
+    if (await redis(['SET', `ap:hold:${rid}`, '1', 'NX', 'EX', String((FULL_TTL_HOURS + HOLD_HOURS) * 3600)]) === 'OK') {
+      ttl += HOLD_HOURS * 3600;
+      await redis(['EXPIRE', `ap:full:${rid}`, String(ttl)]);
+    }
+    return res.status(200).json({ ttl });
   }
 
   // Код проверяется на сервере при каждом действии
