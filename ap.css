@@ -1,0 +1,212 @@
+/* AgentProof · единый стиль для всех страниц (index, paket, terms). 10.11.2026
+   Подключается последним, поэтому перекрывает старые слои.
+   Шрифт: Oswald только заголовки, кнопки, меню, логотип, короткие метки. Всё остальное системный шрифт обычного веса.
+   Шкала: H1 40 · H2 26 · H3 18 · текст 16 · мелкий 14 · метка 14. На телефоне H1 30 · H2 22 · H3 17. */
+:root{--ap-sys:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;--ap-osw:'Oswald','Arial Narrow',Arial,sans-serif;--ap-mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+--ap-t:#414143;--ap-h2c:#676769;--ap-m:#B4FAB2;--ap-r:#FF0A16;--ap-g:#F7F6F6;
+--ap-h1:40px;--ap-h2:26px;--ap-h3:18px;--ap-body:16px;--ap-small:14px;--ap-label:14px}
+@media(max-width:640px){:root{--ap-h1:30px;--ap-h2:22px;--ap-h3:17px}}
+
+/* 1. база: всё наследует системный шрифт обычного веса */
+html body{font-family:var(--ap-sys)!important;font-weight:400!important;font-size:var(--ap-body);line-height:1.6;color:var(--ap-t);letter-spacing:0}
+html body :where(*:not(svg):not(svg *)){font-family:inherit!important;font-weight:inherit!important;letter-spacing:inherit}
+
+/* 2. основной текст: один размер везде */
+html body :is(p,li,td,dd,summary,.lead,.v,.spread,.nt,.ev,.basis,.fxv,.gatemsg,.cssub,.v2sub,.hsub,.ex4sub,.intro,.out,.doc,.feats,.facts,.facts2,.meta,.v2case,.v3q,.fxpay){font-size:var(--ap-body)!important;line-height:1.6!important;text-transform:none}
+html body :is(small,.cshint,.safe,.scope,.legend,.disc,.hint,.site-foot,.site-foot *,.meta,.clrlink,.t3){font-size:var(--ap-small)!important;line-height:1.5!important}
+html body :is(p,li) :is(b,strong){font-weight:400!important}
+
+/* 3. заголовки: Oswald, один размер на уровень */
+html body :is(h1,h2,h3,h4,h5,h6),html body :is(h1,h2,h3,h4,h5,h6)[class]{font-family:var(--ap-osw)!important;text-transform:uppercase;letter-spacing:.02em!important;line-height:1.15!important;color:var(--ap-t)}
+html body h1:not(.top2 h1),html body h1[class]:not(.top2 h1){font-size:var(--ap-h1)!important;font-weight:600!important}
+html body h2,html body h2[class]{font-size:var(--ap-h2)!important;font-weight:600!important}
+html body :is(h3,h4,h5,h6),html body :is(h3,h4,h5,h6)[class]{font-size:var(--ap-h3)!important;font-weight:500!important}
+html body :is(h1,h2,h3,h4) *{font-family:inherit!important;font-size:inherit!important;font-weight:inherit!important}
+
+/* 4. короткие метки и подписи карточек: Oswald 500, 14 px */
+html body :is(.k,.kicker,.label,.eyebrow,.lbl,.fxk,.lb,.nm,.t1,.tag,.v3tag,.pa4tag,.fl,label.fl,.v2case span,.p4q div,.v2card b,.c4c>b,.pa4 b,.step h4,.group b,summary b,:not(p):not(li)>b){font-family:var(--ap-osw)!important;font-weight:500!important;letter-spacing:.06em!important;text-transform:uppercase}
+html body :is(.kicker,.label,.eyebrow,.lbl,.tag,.v3tag,.pa4tag,.v2case span,.fl,label.fl){font-size:var(--ap-label)!important}
+html body :is(.k,.fxk,.lb,.nm,.t1,.p4q div,.v2card b,.c4c>b,.pa4 b,.step h4,.group b){font-size:var(--ap-h3)!important;line-height:1.3!important}
+html body .label b{font-size:inherit!important}
+
+/* 5. кнопки и меню: Oswald 500, без жирного */
+html body :is(button,.btn,.cta,.btn3,.apcta,.langbtn,.aplang,#langbtn,.nav,.csgo,a.btn){font-family:var(--ap-osw)!important;font-weight:500!important;letter-spacing:.05em!important;text-transform:uppercase}
+html body :is(.btn,.cta,.btn3,.apcta,.csgo,a.btn){font-size:15px!important}
+html body :is(.langbtn,.aplang,#langbtn,#lt,#langToggle){font-size:14px!important}
+html body .nav{font-size:15px!important}
+html body .clrlink{font-family:var(--ap-sys)!important;text-transform:none;letter-spacing:0!important}
+
+/* 6. логотип в шапке: одинаковый на всех страницах, подпись читается */
+html body :is(.top .logo b,.aplogo b){font-family:var(--ap-osw)!important;font-weight:600!important;font-size:20px!important;letter-spacing:.04em!important;line-height:1.1!important}
+html body :is(.top .logo b i,.aplogo b i){display:block;font-family:var(--ap-sys)!important;font-weight:400!important;font-size:13px!important;letter-spacing:0!important;text-transform:none!important;line-height:1.3!important;margin-top:2px;white-space:nowrap}
+
+/* 7. промпт на «Подготовке» остаётся моноширинным */
+html body :is(pre,code,.prompt,#promptView,#promptView *){font-family:var(--ap-mono)!important;font-size:14px!important;font-weight:400!important}
+
+/* 8. поля ввода */
+html body :is(input,textarea,select){font-family:var(--ap-sys)!important;font-size:var(--ap-body)!important}
+
+@media(max-width:640px){
+  html body :is(.top .logo b,.aplogo b){font-size:17px!important}
+  html body :is(.top .logo b i,.aplogo b i){font-size:11.5px!important}
+  html body :is(.btn,.cta,.btn3,.apcta,.csgo,a.btn){font-size:14px!important}
+  html body .top .cta,html body .apcta{font-size:12.5px!important}
+  html body :is(.langbtn,.aplang,#langbtn){font-size:13px!important}
+}
+
+/* 9. пункты «Что вы получите»: подпись под названием обычным текстом */
+html body .it3>span{font-family:var(--ap-sys)!important;font-weight:400!important;text-transform:none!important;letter-spacing:0!important;font-size:var(--ap-small)!important;line-height:1.45!important}
+
+/* 10. заголовки сценариев «Сколько может стоить сбой»: длинные фразы, обычный текст */
+html body :is(.lossc>b,.plan .fx>b){font-family:var(--ap-sys)!important;font-weight:400!important;text-transform:none!important;letter-spacing:0!important;font-size:var(--ap-body)!important;line-height:1.5!important}
+
+/* 11. плашки «пример» внутри заголовков: размер метки, не заголовка */
+html body :is(h1,h2,h3,h4) :is(.ex4tag,.v3tag,.pa4tag,[class*="tag"]){font-size:13px!important;font-weight:500!important;vertical-align:middle}
+
+/* 12. ШАПКА: один вид на всех страницах.
+   Логотип: значок по центру названия, название и подпись выровнены по одному левому краю.
+   RU / EN и кнопка одной высоты 34 px, RU / EN без жирного. */
+html body :is(.top .logo,.aplogo){display:grid!important;grid-template-columns:auto auto;grid-template-rows:auto auto;column-gap:10px;row-gap:3px;align-items:center;padding:0!important;border:none!important;text-decoration:none}
+html body :is(.top .logo .lgmark,.aplogo img){grid-row:1;grid-column:1;height:14px!important;width:auto;align-self:center}
+html body :is(.top .logo b,.aplogo b){display:contents!important}
+html body :is(.top .logo .bp,.aplogo b>span){grid-row:1;grid-column:2;display:block;font-family:var(--ap-osw)!important;font-weight:600!important;font-size:21px!important;line-height:1!important;letter-spacing:.04em!important;color:#fff;text-transform:uppercase}
+html body :is(.top .logo b i,.aplogo b i){grid-row:2;grid-column:2;display:block;margin:0!important;font-family:var(--ap-sys)!important;font-weight:400!important;font-size:12.5px!important;line-height:1.1!important;letter-spacing:.01em!important;color:#B4FAB2!important;text-transform:none!important;white-space:nowrap}
+html body :is(.topright,.apr){display:flex;align-items:center;gap:8px}
+html body :is(#langbtn,.aplang,#lt,#langToggle){height:34px;display:inline-flex!important;align-items:center;gap:5px;padding:0 12px!important;margin:0;background:transparent!important;border:1px solid rgba(255,255,255,.35)!important;border-radius:3px!important;box-shadow:none!important;font-family:var(--ap-osw)!important;font-weight:400!important;font-size:13px!important;letter-spacing:.08em!important;line-height:1!important;color:rgba(255,255,255,.55)!important;cursor:pointer}
+html body :is(#langbtn,.aplang,#lt,#langToggle) .on{color:#fff}
+html body :is(#newBtn,.top .cta,.apcta){height:34px;display:inline-flex!important;align-items:center;padding:0 16px!important;margin:0;font-family:var(--ap-osw)!important;font-weight:500!important;font-size:13px!important;letter-spacing:.06em!important;line-height:1!important;white-space:nowrap!important;max-width:none!important;color:#414143!important;background:#B4FAB2!important;border:none!important;border-radius:3px!important;text-decoration:none}
+
+/* 13. ГЛАВНЫЙ БЛОК «ОБЗОРА»: крупный ровный текст, цифры отдельной строкой */
+html body .x-oldhero{grid-template-columns:minmax(0,1fr) 230px!important;gap:24px 48px!important;align-items:center!important;padding:36px 0 8px!important}
+html body .x-oldhero .hsub{font-size:18px!important;line-height:1.6!important;max-width:640px!important;margin:0!important;color:var(--ap-t)!important}
+html body .x-oldheroimg{max-width:230px!important}
+html body .hfacts{display:none!important}
+html body .x-oldstats{display:flex;gap:0;margin:26px 0 26px;padding:18px 0 0;border-top:1px solid rgba(65,65,67,.15);max-width:640px}
+html body .x-oldstats>div{flex:1;padding-right:18px}
+html body .x-oldstats>div+div{padding-left:18px;border-left:1px solid rgba(65,65,67,.15)}
+html body .x-oldstats b{display:block;font-family:var(--ap-osw)!important;font-weight:600!important;font-size:44px!important;line-height:1!important;letter-spacing:0!important;color:var(--ap-t);text-transform:none}
+html body .x-oldstats span{display:block;margin-top:6px;font-family:var(--ap-sys)!important;font-size:14px!important;line-height:1.35!important;color:var(--ap-h2c)}
+
+@media(max-width:640px){
+  html body :is(.top,.aptop){padding-left:12px!important;padding-right:10px!important}
+  html body :is(.top .logo,.aplogo){column-gap:7px;row-gap:2px}
+  html body :is(.top .logo .lgmark,.aplogo img){height:11px!important}
+  html body :is(.top .logo .bp,.aplogo b>span){font-size:17px!important}
+  html body :is(.top .logo b i,.aplogo b i){font-size:10.5px!important}
+  html body :is(#langbtn,.aplang,#lt,#langToggle){height:30px;padding:0 8px!important;font-size:12px!important;letter-spacing:.04em!important}
+  html body :is(#newBtn,.top .cta,.apcta){height:30px;padding:0 9px!important;font-size:11.5px!important;letter-spacing:.03em!important}
+  html body .x-oldhero{grid-template-columns:1fr 110px!important;gap:12px!important;padding:22px 0 0!important}
+  html body .x-oldheroimg{max-width:110px!important}
+  html body .x-oldhero .hsub{font-size:16px!important}
+  html body .x-oldstats{margin:20px 0}
+  html body .x-oldstats>div{padding-right:10px}
+  html body .x-oldstats>div+div{padding-left:10px}
+  html body .x-oldstats b{font-size:32px!important}
+  html body .x-oldstats span{font-size:12.5px!important}
+}
+@media(max-width:360px){html body :is(.top .logo b i,.aplogo b i){display:none}}
+
+/* 14. телефон: шапка помещается в 375 px, картинка над текстом, текст на всю ширину */
+@media(max-width:640px){
+  html body :is(.top,.aptop){padding-left:10px!important;padding-right:8px!important;gap:6px!important}
+  html body :is(.topright,.apr){gap:5px}
+  html body :is(.top .logo .bp,.aplogo b>span){font-size:16px!important}
+  html body :is(.top .logo b i,.aplogo b i){font-size:10px!important;letter-spacing:0!important}
+  html body :is(.top .logo .lgmark,.aplogo img){height:10px!important}
+  html body :is(.top .logo,.aplogo){column-gap:6px}
+  html body :is(#langbtn,.aplang,#lt,#langToggle){padding:0 7px!important;font-size:11.5px!important;letter-spacing:.02em!important}
+  html body :is(#newBtn,.top .cta,.apcta){padding:0 8px!important;font-size:11px!important;letter-spacing:.02em!important}
+  html body .x-oldhero{grid-template-columns:1fr!important;gap:6px!important}
+  html body .x-oldheroaside{order:-1}
+  html body .x-oldheroimg{max-width:150px!important;margin:0 auto!important}
+}
+
+/* 15. ЛОГОТИП по образцу Екатерины: строка 1 значок + название, строка 2 подпись на всю ширину логотипа.
+   КНОПКИ В ШАПКЕ: RU / EN и «Проверить систему» одинаковые по высоте, шрифту и весу; различаются только цветом
+   (второстепенная светло-серая с тенью, главная мятная). */
+html body :is(.top .logo,.aplogo){display:inline-grid!important;grid-template-columns:auto auto;column-gap:8px;row-gap:4px;align-items:center;justify-content:start}
+html body :is(.top .logo .lgmark,.aplogo img){height:18px!important;width:auto!important}
+html body :is(.top .logo .bp,.aplogo b>span){font-size:24px!important;line-height:1!important}
+html body :is(.top .logo b i,.aplogo b i){grid-column:1 / span 2!important;grid-row:2;font-size:12.5px!important;line-height:1!important;text-align:justify;text-align-last:justify;white-space:nowrap;letter-spacing:.02em!important}
+html body :is(#langbtn,.aplang,#lt,#langToggle,#newBtn,.top .cta,.apcta){height:34px!important;padding:0 14px!important;font-family:var(--ap-osw)!important;font-weight:500!important;font-size:13px!important;letter-spacing:.06em!important;line-height:1!important;border:none!important;border-radius:3px!important;box-shadow:0 2px 8px rgba(0,0,0,.18)!important;color:#414143!important}
+html body :is(#langbtn,.aplang,#lt,#langToggle){background:#F7F6F6!important;gap:4px}
+html body :is(#langbtn,.aplang,#lt,#langToggle) span{color:#414143;opacity:.4}
+html body :is(#langbtn,.aplang,#lt,#langToggle) span.on{opacity:1}
+html body :is(#newBtn,.top .cta,.apcta){background:#B4FAB2!important}
+@media(max-width:640px){
+  html body :is(.top .logo,.aplogo){column-gap:6px;row-gap:3px}
+  html body :is(.top .logo .lgmark,.aplogo img){height:13px!important}
+  html body :is(.top .logo .bp,.aplogo b>span){font-size:19px!important}
+  html body :is(.top .logo b i,.aplogo b i){display:block!important;font-size:10px!important;letter-spacing:0!important}
+  html body :is(#langbtn,.aplang,#lt,#langToggle,#newBtn,.top .cta,.apcta){height:30px!important;padding:0 8px!important;font-size:11px!important;letter-spacing:.02em!important}
+}
+html body :is(#langbtn,.aplang,#lt,#langToggle) span.on,html body :is(#langbtn,.aplang,#lt,#langToggle) span{color:#414143!important}
+
+/* 16. Кнопки шапки как было: маленькие и аккуратные. Одинаковая высота, буквы не жирные. */
+html body :is(#langbtn,.aplang,#lt,#langToggle,#newBtn,.top .cta,.apcta){height:24px!important;padding:0 9px!important;font-size:12px!important;font-weight:400!important;letter-spacing:.04em!important;line-height:1!important;box-shadow:none!important;border:none!important;border-radius:3px!important}
+html body :is(#langbtn,.aplang,#lt,#langToggle){background:rgba(255,255,255,.14)!important;color:#fff!important}
+html body :is(#newBtn,.top .cta,.apcta){background:#B4FAB2!important;color:#414143!important}
+@media(max-width:640px){html body :is(#langbtn,.aplang,#lt,#langToggle,#newBtn,.top .cta,.apcta){height:24px!important;padding:0 7px!important;font-size:11px!important}}
+
+/* 17. Карточки «Как это выглядит в работе»: оба ряда одним шрифтом и размером */
+html body :is(.p4q div,.v3chip b,.v3chip,.v2card b){font-family:var(--ap-osw)!important;font-weight:500!important;font-size:15px!important;letter-spacing:.04em!important;line-height:1.25!important;text-transform:uppercase}
+
+/* 18. Главный блок: мясорубка вровень с текстом, текст 17 px, цифры одной строкой-плашками без раздувания */
+html body .x-oldhero{align-items:start!important;grid-template-columns:minmax(0,1fr) 210px!important}
+html body .x-oldheroaside{align-self:start!important;margin-top:0!important}
+html body .x-oldheroimg{max-width:210px!important;margin:0 0 0 auto!important}
+html body .x-oldhero .hsub{font-size:17px!important;line-height:1.6!important}
+html body .x-oldstats{display:flex!important;flex-wrap:wrap;gap:8px!important;margin:18px 0 22px!important;padding:0!important;border:none!important;max-width:none!important}
+html body .x-oldstats>div,html body .x-oldstats>div+div{flex:none!important;padding:7px 12px!important;border:none!important;border-left:3px solid #B4FAB2!important;background:#F7F6F6;border-radius:3px}
+html body .x-oldstats b,html body .x-oldstats span{display:inline!important;margin:0!important;font-family:var(--ap-osw)!important;font-weight:500!important;font-size:14px!important;line-height:1.2!important;letter-spacing:.04em!important;text-transform:uppercase;color:#414143!important}
+html body .x-oldstats b{margin-right:5px!important}
+@media(max-width:640px){
+  html body .x-oldhero{grid-template-columns:1fr!important}
+  html body .x-oldheroimg{max-width:150px!important;margin:0 auto!important}
+  html body .x-oldhero .hsub{font-size:16px!important}
+  html body .x-oldstats b,html body .x-oldstats span{font-size:12.5px!important}
+  html body :is(.p4q div,.v3chip b,.v3chip,.v2card b){font-size:14px!important}
+}
+
+/* 19. Главный блок по скрину Екатерины: без пустого места сверху.
+   Текст и плашки 72 · 6 · 16 одним блоком слева, мясорубка справа ровно на высоту этого блока. Кнопки ниже. */
+html body .x-oldhero{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto auto;column-gap:32px!important;row-gap:0!important;align-items:stretch!important;padding:14px 0 0!important;min-height:0!important}
+html body .x-oldhero>.reveal:first-child{display:contents!important}
+html body .x-oldhero .eyebrow,html body .x-oldhero .htitle{display:none!important}
+html body .x-oldhero .hsub{grid-column:1;grid-row:1;margin:0!important;align-self:start}
+html body .x-oldhero .x-oldstats{grid-column:1;grid-row:2;margin:14px 0 0!important;align-self:end}
+html body .x-oldhero .hcta{grid-column:1 / -1;grid-row:3;margin-top:22px!important}
+html body .x-oldhero .heroaside{grid-column:2;grid-row:1 / 3;align-self:stretch!important;display:flex!important;position:relative;min-height:0}
+html body .x-oldhero .heroimg{height:100%;max-width:none!important;width:auto!important;margin:0!important}
+html body .x-oldhero .heroimg :is(video,img){height:100%!important;width:auto!important;max-width:none!important;object-fit:contain;display:block}
+@media(max-width:640px){
+  html body .x-oldhero{grid-template-columns:minmax(0,1fr) auto!important;column-gap:10px!important;padding-top:10px!important}
+  html body .x-oldhero .heroaside{grid-row:1 / 2}
+  html body .x-oldhero .x-oldstats{grid-column:1 / -1}
+}
+/* 19a. картинка не задаёт высоту: занимает ровно высоту текста и плашек */
+html body .x-oldhero{grid-template-columns:minmax(0,1fr) 230px!important}
+html body .x-oldhero .heroimg{position:absolute!important;inset:0!important;height:auto!important;width:auto!important}
+html body .x-oldhero .heroimg :is(video,img){position:absolute;inset:0;width:100%!important;height:100%!important;object-fit:contain;object-position:center}
+@media(max-width:640px){html body .x-oldhero{grid-template-columns:minmax(0,1fr) 110px!important}}
+html body .x-oldhero{grid-template-columns:minmax(0,500px) minmax(0,1fr)!important}
+html body .x-oldhero .heroimg :is(video,img){object-position:left center}
+@media(max-width:640px){html body .x-oldhero{grid-template-columns:minmax(0,1fr) 110px!important}html body .x-oldhero .heroimg :is(video,img){object-position:center}}
+html body .x-oldhero{grid-template-columns:minmax(0,560px) minmax(0,1fr)!important}
+html body .x-oldstats>div,html body .x-oldstats>div+div{padding:7px 10px!important}
+@media(max-width:640px){html body .x-oldhero{grid-template-columns:minmax(0,1fr) 110px!important}}
+/* 19b. 72 · 6 · 16 одной плашкой */
+html body .x-oldstats{display:block!important;background:#F7F6F6;border-left:3px solid #B4FAB2!important;border-radius:3px;padding:10px 14px!important;justify-self:start}
+html body .x-oldstats>div,html body .x-oldstats>div+div{display:inline!important;padding:0!important;border:none!important;background:none!important}
+html body .x-oldstats>div+div::before{content:"·";margin:0 9px;font-family:var(--ap-osw);color:#676769}
+@media(min-width:641px){html body .x-oldhero{grid-template-columns:max-content minmax(0,1fr)!important}html body .x-oldstats{white-space:nowrap}html body .x-oldstats b,html body .x-oldstats span{font-size:13px!important;letter-spacing:.03em!important}}
+/* 19c. по образцу Екатерины (скрин 3): узкая колонка текста, крупная мясорубка той же высоты */
+@media(min-width:641px){
+  html body .x-oldhero{grid-template-columns:440px 300px!important;column-gap:40px!important;justify-content:start}
+  html body .x-oldhero .hsub{font-size:18px!important;line-height:1.6!important}
+  html body .x-oldstats{white-space:normal!important}
+  html body .x-oldstats b,html body .x-oldstats span{font-size:14px!important;letter-spacing:.04em!important}
+}
+
+/* «Подготовка»: маркеры списков точками, а не чёрточками */
+html body .group li::before{width:6px!important;height:6px!important;border-radius:50%!important;background:#B4FAB2!important;box-shadow:inset 0 0 0 1px rgba(65,65,67,.3);top:.62em!important}

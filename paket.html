@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Подготовка проекта к аудиту — AgentProof</title>
-<meta name="description" content="Как подготовить проект с AI-агентами к аудиту AgentProof: 22 проверки, пример отчёта, промпт для вашего AI-агента, состав описания и форматы файлов.">
+<title>Подготовка проекта к аудиту: AgentProof</title>
+<meta name="description" content="Как подготовить проект с AI-агентами к аудиту AgentProof: 72 класса уязвимостей, 6 проверок каждого агента и 16 системных, пример отчёта, промпт для вашего AI-агента, состав описания и форматы файлов.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20fill%3D%22none%22%20stroke%3D%22%232c3341%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M16%2016%20C12.5%2010.5%208.5%209%206%2011%20C3.3%2013.2%203.3%2018.8%206%2021%20C8.5%2023%2012.5%2021.5%2016%2016%20C19.5%2010.5%2023.5%209%2026%2011%20C28.7%2013.2%2028.7%2018.8%2026%2021%20C23.5%2023%2019.5%2021.5%2016%2016%22/%3E%3Cpath%20d%3D%22M21.8%2016%20L24.4%2018.6%20L29.6%2012.4%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%226%22/%3E%3Cpath%20d%3D%22M21.8%2016%20L24.4%2018.6%20L29.6%2012.4%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
   :root{--ink:#2c3341;--body:#394050;--muted:#646c7b;--rule:#e6e9ec;--mint:#B4FAB2;--mint-ink:#2e8540;--paper:#fff;--r:3px}
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{background:var(--paper);color:var(--body);font-family:'Manrope',sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  body{background:var(--paper);color:var(--body);font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
   h1,h2,h3{font-family:'Oswald',sans-serif;color:var(--ink);font-weight:600}
   a{color:var(--ink);text-decoration-color:var(--mint);text-decoration-thickness:3px;text-underline-offset:3px}
   ::selection{background:var(--mint);color:var(--ink)}
@@ -120,87 +120,39 @@
 </style>
 </head>
 <body>
-<div class="topbar"><div class="wrap">
-  <header class="top">
-    <a class="brand" href="https://agentproof.arsysai.com" aria-label="AgentProof">
-      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 16 C12.5 10.5 8.5 9 6 11 C3.3 13.2 3.3 18.8 6 21 C8.5 23 12.5 21.5 16 16 C19.5 10.5 23.5 9 26 11 C28.7 13.2 28.7 18.8 26 21 C23.5 23 19.5 21.5 16 16" stroke="#B4FAB2" stroke-width="2.4"/><path d="M21.8 16 L24.4 18.6 L29.6 12.4" stroke="#2c3341" stroke-width="5.2"/><path d="M21.8 16 L24.4 18.6 L29.6 12.4" stroke="#B4FAB2" stroke-width="2.4"/></svg>
-      <b>AGENT<em>PROOF</em><i>Аудит мультиагентных систем</i></b>
-    </a>
-    <nav><a href="#check">Что проверяем</a><a href="#report">Отчёт</a><a href="#prompt">Промпт</a><a href="#kit">Что входит</a><a href="#steps">Как пройти</a><a class="topcta" href="https://agentproof.arsysai.com">Новый аудит</a><button class="topcta" id="langToggle" type="button" style="margin-left:8px">EN</button></nav>
-  </header>
-</div></div>
+<div class="apbar"><header class="aptop">
+  <a class="aplogo" href="index.html" aria-label="AgentProof"><img src="logo-agentproof.png" alt=""><b><span>AGENT<em>PROOF</em></span><i>Аудит мультиагентных систем</i></b></a>
+  <div class="apr"><button class="aplang" id="langToggle" type="button">EN</button><a class="apcta" href="index.html">Проверить систему</a></div>
+</header></div>
 <div class="wrap">
 
   <div class="hero">
     <div class="kicker">Аудит мультиагентных систем</div>
     <h1>Подготовка проекта <mark>к аудиту</mark></h1>
-    <p class="lead">Для аудита нужно описание вашего проекта с AI-агентами: промпты, связи, права, ключи. Всё это уже есть в папке проекта. Передайте своему AI-агенту промпт со страницы — он соберёт описание в один файл без ключей и личных данных.</p>
-    <div class="cta"><a class="btn ink" href="#prompt">Промпт для агента</a><a class="btn line" href="#report">Пример отчёта</a></div>
-    <p class="facts"><b>22 проверки</b> · <b>6 осей</b> надёжности · <b>балл 0–10</b> по открытой рубрике · отчёт за несколько минут · <b>PDF</b></p>
+    <p class="lead">Для аудита нужно описание вашего проекта с AI-агентами: промпты, связи, права, ключи. Всё это уже есть в папке проекта. Передайте своему AI-агенту промпт со страницы. Он соберёт описание в один файл без ключей и личных данных.</p>
+    <div class="cta"><a class="btn ink" href="#prompt">Промпт для агента <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="btn line" href="index.html#reports">Образец отчёта</a></div>
+    <p class="facts"><b>72 класса</b> уязвимостей · <b>6 проверок</b> каждого агента · <b>16</b> системных проверок · <b>балл 0–10</b> по единой рубрике · отчёт за несколько минут · <b>PDF</b></p>
   </div>
 </div>
 
 <section id="check"><div class="wrap">
   <div class="label"><b>01</b>Что проверяет аудит</div>
   <h2>Каждого агента и каждую связь</h2>
-  <p class="intro">Промпты, код, деньги и связи — как одно целое: где входит внешний текст, куда он может дойти, что может сломаться и сколько это стоит.</p>
+  <p class="intro">Промпты, код, деньги и связи. Как одно целое: где входит внешний текст, куда он может дойти, что может сломаться и сколько это стоит.</p>
   <div class="groups">
     <div class="group"><h3>Безопасность</h3><ul><li>Изоляция ключей и прав между агентами</li><li>Инъекции из сообщений, писем, комментариев, сайтов, документов</li><li>Отравление памяти и баз знаний</li><li>Утечка персональных данных</li><li>Цепочки атак от входа до денег и ключей</li></ul></div>
     <div class="group"><h3>Деньги и права</h3><ul><li>Вызовы инструментов и выдуманные вызовы</li><li>Необратимые действия без подтверждения человеком</li><li>Выдача денег и доступа по непроверенному тексту</li><li>Денежные потоки и двойные начисления</li></ul></div>
     <div class="group"><h3>Надёжность</h3><ul><li>Стыки передачи между агентами</li><li>Накопление ошибки на длинной цепочке</li><li>Опора на первоисточник</li><li>Стабильность при смене модели</li><li>Резервная модель и обработка отказов</li><li>Изоляция процессов и единая точка отказа</li></ul></div>
-    <div class="group"><h3>Контроль</h3><ul><li>Зацикливание агентов друг на друге</li><li>Лимиты шагов и бюджета</li><li>Журналирование и трассировка</li></ul></div>
+    <div class="group"><h3>Контроль</h3><ul><li>Зацикливание агентов друг на друге</li><li>Расход шагов и бюджета</li><li>Журналирование и трассировка</li></ul></div>
   </div>
 </div></section>
 
-<section id="report"><div class="wrap">
-  <div class="label"><b>02</b>Так выглядит отчёт</div>
-  <h2>Реальный аудит бота-продавца</h2>
-  <p class="intro">Четыре бота в одном процессе, два AI-агента, оплата через платёжную связку. Отчёт показан почти целиком, данные обезличены.</p>
 
-  <div class="rep-top">
-    <div class="score"><b>6<small>/10</small></b><span>С оговорками</span></div>
-    <div><div class="rk">Слабое звено</div><p class="rq">Выдача платного доступа по коду из служебной ссылки — единственный вход в «оплачено», который напрямую зависит от текста клиента.</p></div>
-    <div><div class="rk">Сильное место</div><p class="rp">Платёжная связка пишет в базу ключом только на добавление записей — разумная изоляция. Ключи в контекст модели не попадают.</p></div>
-  </div>
-
-  <div class="cols">
-    <div class="tbl"><h3>Батарея по агентам</h3>
-      <div class="tr"><b>Вызовы инструментов</b><i>4/5</i><p>AI-агенты только пишут текст: деньги и доступ решает код по базе.</p></div>
-      <div class="tr"><b>Длинная дистанция</b><i>4/5</i><p>История до 40 сообщений переживает перезапуск; разрешение противоречий старого и нового контекста стоит описать.</p></div>
-      <div class="tr"><b>Инъекции из контента</b><i>3/5</i><p>Вход — только текст клиента, площадь атаки узкая; явного правила против инструкций из этого текста пока нет.</p></div>
-      <div class="tr"><b>Первоисточник</b><i>3/5</i><p>Выдумывать факты запрещено; путаница материалов разных клиентов в общей базе отдельно не проверяется.</p></div>
-      <div class="tr"><b>Зацикливание</b><i>3/5</i><p>Жёсткого лимита обращений к модели на диалог нет — только повторы при перегрузке.</p></div>
-      <div class="tr"><b>Стабильность при смене модели</b><i>3/5</i><p>Запасная модель включается автоматически; её соблюдение жёстких правил отдельно не проверяется.</p></div>
-    </div>
-    <div class="tbl"><h3>Системные проверки</h3>
-      <div class="tr"><b>Утечки</b><p>Ключи в контекст модели не попадают, но все секреты живут в одном процессе с ботом, читающим текст клиента, — единая точка отказа для четырёх ботов.</p></div>
-      <div class="tr"><b>Стыки передачи</b><p>«Платёжная связка → база» изолирован разумно; «ссылка с кодом → оплачено» проходит без проверки источника.</p></div>
-      <div class="tr"><b>Накопление ошибки</b><p>Цепочки короткие; риск в параллельной записи статуса оплаты и начислений.</p></div>
-      <div class="tr"><b>Дрейф модели</b><p>Каскад из трёх моделей разной силы: под нагрузкой жёсткие правила могут ослабнуть.</p></div>
-      <div class="tr"><b>Цепочка атаки · вывод из описания</b><ol class="chain"><li>Клиент отправляет ссылку с подобранным кодом</li><li>Бот ставит «оплачено» и выдаёт токен</li><li>Платный доступ без оплаты</li></ol></div>
-    </div>
-  </div>
-
-  <div class="plan"><h3>План укрепления · как проверить</h3>
-    <div class="fx"><span class="p">P1</span><b>Одноразовые коды или подписанная ссылка вместо статичного кода</b><span>Один код дважды с разных аккаунтов — доступ выдаётся ожидаемое число раз.</span></div>
-    <div class="fx"><span class="p">P2</span><b>Бот выплат — в отдельный процесс со своими ключами</b><span>Ключи выплат недоступны из процесса продавца.</span></div>
-    <div class="fx"><span class="p">P2</span><b>Лимит обращений к модели на пользователя</b><span>N+5 сообщений подряд — после лимита понятный отказ.</span></div>
-    <div class="fx"><span class="p">P3</span><b>Барьер в коде против запроса «покажи инструкцию»</b><span>Запрос и вариации — в ответе ноль фрагментов промпта.</span></div>
-    <div class="fx"><span class="p">P3</span><b>Защита от двойного начисления при параллельной записи</b><span>Два одновременных запуска — одно начисление.</span></div>
-    <div class="fx"><span class="p">Позже</span><b>Проверка запасной модели на жёсткие правила</b><span>10–15 провокаций на обеих моделях — одинаково безопасный ответ.</span></div>
-  </div>
-
-  <div class="feats">
-    <div><b>Весь путь денег</b><p>Дальше промптов: выдача доступа, начисления, гонки записи, изоляция процессов.</p></div>
-    <div><b>Факт или вывод из описания</b><p>У каждой находки — основание: цитата из описания; названы и сильные места.</p></div>
-    <div><b>Проверяемый план</b><p>Приоритет и тест к каждому исправлению — видно, что дыра закрыта.</p></div>
-  </div>
-</div></section>
 
 <section id="prompt"><div class="wrap">
-  <div class="label"><b>03</b>Промпт для вашего агента</div>
+  <div class="label"><b>02</b>Промпт для вашего агента</div>
   <h2>Агент соберёт описание из папки проекта</h2>
-  <p class="intro">Откройте проект в своём AI-агенте и передайте ему промпт целиком. На выходе — файл <b style="color:var(--ink)">agentproof-package.md</b> для загрузки на аудит.</p>
+  <p class="intro">Откройте проект в своём AI-агенте и передайте ему промпт целиком. На выходе: файл <b style="color:var(--ink)">agentproof-package.md</b> для загрузки на аудит.</p>
   <p class="agents"><span>Claude Code</span> · <span>Codex</span> · <span>Cursor</span> · <span>Windsurf</span> · <span>GitHub Copilot</span> · <span>Gemini CLI</span> · <span>ChatGPT и Claude с загрузкой файлов</span></p>
   <div class="doc">
     <div class="docbar"><span class="fname">agentproof-prompt.md</span>
@@ -211,63 +163,86 @@
     <pre class="prompt" id="promptView"></pre>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </div>
-  <p class="noagent"><b>Без агента</b>Этот же промпт — готовое техническое задание: пройдите по разделам сами или передайте разработчику. Для n8n, Make, Zapier, GPTs приложите экспорт сценария.</p>
+  <p class="noagent"><b>Без агента</b>Этот же промпт: готовое техническое задание: пройдите по разделам сами или передайте разработчику. Для n8n, Make, Zapier, GPTs приложите экспорт сценария.</p>
 </div></section>
 
 <section id="kit"><div class="wrap">
-  <div class="label"><b>04</b>Состав описания</div>
+  <div class="label"><b>03</b>Состав описания</div>
   <h2>Что взять и что убрать</h2>
   <div class="kit">
     <div class="in"><h3>Взять</h3><ul>
-      <li><b>Промпты агентов</b> — полностью, с шаблонами подстановки</li>
-      <li><b>Код и сценарии</b> — вызовы моделей и инструментов, выдача доступа и денег; экспорты n8n, Make, Zapier</li>
-      <li><b>Настройки</b> — модели и версии, лимиты, схемы данных, имена переменных без значений</li>
-      <li><b>Журналы</b> — 2–3 обезличенных примера, один со сбоем</li></ul>
+      <li><b>Промпты агентов</b>: полностью, с шаблонами подстановки</li>
+      <li><b>Код и сценарии</b>: вызовы моделей и инструментов, выдача доступа и денег; экспорты n8n, Make, Zapier</li>
+      <li><b>Настройки</b>: модели и версии, лимиты, схемы данных, имена переменных без значений</li>
+      <li><b>Журналы</b>: 2–3 обезличенных примера, один со сбоем</li></ul>
       <p class="ext"><span>.md</span><span>.txt</span><span>.docx</span><span>.json</span><span>.yaml</span><span>.log</span><span>.csv</span><span>.xml</span><span>.toml</span><span>.py</span><span>.js</span><span>.ts</span><span>.jsx</span><span>.tsx</span><span>.mjs</span><span>.env.example</span></p></div>
     <div class="out"><h3>Убрать</h3><ul>
-      <li><b>Значения секретов</b> — ключи, токены, пароли, строки подключения → [СЕКРЕТ]</li>
-      <li><b>Персональные данные</b> — имена, телефоны, email, адреса, платежи → [ПДн]</li>
-      <li><b>Лишние файлы</b> — сайт пропускает их автоматически</li></ul>
+      <li><b>Значения секретов</b>: ключи, токены, пароли, строки подключения → [СЕКРЕТ]</li>
+      <li><b>Персональные данные</b>: имена, телефоны, email, адреса, платежи → [ПДн]</li>
+      <li><b>Лишние файлы</b>: сайт пропускает их автоматически</li></ul>
       <p class="ext"><span>.env</span><span>ключи и сертификаты</span><span>дампы баз</span><span>клиентские выгрузки</span><span>медиа</span><span>архивы</span><span>node_modules</span></p></div>
   </div>
   <p class="facts2"><b>До 4 МБ</b> текста · ключи, оставшиеся по ошибке, сайт вырезает до проверки · <b>0 копий</b>: описание проверяется в памяти и сразу забывается</p>
 </div></section>
 
 <section id="steps"><div class="wrap">
-  <div class="label"><b>05</b>Как пройти аудит</div>
+  <div class="label"><b>04</b>Как пройти аудит</div>
   <div class="steps">
-    <div class="step"><h3>Описание</h3>Соберите заранее — промптом со страницы.</div>
+    <div class="step"><h3>Описание</h3>Соберите заранее: промптом со страницы.</div>
     <div class="step"><h3>Код</h3>«АУДИТ» в <a href="https://t.me/arsysai_bot">@arsysai_bot</a>. 48 часов, одна проверка.</div>
-    <div class="step"><h3>Загрузка</h3><a href="https://agentproof.arsysai.com">agentproof.arsysai.com</a> → «Новый аудит» → код → файл.</div>
-    <div class="step"><h3>Отчёт</h3>Через несколько минут — карта, балл, атаки, план. PDF.</div>
+    <div class="step"><h3>Загрузка</h3><a href="index.html">agentproof.arsysai.com</a> → «Новый аудит» → код → файл.</div>
+    <div class="step"><h3>Отчёт</h3>Через несколько минут: карта, балл, атаки, план. PDF.</div>
   </div>
 </div></section>
 
 <div class="wrap">
-  <div class="final"><h2>Ваш проект готов <mark>к аудиту</mark></h2><a class="btn ink" href="https://t.me/arsysai_bot">Получить код в боте</a></div>
-<style>html[lang=en] .ft-ru{display:none}html:not([lang=en]) .ft-en{display:none}</style><div class="site-foot" style="display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;padding:16px;margin-top:16px;border-top:1px solid rgba(255,255,255,.12);opacity:.8"><span class="ft-ru">© 2026 ArchitectSystemsAI. Все права защищены.</span><span class="ft-ru"><a href="https://legal.arsysai.com/privacy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Политика конфиденциальности</a> | <a href="https://legal.arsysai.com/consent-agentproof" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Согласие на обработку данных</a></span><span class="ft-en">© 2026 ArchitectSystemsAI. All rights reserved.</span><span class="ft-en"><a href="https://legal.arsysai.com/en#policy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Privacy Policy</a> | <a href="https://legal.arsysai.com/en#consents" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Data Processing Consent</a></span></div>
+  <div class="final"><h2>Ваш проект готов <mark>к аудиту</mark></h2><a class="btn ink" href="https://t.me/arsysai_bot">Получить код в боте <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></div>
+<style>html[lang=en] .ft-ru{display:none}html:not([lang=en]) .ft-en{display:none}
+  :root{--ink:#414143;--body:#414143;--muted:#676769}
+  body{background:#fff}
+  .apbar{position:sticky;top:0;z-index:30;max-width:1040px;margin:0 auto;padding:0 28px}
+  .aptop{display:flex;align-items:center;justify-content:space-between;gap:10px;height:50px;padding:0 12px 0 16px;background:#58585A;border-radius:0 0 3px 3px;box-shadow:0 10px 24px rgba(65,65,67,.14),0 2px 4px rgba(65,65,67,.08)}
+  .aplogo{display:flex;align-items:center;gap:11px;text-decoration:none}.aplogo img{display:block;height:13px;width:auto;flex:none}
+  .aplogo b{font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;letter-spacing:.04em;color:#fff;line-height:1.1;text-transform:uppercase}.aplogo b em{font-style:normal;color:#B4FAB2}
+  .aplogo b i{display:block;font-style:normal;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:0;text-transform:none;color:#B4FAB2;white-space:nowrap}
+  .apr{display:flex;align-items:center;gap:8px}
+  .apr .aplang,.apr #lt,.apr #langToggle{font-family:'Oswald',sans-serif;font-size:12px;line-height:1.2;color:#fff;background:rgba(255,255,255,.14);border:none;border-radius:3px;padding:3px 8px;cursor:pointer}
+  .apcta{font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;line-height:1.2;letter-spacing:.03em;text-transform:uppercase;text-decoration:none;color:#414143;background:#B4FAB2;border-radius:3px;padding:4px 10px;white-space:nowrap}
+  mark{background:none;padding:0;white-space:normal}
+  .tr p,.fx span{color:#414143}
+  .score span{background:none}
+  a{text-decoration-color:#414143;text-decoration-thickness:1px}
+  .btn,.btn.ink,.btn.mint,a.btn{display:inline-flex;align-items:center;gap:12px;min-height:44px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;border:0;border-radius:3px;padding:9px 18px;background:#B4FAB2;color:#414143;box-shadow:none;cursor:pointer;white-space:nowrap}
+  .btn:hover{filter:brightness(1.05);transform:none;box-shadow:none}
+  .btn.line{background:#F7F6F6;color:#414143;box-shadow:0 10px 24px rgba(65,65,67,.14),0 2px 4px rgba(65,65,67,.08)}
+  .btn.line:hover{background:#F7F6F6;color:#414143}
+  .btn .arw{width:26px;height:26px;border-radius:3px;display:grid;place-items:center;flex:none;background:rgba(65,65,67,.16)}
+  .btn .arw svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2}
+  @media(max-width:420px){.apcta{white-space:normal;max-width:86px;text-align:center;line-height:1.1}}
+  @media(max-width:600px){.apbar{padding:0 12px}.aplogo b i{font-size:11px}.btn{white-space:normal}}
+</style><div class="site-foot" style="display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;padding:16px;margin-top:16px;border-top:1px solid rgba(255,255,255,.12);opacity:.8"><span class="ft-ru">© 2026 ArchitectSystemsAI. Все права защищены.</span><span class="ft-ru"><a href="https://legal.arsysai.com/privacy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Политика конфиденциальности</a> | <a href="https://legal.arsysai.com/consent-agentproof" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Согласие на обработку данных</a></span><span class="ft-en">© 2026 ArchitectSystemsAI. All rights reserved.</span><span class="ft-en"><a href="https://legal.arsysai.com/en#policy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Privacy Policy</a> | <a href="https://legal.arsysai.com/en#consents" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Data Processing Consent</a></span></div>
 </div>
 
 <script>
 const PROMPT = `# РОЛЬ
-Ты — инженер по подготовке систем к аудиту. Ты описываешь мультиагентную систему для внешнего аудитора AgentProof: точно, полно и безопасно.
+Ты: инженер по подготовке систем к аудиту. Ты описываешь мультиагентную систему для внешнего аудитора AgentProof: точно, полно и безопасно.
 
 # ЦЕЛЬ
-Создать файл agentproof-package.md — полное описание системы для аудита надёжности и безопасности. Аудитор видит систему только через это описание: его полнота определяет глубину отчёта.
+Создать файл agentproof-package.md: полное описание системы для аудита надёжности и безопасности. Аудитор видит систему только через это описание: его полнота определяет глубину отчёта.
 
 # КОНТЕКСТ
 Проект находится в текущей папке. Работай в режиме чтения: исходные файлы остаются без изменений, создаётся один новый файл.
 
 # ЧТО ВКЛЮЧИТЬ
-- Системные промпты всех агентов — полностью, с шаблонами подстановки и путём к файлу.
+- Системные промпты всех агентов. Полностью, с шаблонами подстановки и путём к файлу.
 - Код, где агенты вызывают модели и инструменты, принимают внешний текст, выдают доступ или проводят деньги.
 - Сценарии и конфигурации оркестрации: n8n, Make, Zapier, LangGraph, CrewAI, GPTs.
 - Описания инструментов и API, схемы данных на стыках между агентами.
 - Настройки моделей: провайдер, модель, версия, температура, лимиты.
-- Журналы и примеры работы: 2–3 обезличенных, один — со сбоем.
-- Имена переменных окружения — без значений.
+- Журналы и примеры работы: 2–3 обезличенных, один: со сбоем.
+- Имена переменных окружения. Без значений.
 - Список зависимостей с версиями: фреймворк, конструктор агентов, MCP-серверы, ключевые библиотеки (package.json, requirements.txt и аналоги).
-- Файлы сборки и публикации (GitHub Actions, GitLab CI и аналоги): какие секреты видны каждому шагу — имена без значений.
+- Файлы сборки и публикации (GitHub Actions, GitLab CI и аналоги): какие секреты видны каждому шагу. Имена без значений.
 
 # ЧТО УБРАТЬ
 - Значения ключей, токенов, паролей и строк подключения → [СЕКРЕТ]. Имя переменной сохрани: OPENAI_API_KEY=[СЕКРЕТ].
@@ -278,10 +253,10 @@ const PROMPT = `# РОЛЬ
 1. Изучи структуру проекта. Найди всех агентов и все точки вызова моделей.
 2. Построй путь запроса от входа клиента до результата.
 3. Собери промпты, инструменты, права, секреты и защитные механизмы.
-4. Заполни все разделы выхода. Где данных нет — «нет данных».
+4. Заполни все разделы выхода. Где данных нет: «нет данных».
 5. Перечитай файл целиком на секреты и персональные данные.
 
-# ФОРМАТ ВЫХОДА — agentproof-package.md
+# ФОРМАТ ВЫХОДА: agentproof-package.md
 ## 0. Обзор
 Назначение, для кого, каналы. Касается ли денег, доступа к платному, персональных данных, публикаций от имени бренда. Стек и хостинг.
 ## 1. Реестр агентов
@@ -293,9 +268,9 @@ const PROMPT = `# РОЛЬ
 ## 4. Секреты и доступы
 Таблица: название | где хранится | где ещё лежит копия (старые и тестовые конфиги, репозиторий, история git) | какие агенты имеют доступ | общий или отдельный | пишется ли, кто и когда им пользовался, есть ли тревога.
 ## 5. Защитные механизмы
-Для каждого — есть / частично / нет и где в коде: лимит шагов, лимит бюджета, проверка оплаты по платёжной системе (подпись вебхука, повтор платежа), подтверждение необратимых действий, модерация публикаций, разделение данных и инструкций, проверка формата на стыках, изоляция ключей, ограничение частоты и длины входящих сообщений, журналирование (на дозапись или нет), автоматическая остановка по тревоге, резервная модель, закреплены ли версии пакетов.
+Для каждого: есть / частично / нет и где в коде: лимит шагов, лимит бюджета, проверка оплаты по платёжной системе (подпись вебхука, повтор платежа), подтверждение необратимых действий, модерация публикаций, разделение данных и инструкций, проверка формата на стыках, изоляция ключей, ограничение частоты и длины входящих сообщений, журналирование (на дозапись или нет), автоматическая остановка по тревоге, резервная модель, закреплены ли версии пакетов.
 ## 5а. Каналы выхода и доступ к панелям
-Все пути, по которым данные могут уйти наружу: HTTP, DNS, почта, вебхуки, превью ссылок, картинки в ответах, git, реестры пакетов — открыт / закрыт / нет данных. Вход в панели (GitHub, хостинг, база, BotFather, платёжная система): отдельные учётки, второй фактор — какой именно (SMS, приложение, ключ доступа passkey, аппаратный ключ).
+Все пути, по которым данные могут уйти наружу: HTTP, DNS, почта, вебхуки, превью ссылок, картинки в ответах, git, реестры пакетов. Открыт / закрыт / нет данных. Вход в панели (GitHub, хостинг, база, BotFather, платёжная система): отдельные учётки, второй фактор. Какой именно (SMS, приложение, ключ доступа passkey, аппаратный ключ).
 ## 6. Память и данные
 История диалогов, базы знаний и RAG, общая память агентов, срок хранения.
 ## 7. Модели и версии
@@ -305,9 +280,9 @@ const PROMPT = `# РОЛЬ
 ## 8. Промпты
 Системный промпт каждого агента полностью.
 ## 9. Ключевой код
-Фрагменты с вызовами инструментов, приёмом внешнего текста, выдачей доступа и денег — с путями к файлам.
+Фрагменты с вызовами инструментов, приёмом внешнего текста, выдачей доступа и денег. С путями к файлам.
 ## 10. Журналы и примеры
-2–3 обезличенных диалога или трассы, один — со сбоем.
+2–3 обезличенных диалога или трассы, один. Со сбоем.
 ## 11. Известные сбои и опасения владельца
 ## 12. Пробелы
 Что в проекте найти не удалось.
@@ -320,8 +295,8 @@ const PROMPT = `# РОЛЬ
 # ОТЧЁТ
 Сообщи: размер файла, число найденных агентов, что осталось неясным.`;
 
-const PROMPT_EN = "# ROLE\nYou are an engineer preparing systems for audit. You describe a multi-agent system for the external auditor AgentProof: precisely, completely and safely.\n\n# GOAL\nCreate the file agentproof-package.md — a complete description of the system for a reliability and security audit. The auditor sees the system only through this description: its completeness defines the depth of the report.\n\n# CONTEXT\nThe project is in the current folder. Work read-only: source files stay unchanged, one new file is created.\n\n# WHAT TO INCLUDE\n- System prompts of all agents — in full, with substitution templates and file path.\n- Code where agents call models and tools, take external text, grant access or move money.\n- Orchestration scenarios and configs: n8n, Make, Zapier, LangGraph, CrewAI, GPTs.\n- Tool and API descriptions, data schemas at the handoffs between agents.\n- Model settings: provider, model, version, temperature, limits.\n- Logs and examples: 2–3 anonymised, one with a failure.\n- Environment variable names — without values.\n- Dependency list with versions: framework, agent builder, MCP servers, key libraries (package.json, requirements.txt and similar).\n- Build and publish files (GitHub Actions, GitLab CI and similar): which secrets each step can see — names without values.\n\n# WHAT TO REMOVE\n- Values of keys, tokens, passwords and connection strings → [SECRET]. Keep the variable name: OPENAI_API_KEY=[SECRET].\n- Customer personal data: names, phones, email, addresses, payment data → [PII].\n- .env files, private keys and certificates, database dumps, customer exports, media, archives, dependencies (node_modules, venv).\n\n# WORK ORDER\n1. Study the project structure. Find all agents and all model call points.\n2. Trace a request from the customer entry to the result.\n3. Collect prompts, tools, permissions, secrets and protective mechanisms.\n4. Fill in every output section. Where there is no data — \"no data\".\n5. Re-read the whole file for secrets and personal data.\n\n# OUTPUT FORMAT — agentproof-package.md\n## 0. Overview\nPurpose, audience, channels. Does it touch money, paid access, personal data, publishing on behalf of the brand. Stack and hosting.\n## 1. Agent registry\nTable: ID | role | model and provider | where it runs | input | output | reads external text (yes/no).\n## 2. Handoff map\nWho → to whom → what, format, input validation. End-to-end walkthrough of one request. Mermaid diagram.\n## 3. Tools and permissions\nTable: agent | tool or API | permissions | irreversible action (yes/no) | human confirmation (yes/no).\n## 4. Secrets and access\nTable: name | where stored | which agents can access | shared or separate.\n## 5. Protective mechanisms\nFor each — present / partial / absent and where in code: step limit, budget limit, payment verification via the payment system (webhook signature, payment replay), confirmation of irreversible actions, publishing moderation, separation of data and instructions, format checks at handoffs, key isolation, rate and incoming message length limits, logging (append-only or not), automatic stop on alert, fallback model, pinned package versions.\n## 5a. Egress channels and panel access\nAll paths data can leave through: HTTP, DNS, email, webhooks, link previews, images in replies, git, package registries — open / closed / no data. Access to panels (GitHub, hosting, database, payment system): separate accounts, second factor.\n## 6. Memory and data\nConversation history, knowledge bases and RAG, shared agent memory, retention.\n## 7. Models and versions\nModel of each agent, whether the version is pinned, parameters.\n## 8. Prompts\nThe full system prompt of each agent.\n## 9. Key code\nFragments with tool calls, intake of external text, granting access and money — with file paths.\n## 10. Logs and examples\n2–3 anonymised conversations or traces, one with a failure.\n## 11. Known failures and owner concerns\n## 12. Gaps\nWhat could not be found in the project.\n\n# QUALITY CRITERIA\n- Every statement relies on a project file, the path is given.\n- Tables are filled for all agents.\n- Zero secret values and zero personal data in the file.\n\n# REPORT\nState: file size, number of agents found, what remains unclear.";
-const EN = {"Что проверяем": "What we check", "Отчёт": "Report", "Промпт": "Prompt", "Что входит": "What to include", "Как пройти": "How it works", "Новый аудит": "New audit", "Аудит мультиагентных систем": "Audit of Multi-Agent Systems", "Подготовка проекта": "Preparing a project", "к аудиту": "for audit", "Для аудита нужно описание вашего проекта с AI-агентами: промпты, связи, права, ключи. Всё это уже есть в папке проекта. Передайте своему AI-агенту промпт со страницы — он соберёт описание в один файл без ключей и личных данных.": "The audit needs a description of your AI agent project: prompts, links, permissions, keys. All of it is already in your project folder. Give the prompt on this page to your AI agent — it will assemble the description into one file without keys or personal data.", "Промпт для агента": "Prompt for your agent", "Пример отчёта": "Sample report", "22 проверки": "22 checks", "6 осей": "6 axes", "надёжности ·": "of reliability ·", "балл 0–10": "score 0–10", "по открытой рубрике · отчёт за несколько минут ·": "on an open rubric · report in a few minutes ·", "Что проверяет аудит": "What the audit checks", "Каждого агента и каждую связь": "Every agent and every link", "Промпты, код, деньги и связи — как одно целое: где входит внешний текст, куда он может дойти, что может сломаться и сколько это стоит.": "Prompts, code, money and links as one whole: where external text enters, how far it can reach, what can break and what it costs.", "Безопасность": "Security", "Изоляция ключей и прав между агентами": "Isolation of keys and permissions between agents", "Инъекции из сообщений, писем, комментариев, сайтов, документов": "Injections from messages, emails, comments, websites, documents", "Отравление памяти и баз знаний": "Memory and knowledge base poisoning", "Утечка персональных данных": "Personal data leaks", "Цепочки атак от входа до денег и ключей": "Attack chains from entry to money and keys", "Деньги и права": "Money and permissions", "Вызовы инструментов и выдуманные вызовы": "Tool calls and fabricated calls", "Необратимые действия без подтверждения человеком": "Irreversible actions without human confirmation", "Выдача денег и доступа по непроверенному тексту": "Money and access granted on unverified text", "Денежные потоки и двойные начисления": "Money flows and double crediting", "Надёжность": "Reliability", "Стыки передачи между агентами": "Handoffs between agents", "Накопление ошибки на длинной цепочке": "Error accumulation on a long chain", "Опора на первоисточник": "Source grounding", "Стабильность при смене модели": "Stability when the model changes", "Резервная модель и обработка отказов": "Fallback model and failure handling", "Изоляция процессов и единая точка отказа": "Process isolation and single point of failure", "Контроль": "Control", "Зацикливание агентов друг на друге": "Agents looping on each other", "Лимиты шагов и бюджета": "Step and budget limits", "Журналирование и трассировка": "Logging and tracing", "Так выглядит отчёт": "This is what a report looks like", "Реальный аудит бота-продавца": "A real audit of a sales bot", "Четыре бота в одном процессе, два AI-агента, оплата через платёжную связку. Отчёт показан почти целиком, данные обезличены.": "Four bots in one process, two AI agents, payments through a payment pipeline. The report is shown almost in full, data anonymised.", "С оговорками": "With caveats", "Слабое звено": "Weak link", "Выдача платного доступа по коду из служебной ссылки — единственный вход в «оплачено», который напрямую зависит от текста клиента.": "Paid access granted by a code from a service link — the only path to “paid” that depends directly on customer text.", "Сильное место": "Strong point", "Платёжная связка пишет в базу ключом только на добавление записей — разумная изоляция. Ключи в контекст модели не попадают.": "The payment pipeline writes to the database with an insert-only key — sensible isolation. Keys never reach the model context.", "Батарея по агентам": "Per-agent battery", "Вызовы инструментов": "Tool calls", "AI-агенты только пишут текст: деньги и доступ решает код по базе.": "AI agents only write text: money and access are decided by code against the database.", "Длинная дистанция": "Long horizon", "История до 40 сообщений переживает перезапуск; разрешение противоречий старого и нового контекста стоит описать.": "History of up to 40 messages survives a restart; resolving conflicts between old and new context is worth describing.", "Инъекции из контента": "Content injections", "Вход — только текст клиента, площадь атаки узкая; явного правила против инструкций из этого текста пока нет.": "Input is customer text only, a narrow attack surface; there is no explicit rule against instructions in that text yet.", "Первоисточник": "Source grounding", "Выдумывать факты запрещено; путаница материалов разных клиентов в общей базе отдельно не проверяется.": "Inventing facts is forbidden; mixing up materials of different customers in the shared base is not checked separately.", "Зацикливание": "Looping", "Жёсткого лимита обращений к модели на диалог нет — только повторы при перегрузке.": "No hard limit on model calls per conversation — only retries on overload.", "Запасная модель включается автоматически; её соблюдение жёстких правил отдельно не проверяется.": "The fallback model switches on automatically; its compliance with hard rules is not checked separately.", "Системные проверки": "System checks", "Утечки": "Leaks", "Ключи в контекст модели не попадают, но все секреты живут в одном процессе с ботом, читающим текст клиента, — единая точка отказа для четырёх ботов.": "Keys never reach the model context, but all secrets live in one process with the bot that reads customer text — a single point of failure for four bots.", "Стыки передачи": "Handoffs", "«Платёжная связка → база» изолирован разумно; «ссылка с кодом → оплачено» проходит без проверки источника.": "“Payment pipeline → database” is sensibly isolated; “link with code → paid” passes without checking the source.", "Накопление ошибки": "Error accumulation", "Цепочки короткие; риск в параллельной записи статуса оплаты и начислений.": "Chains are short; the risk is in concurrent writes of payment status and crediting.", "Дрейф модели": "Model drift", "Каскад из трёх моделей разной силы: под нагрузкой жёсткие правила могут ослабнуть.": "A cascade of three models of different strength: under load, hard rules may weaken.", "Цепочка атаки · вывод из описания": "Attack chain · conclusion from the description", "Клиент отправляет ссылку с подобранным кодом": "A customer sends a link with a guessed code", "Бот ставит «оплачено» и выдаёт токен": "The bot marks “paid” and issues a token", "Платный доступ без оплаты": "Paid access without payment", "План укрепления · как проверить": "Hardening plan · how to verify", "Одноразовые коды или подписанная ссылка вместо статичного кода": "One-time codes or a signed link instead of a static code", "Один код дважды с разных аккаунтов — доступ выдаётся ожидаемое число раз.": "One code twice from different accounts — access is granted the expected number of times.", "Бот выплат — в отдельный процесс со своими ключами": "Payout bot in a separate process with its own keys", "Ключи выплат недоступны из процесса продавца.": "Payout keys are unreachable from the sales process.", "Лимит обращений к модели на пользователя": "Per-user limit on model calls", "N+5 сообщений подряд — после лимита понятный отказ.": "N+5 messages in a row — a clear refusal after the limit.", "Барьер в коде против запроса «покажи инструкцию»": "A code barrier against “show your instructions”", "Запрос и вариации — в ответе ноль фрагментов промпта.": "The request and its variations — zero prompt fragments in the reply.", "Защита от двойного начисления при параллельной записи": "Protection against double crediting on concurrent writes", "Два одновременных запуска — одно начисление.": "Two simultaneous runs — one credit.", "Позже": "Later", "Проверка запасной модели на жёсткие правила": "Checking the fallback model against hard rules", "10–15 провокаций на обеих моделях — одинаково безопасный ответ.": "10–15 provocations on both models — an equally safe reply.", "Весь путь денег": "The whole money path", "Дальше промптов: выдача доступа, начисления, гонки записи, изоляция процессов.": "Beyond prompts: access granting, crediting, write races, process isolation.", "Факт или вывод из описания": "Fact or conclusion from the description", "У каждой находки — основание: цитата из описания; названы и сильные места.": "Every finding has a basis: a quote from the description; strong points are named too.", "Проверяемый план": "A verifiable plan", "Приоритет и тест к каждому исправлению — видно, что дыра закрыта.": "A priority and a test for every fix — you can see the hole is closed.", "Промпт для вашего агента": "Prompt for your agent", "Агент соберёт описание из папки проекта": "The agent assembles the description from the project folder", "Откройте проект в своём AI-агенте и передайте ему промпт целиком. На выходе — файл": "Open the project in your AI agent and give it the whole prompt. The output is the file", "для загрузки на аудит.": "to upload for the audit.", "ChatGPT и Claude с загрузкой файлов": "ChatGPT and Claude with file upload", "Скопировать промпт": "Copy prompt", "Скачать .md": "Download .md", "Без агента": "Without an agent", "Этот же промпт — готовое техническое задание: пройдите по разделам сами или передайте разработчику. Для n8n, Make, Zapier, GPTs приложите экспорт сценария.": "The same prompt is a ready brief: go through the sections yourself or hand it to a developer. For n8n, Make, Zapier, GPTs attach the scenario export.", "Состав описания": "Description contents", "Что взять и что убрать": "What to include and what to remove", "Взять": "Include", "Промпты агентов": "Agent prompts", "— полностью, с шаблонами подстановки": "— in full, with substitution templates", "Код и сценарии": "Code and scenarios", "— вызовы моделей и инструментов, выдача доступа и денег; экспорты n8n, Make, Zapier": "— model and tool calls, granting access and money; n8n, Make, Zapier exports", "Настройки": "Settings", "— модели и версии, лимиты, схемы данных, имена переменных без значений": "— models and versions, limits, data schemas, variable names without values", "Журналы": "Logs", "— 2–3 обезличенных примера, один со сбоем": "— 2–3 anonymised examples, one with a failure", "Убрать": "Remove", "Значения секретов": "Secret values", "— ключи, токены, пароли, строки подключения → [СЕКРЕТ]": "— keys, tokens, passwords, connection strings → [SECRET]", "Персональные данные": "Personal data", "— имена, телефоны, email, адреса, платежи → [ПДн]": "— names, phones, email, addresses, payments → [PII]", "Лишние файлы": "Extra files", "— сайт пропускает их автоматически": "— the site skips them automatically", "ключи и сертификаты": "keys and certificates", "дампы баз": "database dumps", "клиентские выгрузки": "customer exports", "медиа": "media", "архивы": "archives", "До 4 МБ": "Up to 4 MB", "текста · ключи, оставшиеся по ошибке, сайт вырезает до проверки ·": "of text · keys left by mistake are removed by the site before the check ·", "0 копий": "0 copies", ": описание проверяется в памяти и сразу забывается": ": the description is checked in memory and forgotten right away", "Как пройти аудит": "How to take the audit", "Описание": "Description", "Соберите заранее — промптом со страницы.": "Prepare it in advance — with the prompt on this page.", "Код": "Code", "«АУДИТ» в": "“АУДИТ” in", ". 48 часов, одна проверка.": ". 48 hours, one check.", "Загрузка": "Upload", "→ «Новый аудит» → код → файл.": "→ “New audit” → code → file.", "Через несколько минут — карта, балл, атаки, план. PDF.": "In a few minutes — map, score, attacks, plan. PDF.", "Ваш проект готов": "Your project is ready", "Получить код в боте": "Get a code in the bot"};
+const PROMPT_EN = "# ROLE\nYou are an engineer preparing systems for audit. You describe a multi-agent system for the external auditor AgentProof: precisely, completely and safely.\n\n# GOAL\nCreate the file agentproof-package.md: a complete description of the system for a reliability and security audit. The auditor sees the system only through this description: its completeness defines the depth of the report.\n\n# CONTEXT\nThe project is in the current folder. Work read-only: source files stay unchanged, one new file is created.\n\n# WHAT TO INCLUDE\n- System prompts of all agents. In full, with substitution templates and file path.\n- Code where agents call models and tools, take external text, grant access or move money.\n- Orchestration scenarios and configs: n8n, Make, Zapier, LangGraph, CrewAI, GPTs.\n- Tool and API descriptions, data schemas at the handoffs between agents.\n- Model settings: provider, model, version, temperature, limits.\n- Logs and examples: 2–3 anonymised, one with a failure.\n- Environment variable names. Without values.\n- Dependency list with versions: framework, agent builder, MCP servers, key libraries (package.json, requirements.txt and similar).\n- Build and publish files (GitHub Actions, GitLab CI and similar): which secrets each step can see. Names without values.\n\n# WHAT TO REMOVE\n- Values of keys, tokens, passwords and connection strings → [SECRET]. Keep the variable name: OPENAI_API_KEY=[SECRET].\n- Customer personal data: names, phones, email, addresses, payment data → [PII].\n- .env files, private keys and certificates, database dumps, customer exports, media, archives, dependencies (node_modules, venv).\n\n# WORK ORDER\n1. Study the project structure. Find all agents and all model call points.\n2. Trace a request from the customer entry to the result.\n3. Collect prompts, tools, permissions, secrets and protective mechanisms.\n4. Fill in every output section. Where there is no data: \"no data\".\n5. Re-read the whole file for secrets and personal data.\n\n# OUTPUT FORMAT: agentproof-package.md\n## 0. Overview\nPurpose, audience, channels. Does it touch money, paid access, personal data, publishing on behalf of the brand. Stack and hosting.\n## 1. Agent registry\nTable: ID | role | model and provider | where it runs | input | output | reads external text (yes/no).\n## 2. Handoff map\nWho → to whom → what, format, input validation. End-to-end walkthrough of one request. Mermaid diagram.\n## 3. Tools and permissions\nTable: agent | tool or API | permissions | irreversible action (yes/no) | human confirmation (yes/no).\n## 4. Secrets and access\nTable: name | where stored | which agents can access | shared or separate.\n## 5. Protective mechanisms\nFor each: present / partial / absent and where in code: step limit, budget limit, payment verification via the payment system (webhook signature, payment replay), confirmation of irreversible actions, publishing moderation, separation of data and instructions, format checks at handoffs, key isolation, rate and incoming message length limits, logging (append-only or not), automatic stop on alert, fallback model, pinned package versions.\n## 5a. Egress channels and panel access\nAll paths data can leave through: HTTP, DNS, email, webhooks, link previews, images in replies, git, package registries. Open / closed / no data. Access to panels (GitHub, hosting, database, payment system): separate accounts, second factor.\n## 6. Memory and data\nConversation history, knowledge bases and RAG, shared agent memory, retention.\n## 7. Models and versions\nModel of each agent, whether the version is pinned, parameters.\n## 8. Prompts\nThe full system prompt of each agent.\n## 9. Key code\nFragments with tool calls, intake of external text, granting access and money. With file paths.\n## 10. Logs and examples\n2–3 anonymised conversations or traces, one with a failure.\n## 11. Known failures and owner concerns\n## 12. Gaps\nWhat could not be found in the project.\n\n# QUALITY CRITERIA\n- Every statement relies on a project file, the path is given.\n- Tables are filled for all agents.\n- Zero secret values and zero personal data in the file.\n\n# REPORT\nState: file size, number of agents found, what remains unclear.";
+const EN = {"Критично": "Critical", "Важно": "Important", "Укрепить": "Harden", "Что проверяем": "What we check", "Отчёт": "Report", "Промпт": "Prompt", "Что входит": "What to include", "Как пройти": "How it works", "Новый аудит": "New audit", "Аудит мультиагентных систем": "Audit of Multi-Agent Systems", "Подготовка проекта": "Preparing a project", "к аудиту": "for audit", "Для аудита нужно описание вашего проекта с AI-агентами: промпты, связи, права, ключи. Всё это уже есть в папке проекта. Передайте своему AI-агенту промпт со страницы. Он соберёт описание в один файл без ключей и личных данных.": "The audit needs a description of your AI agent project: prompts, links, permissions, keys. All of it is already in your project folder. Give the prompt on this page to your AI agent. It will assemble the description into one file without keys or personal data.", "Промпт для агента": "Prompt for your agent", "Образец отчёта": "Sample report", "72 класса": "72 classes", "уязвимостей ·": "of vulnerabilities ·", "6 проверок": "6 checks", "каждого агента ·": "per agent ·", "16": "16", "системных проверок ·": "system checks ·", "балл 0–10": "score 0–10", "по единой рубрике · отчёт за несколько минут ·": "on a single rubric · report in a few minutes ·", "Проверить систему": "Check your system", "Что проверяет аудит": "What the audit checks", "Каждого агента и каждую связь": "Every agent and every link", "Промпты, код, деньги и связи. Как одно целое: где входит внешний текст, куда он может дойти, что может сломаться и сколько это стоит.": "Prompts, code, money and links as one whole: where external text enters, how far it can reach, what can break and what it costs.", "Безопасность": "Security", "Изоляция ключей и прав между агентами": "Isolation of keys and permissions between agents", "Инъекции из сообщений, писем, комментариев, сайтов, документов": "Injections from messages, emails, comments, websites, documents", "Отравление памяти и баз знаний": "Memory and knowledge base poisoning", "Утечка персональных данных": "Personal data leaks", "Цепочки атак от входа до денег и ключей": "Attack chains from entry to money and keys", "Деньги и права": "Money and permissions", "Вызовы инструментов и выдуманные вызовы": "Tool calls and fabricated calls", "Необратимые действия без подтверждения человеком": "Irreversible actions without human confirmation", "Выдача денег и доступа по непроверенному тексту": "Money and access granted on unverified text", "Денежные потоки и двойные начисления": "Money flows and double crediting", "Надёжность": "Reliability", "Стыки передачи между агентами": "Handoffs between agents", "Накопление ошибки на длинной цепочке": "Error accumulation on a long chain", "Опора на первоисточник": "Source grounding", "Стабильность при смене модели": "Stability when the model changes", "Резервная модель и обработка отказов": "Fallback model and failure handling", "Изоляция процессов и единая точка отказа": "Process isolation and single point of failure", "Контроль": "Control", "Зацикливание агентов друг на друге": "Agents looping on each other", "Расход шагов и бюджета": "Step and budget spend", "Журналирование и трассировка": "Logging and tracing", "Так выглядит отчёт": "This is what a report looks like", "Реальный аудит бота-продавца": "A real audit of a sales bot", "Четыре бота в одном процессе, два AI-агента, оплата через платёжную связку. Отчёт показан почти целиком, данные обезличены.": "Four bots in one process, two AI agents, payments through a payment pipeline. The report is shown almost in full, data anonymised.", "С оговорками": "With caveats", "Слабое звено": "Weak link", "Выдача платного доступа по коду из служебной ссылки. Единственный вход в «оплачено», который напрямую зависит от текста клиента.": "Paid access granted by a code from a service link. The only path to “paid” that depends directly on customer text.", "Сильное место": "Strong point", "Платёжная связка пишет в базу ключом только на добавление записей. Разумная изоляция. Ключи в контекст модели не попадают.": "The payment pipeline writes to the database with an insert-only key. Sensible isolation. Keys never reach the model context.", "Проверка каждого агента": "Check of every agent", "Вызовы инструментов": "Tool calls", "AI-агенты только пишут текст: деньги и доступ решает код по базе.": "AI agents only write text: money and access are decided by code against the database.", "Длинная дистанция": "Long horizon", "История до 40 сообщений переживает перезапуск; разрешение противоречий старого и нового контекста стоит описать.": "History of up to 40 messages survives a restart; resolving conflicts between old and new context is worth describing.", "Инъекции из контента": "Content injections", "Вход: только текст клиента, площадь атаки узкая; явного правила против инструкций из этого текста пока нет.": "Input is customer text only, a narrow attack surface; there is no explicit rule against instructions in that text yet.", "Опора на первоисточник": "Grounding in the source", "Выдумывать факты запрещено; путаница материалов разных клиентов в общей базе отдельно не проверяется.": "Inventing facts is forbidden; mixing up materials of different customers in the shared base is not checked separately.", "Зацикливание": "Looping", "Жёсткого лимита обращений к модели на диалог нет. Только повторы при перегрузке.": "No hard limit on model calls per conversation. Only retries on overload.", "Запасная модель включается автоматически; её соблюдение жёстких правил отдельно не проверяется.": "The fallback model switches on automatically; its compliance with hard rules is not checked separately.", "Системные проверки": "System checks", "Утечки": "Leaks", "Ключи в контекст модели не попадают, но все секреты живут в одном процессе с ботом, читающим текст клиента. Единая точка отказа для четырёх ботов.": "Keys never reach the model context, but all secrets live in one process with the bot that reads customer text. A single point of failure for four bots.", "Стыки передачи": "Handoffs", "«Платёжная связка → база» изолирован разумно; «ссылка с кодом → оплачено» проходит без проверки источника.": "“Payment pipeline → database” is sensibly isolated; “link with code → paid” passes without checking the source.", "Накопление ошибки": "Error accumulation", "Цепочки короткие; риск в параллельной записи статуса оплаты и начислений.": "Chains are short; the risk is in concurrent writes of payment status and crediting.", "Дрейф модели": "Model drift", "Каскад из трёх моделей разной силы: под нагрузкой жёсткие правила могут ослабнуть.": "A cascade of three models of different strength: under load, hard rules may weaken.", "Как могут атаковать · вывод по описанию": "How an attack could run · inferred from the description", "Клиент отправляет ссылку с подобранным кодом": "A customer sends a link with a guessed code", "Бот ставит «оплачено» и выдаёт токен": "The bot marks “paid” and issues a token", "Платный доступ без оплаты": "Paid access without payment", "План укрепления · как проверить": "Hardening plan · how to verify", "Одноразовые коды или подписанная ссылка вместо статичного кода": "One-time codes or a signed link instead of a static code", "Один код дважды с разных аккаунтов. Доступ выдаётся ожидаемое число раз.": "One code twice from different accounts. Access is granted the expected number of times.", "Бот выплат: в отдельный процесс со своими ключами": "Payout bot in a separate process with its own keys", "Ключи выплат недоступны из процесса продавца.": "Payout keys are unreachable from the sales process.", "Лимит обращений к модели на пользователя": "Per-user limit on model calls", "N+5 сообщений подряд: после лимита понятный отказ.": "N+5 messages in a row. A clear refusal after the limit.", "Барьер в коде против запроса «покажи инструкцию»": "A code barrier against “show your instructions”", "Запрос и вариации: в ответе ноль фрагментов промпта.": "The request and its variations. Zero prompt fragments in the reply.", "Защита от двойного начисления при параллельной записи": "Protection against double crediting on concurrent writes", "Два одновременных запуска: одно начисление.": "Two simultaneous runs: one credit.", "Позже": "Later", "Проверка запасной модели на жёсткие правила": "Checking the fallback model against hard rules", "10–15 провокаций на обеих моделях. Одинаково безопасный ответ.": "10–15 provocations on both models. An equally safe reply.", "Весь путь денег": "The whole money path", "Дальше промптов: выдача доступа, начисления, гонки записи, изоляция процессов.": "Beyond prompts: access granting, crediting, write races, process isolation.", "Факт или вывод из описания": "Fact or conclusion from the description", "У каждой находки: основание: цитата из описания; названы и сильные места.": "Every finding has a basis: a quote from the description; strong points are named too.", "Проверяемый план": "A verifiable plan", "Приоритет и тест к каждому исправлению. Видно, что дыра закрыта.": "A priority and a test for every fix. You can see the hole is closed.", "Промпт для вашего агента": "Prompt for your agent", "Агент соберёт описание из папки проекта": "The agent assembles the description from the project folder", "Откройте проект в своём AI-агенте и передайте ему промпт целиком. На выходе: файл": "Open the project in your AI agent and give it the whole prompt. The output is the file", "для загрузки на аудит.": "to upload for the audit.", "ChatGPT и Claude с загрузкой файлов": "ChatGPT and Claude with file upload", "Скопировать промпт": "Copy prompt", "Скачать .md": "Download .md", "Без агента": "Without an agent", "Этот же промпт: готовое техническое задание: пройдите по разделам сами или передайте разработчику. Для n8n, Make, Zapier, GPTs приложите экспорт сценария.": "The same prompt is a ready brief: go through the sections yourself or hand it to a developer. For n8n, Make, Zapier, GPTs attach the scenario export.", "Состав описания": "Description contents", "Что взять и что убрать": "What to include and what to remove", "Взять": "Include", "Промпты агентов": "Agent prompts", ": полностью, с шаблонами подстановки": ": in full, with substitution templates", "Код и сценарии": "Code and scenarios", ": вызовы моделей и инструментов, выдача доступа и денег; экспорты n8n, Make, Zapier": ": model and tool calls, granting access and money; n8n, Make, Zapier exports", "Настройки": "Settings", ": модели и версии, лимиты, схемы данных, имена переменных без значений": ": models and versions, limits, data schemas, variable names without values", "Журналы": "Logs", ": 2–3 обезличенных примера, один со сбоем": ": 2–3 anonymised examples, one with a failure", "Убрать": "Remove", "Значения секретов": "Secret values", ": ключи, токены, пароли, строки подключения → [СЕКРЕТ]": ": keys, tokens, passwords, connection strings → [SECRET]", "Персональные данные": "Personal data", ": имена, телефоны, email, адреса, платежи → [ПДн]": ": names, phones, email, addresses, payments → [PII]", "Лишние файлы": "Extra files", ": сайт пропускает их автоматически": ": the site skips them automatically", "ключи и сертификаты": "keys and certificates", "дампы баз": "database dumps", "клиентские выгрузки": "customer exports", "медиа": "media", "архивы": "archives", "До 4 МБ": "Up to 4 MB", "текста · ключи, оставшиеся по ошибке, сайт вырезает до проверки ·": "of text · keys left by mistake are removed by the site before the check ·", "0 копий": "0 copies", ": описание проверяется в памяти и сразу забывается": ": the description is checked in memory and forgotten right away", "Как пройти аудит": "How to take the audit", "Описание": "Description", "Соберите заранее: промптом со страницы.": "Prepare it in advance. With the prompt on this page.", "Код": "Code", "«АУДИТ» в": "“АУДИТ” in", ". 48 часов, одна проверка.": ". 48 hours, one check.", "Загрузка": "Upload", "→ «Новый аудит» → код → файл.": "→ “New audit” → code → file.", "Через несколько минут: карта, балл, атаки, план. PDF.": "In a few minutes. Map, score, attacks, plan. PDF.", "Ваш проект готов": "Your project is ready", "Получить код в боте": "Get a code in the bot"};
 let LANG = 'ru'; try { LANG = localStorage.getItem('asa_lang') === 'en' ? 'en' : 'ru'; } catch (e) {}
 if (new URLSearchParams(location.search).get('lang') === 'en') LANG = 'en';
 const promptText = () => LANG === 'en' ? PROMPT_EN : PROMPT;
@@ -338,7 +313,7 @@ const nodes = [];
 function applyLang() {
   for (const [n, ru] of nodes) n.textContent = LANG === 'en' ? ru.replace(ru.trim(), EN[ru.trim()]) : ru;
   document.documentElement.lang = LANG;
-  document.title = LANG === 'en' ? 'Preparing a project for audit — AgentProof' : TITLE_RU;
+  document.title = LANG === 'en' ? 'Preparing a project for audit: AgentProof' : TITLE_RU;
   document.getElementById('langToggle').textContent = LANG === 'en' ? 'RU' : 'EN';
   paintPrompt();
 }
@@ -347,8 +322,8 @@ applyLang();
 
 const toast = m => { const t = document.getElementById('toast'); t.textContent = m; clearTimeout(toast.t); toast.t = setTimeout(() => t.textContent = '', 3000); };
 document.getElementById('copy').onclick = async () => {
-  try { await navigator.clipboard.writeText(promptText()); toast(LANG === 'en' ? 'Prompt copied — paste it to your agent' : 'Промпт скопирован — вставьте его своему агенту'); }
-  catch (e) { const r = document.createRange(); r.selectNodeContents(document.getElementById('promptView')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast(LANG === 'en' ? 'Prompt selected — press Ctrl+C' : 'Промпт выделен — нажмите Ctrl+C'); }
+  try { await navigator.clipboard.writeText(promptText()); toast(LANG === 'en' ? 'Prompt copied: paste it to your agent' : 'Промпт скопирован: вставьте его своему агенту'); }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(document.getElementById('promptView')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast(LANG === 'en' ? 'Prompt selected: press Ctrl+C' : 'Промпт выделен: нажмите Ctrl+C'); }
 };
 document.getElementById('dl').onclick = () => {
   const a = document.createElement('a');
@@ -357,5 +332,28 @@ document.getElementById('dl').onclick = () => {
   toast(LANG === 'en' ? 'agentproof-prompt.md downloaded' : 'Файл agentproof-prompt.md скачан');
 };
 </script>
+<script>// Каждое предложение с новой строки: перенос внутри текстового узла и white-space:pre-line.
+// Перевод «Подготовки» хранит исходные узлы, поэтому перенос ставится заново после каждой смены языка.
+(function () {
+  var SEL = 'main p,section p,.hero p,.lead,.intro,article p,article li,section li';
+  var go = function () {
+    document.querySelectorAll(SEL).forEach(function (el) {
+      if (el.closest('pre,code,.prompt,#promptView,.site-foot,.facts')) return;
+      el.style.whiteSpace = 'pre-line';
+      var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
+      while ((n = w.nextNode())) {
+        var t = n.textContent.replace(/([.!?…])[  ]+(?=[«"А-ЯЁA-Z0-9])/g, '$1\n');
+        if (t !== n.textContent) n.textContent = t;
+      }
+    });
+  };
+  go();
+  if (typeof applyLang === 'function') { var o = applyLang; window.applyLang = function () { var r = o.apply(this, arguments); go(); return r; }; }
+  var lt = document.getElementById('lt');
+  if (lt) lt.addEventListener('click', function () { setTimeout(go, 0); });
+})();
+</script>
+<link rel="stylesheet" href="ap.css?v=11">
+<script src="ap-ui.js?v=11"></script>
 </body>
 </html>

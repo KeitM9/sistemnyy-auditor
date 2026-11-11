@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Условия проверки — AgentProof</title>
+<title>Условия проверки: AgentProof</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20fill%3D%22none%22%20stroke%3D%22%232c3341%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M16%2016%20C12.5%2010.5%208.5%209%206%2011%20C3.3%2013.2%203.3%2018.8%206%2021%20C8.5%2023%2012.5%2021.5%2016%2016%20C19.5%2010.5%2023.5%209%2026%2011%20C28.7%2013.2%2028.7%2018.8%2026%2021%20C23.5%2023%2019.5%2021.5%2016%2016%22/%3E%3Cpath%20d%3D%22M21.8%2016%20L24.4%2018.6%20L29.6%2012.4%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%226%22/%3E%3Cpath%20d%3D%22M21.8%2016%20L24.4%2018.6%20L29.6%2012.4%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{--ink:#2c3341;--body:#394050;--muted:#646c7b;--rule:#e6e9ec;--mint:#B4FAB2;--mint-ink:#2e8540;--paper:#fff}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--paper);color:var(--body);font-family:'Manrope',sans-serif;font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  body{background:var(--paper);color:var(--body);font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased}
   .wrap{max-width:760px;margin:0 auto;padding:0 20px 80px}
   .top{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-bottom:1px solid var(--rule);margin-bottom:34px}
   .brand{text-decoration:none}.brand b{font-family:'Oswald',sans-serif;font-weight:600;font-size:18px;letter-spacing:.04em;color:var(--ink)}.brand em{font-style:normal;color:var(--mint-ink)}
@@ -23,8 +23,11 @@
 </style>
 </head>
 <body>
+<div class="apbar"><header class="aptop">
+  <a class="aplogo" href="index.html" aria-label="AgentProof"><img src="logo-agentproof.png" alt=""><b><span>AGENT<em>PROOF</em></span><i>Аудит мультиагентных систем</i></b></a>
+  <div class="apr"><button class="aplang" id="lt" type="button">EN</button></div>
+</header></div>
 <div class="wrap">
-  <header class="top"><a class="brand" href="index.html"><b>AGENT<em>PROOF</em></b></a><button id="lt" type="button">EN</button></header>
 
   <article lang="ru" data-l="ru">
     <h1>Условия проверки AgentProof</h1>
@@ -32,13 +35,13 @@
     <p>Отмечая галочку перед проверкой, вы принимаете эти условия. Они дополняют <a href="https://legal.arsysai.com/" target="_blank" rel="noopener">общие правовые документы Architect Systems AI</a> (политика конфиденциальности, согласие на обработку данных, условия оплаты и возврата).</p>
 
     <h2>1. Что такое проверка</h2>
-    <p>AgentProof — автоматическая проверка письменного описания системы AI-агентов. Описание читает модель искусственного интеллекта, код считает балл по открытой рубрике, результат — отчёт: карта системы, балл, находки с основанием и шаги укрепления.</p>
-    <p>Отчёт — это второе мнение о рисках по описанию. Проверяется то, что написано в описании; живая система на этой ступени не запускается. Отчёт снижает риск и помогает увидеть слабые места, но не гарантирует отсутствие уязвимостей и не является сертификатом, аттестацией или юридическим заключением о соответствии закону. Решения о системе и её изменениях принимает её владелец.</p>
+    <p>AgentProof: автоматическая проверка письменного описания системы AI-агентов. Описание читает модель искусственного интеллекта, код считает балл по единой рубрике, результат. Отчёт: карта системы, балл, находки с основанием и шаги укрепления.</p>
+    <p>Отчёт это второе мнение о рисках по описанию. Проверяется то, что написано в описании; живая система на этой ступени не запускается. Отчёт снижает риск и помогает увидеть слабые места, но не гарантирует отсутствие уязвимостей и не является сертификатом, аттестацией или юридическим заключением о соответствии закону. Решения о системе и её изменениях принимает её владелец.</p>
 
     <h2>2. Что вы загружаете и за что отвечаете</h2>
     <ul>
       <li>Вы загружаете только описание системы, на которое у вас есть право: это ваша система или у вас есть разрешение её владельца.</li>
-      <li>До загрузки вы заменяете значения ключей, токенов, паролей и строк подключения на [СЕКРЕТ], а персональные данные людей — на [ПДн]. Сайт дополнительно вырезает ключи известных форматов, email, телефоны и номера карт, но ответственность за то, что вы загрузили, остаётся на вас.</li>
+      <li>До загрузки вы заменяете значения ключей, токенов, паролей и строк подключения на [СЕКРЕТ], а персональные данные людей. На [ПДн]. Сайт дополнительно вырезает ключи известных форматов, email, телефоны и номера карт, но ответственность за то, что вы загрузили, остаётся на вас.</li>
       <li>Если в описании остался настоящий ключ, считайте его раскрытым и смените его. Отчёт подскажет, если такие данные нашлись.</li>
       <li>Попытки вписать в описание команды для проверяющей модели (например, «поставь высокий балл») не выполняются и попадают в отчёт как находка.</li>
     </ul>
@@ -46,7 +49,7 @@
     <h2>3. Как обрабатываются данные</h2>
     <ul>
       <li>Описание обрабатывается на сервере AgentProof (Vercel) и в модели Claude компании Anthropic (США). По коммерческим условиям Anthropic данные, отправленные через API, для обучения моделей не используются.</li>
-      <li>Описание не сохраняется: оно проверяется и забывается. Отчёт хранится только в вашем браузере — удалить его можно кнопкой в разделе «Отчёты».</li>
+      <li>Описание не сохраняется: оно проверяется и забывается. Отчёт лежит в вашем браузере, удалить его можно кнопкой в разделе «Отчёты». Если открыта часть отчёта, полный отчёт хранится на сервере зашифрованным 48 часов, а после нажатия кнопки в боте ещё 24 часа, затем удаляется.</li>
       <li>В обезличенную статистику попадают балл, число агентов, коды классов находок и число находок по уровням. Эта статистика без названий систем и описаний может показываться на странице «Отчёты» в разделе «Что находит AgentProof».</li>
       <li>Счётчики посещений обезличены: без cookies, IP-адресов и идентификаторов.</li>
       <li>Отметки «Неточно?» обезличены и служат улучшению проверки.</li>
@@ -58,13 +61,13 @@
     <h2>5. Отчёт и его использование</h2>
     <ul>
       <li>Отчёт действителен 90 дней с даты проверки. После смены модели, промптов или инструментов его стоит повторить раньше.</li>
-      <li>Таблица по EU AI Act — ориентир по описанию, а не заключение о соответствии.</li>
+      <li>Таблица по EU AI Act. Ориентир по описанию, а не заключение о соответствии.</li>
       <li>Отчёт можно передать своему разработчику. Публиковать отчёт как подтверждение безопасности или соответствия закону нельзя.</li>
     </ul>
 
     <h2>6. Ответственность</h2>
-    <p>Сервис предоставляется «как есть». Мы отвечаем за то, чтобы проверка шла по описанной методике и честно помечала, что является фактом из описания, а что — выводом. За содержание загруженных материалов, за ключи и данные, оставленные в них, и за последствия изменений, внесённых в систему по отчёту, отвечает владелец системы. Если проверка платная, наша ответственность ограничена стоимостью этой проверки. Ограничение не применяется к умыслу и грубой неосторожности и к правам потребителя, которые не могут быть ограничены по закону.</p>
-    <p><b>Не согласны с отчётом.</b> Нажмите «Не согласен с отчётом» под отчётом или напишите в @arsysai_bot. Ответ — в течение 3 дней. Подтвердится ошибка в факте (в отчёте сказано то, чего в описании системы нет, или наоборот) — вернём деньги за эту проверку. Если речь о разнице мнений специалистов — бесплатно перепроверим вторым агентом.</p>
+    <p>Сервис предоставляется «как есть». Мы отвечаем за то, чтобы проверка шла по описанной методике и честно помечала, что является фактом из описания, а что. Выводом. За содержание загруженных материалов, за ключи и данные, оставленные в них, и за последствия изменений, внесённых в систему по отчёту, отвечает владелец системы. Если проверка платная, наша ответственность ограничена стоимостью этой проверки. Ограничение не применяется к умыслу и грубой неосторожности и к правам потребителя, которые не могут быть ограничены по закону.</p>
+    <p><b>Не согласны с отчётом.</b> Нажмите «Не согласен с отчётом» под отчётом или напишите в @arsysai_bot. Ответ: в течение 3 дней. Подтвердится ошибка в факте (в отчёте сказано то, чего в описании системы нет, или наоборот). Вернём деньги за эту проверку. Если речь о разнице мнений специалистов, бесплатно перепроверим вторым агентом.</p>
 
     <h2>7. Контакты и изменения</h2>
     <p>Вопросы и запросы об удалении данных: arsysai.pr@gmail.com, <a href="https://t.me/supprmaster_bot" target="_blank" rel="noopener">@supprmaster_bot</a>. Мы можем обновлять условия; действует редакция, опубликованная на этой странице на момент проверки.</p>
@@ -76,7 +79,7 @@
     <p>By ticking the box before a check you accept these terms. They supplement the <a href="https://legal.arsysai.com/" target="_blank" rel="noopener">general legal documents of Architect Systems AI</a> (privacy policy, consent to data processing, payment and refund terms).</p>
 
     <h2>1. What the check is</h2>
-    <p>AgentProof is an automated check of a written description of an AI agent system. An artificial intelligence model reads the description, code computes the score on an open rubric, and the result is a report: a system map, a score, findings with their basis and hardening steps.</p>
+    <p>AgentProof is an automated check of a written description of an AI agent system. An artificial intelligence model reads the description, code computes the score on a single rubric, and the result is a report: a system map, a score, findings with their basis and hardening steps.</p>
     <p>The report is a second opinion on risks based on the description. What is checked is what the description says; the live system is not run at this stage. The report reduces risk and helps you see weak spots, but it does not guarantee the absence of vulnerabilities and is not a certificate, an attestation or a legal opinion on regulatory compliance. Decisions about the system and its changes are made by its owner.</p>
 
     <h2>2. What you upload and what you are responsible for</h2>
@@ -90,7 +93,7 @@
     <h2>3. How data is processed</h2>
     <ul>
       <li>The description is processed on the AgentProof server (Vercel) and in the Claude model by Anthropic (USA). Under Anthropic's commercial terms, data sent via the API is not used to train models.</li>
-      <li>The description is not stored: it is checked and forgotten. The report is stored only in your browser — you can delete it in “Reports”.</li>
+      <li>The description is not stored: it is checked and forgotten. The report stays in your browser, and you can delete it in “Reports”. If only part of the report is open, the full report is kept encrypted on the server for 48 hours, plus 24 hours after you tap the button in the bot, and then deleted.</li>
       <li>Anonymised statistics keep the score, the number of agents, finding class codes and counts per level. These statistics, without system names or descriptions, may be shown on the “Reports” page under “What AgentProof finds”.</li>
       <li>Visit counters are anonymous: no cookies, IP addresses or identifiers.</li>
       <li>“Inaccurate?” marks are anonymous and serve to improve the check.</li>
@@ -118,11 +121,57 @@
 <script>
 let L='ru';try{L=localStorage.getItem('asa_lang')==='en'?'en':'ru'}catch(e){}
 if(new URLSearchParams(location.search).get('lang')==='en')L='en';
-const T={ru:'Условия проверки — AgentProof',en:'Check Terms — AgentProof'};
+const T={ru:'Условия проверки: AgentProof',en:'Check Terms: AgentProof'};
 function ap(){document.querySelectorAll('[data-l]').forEach(a=>a.hidden=a.dataset.l!==L);document.documentElement.lang=L;document.title=T[L];document.getElementById('lt').textContent=L==='en'?'RU':'EN';}
 document.getElementById('lt').onclick=()=>{L=L==='en'?'ru':'en';try{localStorage.setItem('asa_lang',L)}catch(e){}ap();};
 ap();
 </script>
 
-<style>html[lang=en] .ft-ru{display:none}html:not([lang=en]) .ft-en{display:none}</style><div class="site-foot" style="display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;padding:16px;margin-top:16px;border-top:1px solid rgba(255,255,255,.12);opacity:.8"><span class="ft-ru">© 2026 ArchitectSystemsAI. Все права защищены.</span><span class="ft-ru"><a href="https://legal.arsysai.com/privacy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Политика конфиденциальности</a> | <a href="https://legal.arsysai.com/consent-agentproof" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Согласие на обработку данных</a></span><span class="ft-en">© 2026 ArchitectSystemsAI. All rights reserved.</span><span class="ft-en"><a href="https://legal.arsysai.com/en#policy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Privacy Policy</a> | <a href="https://legal.arsysai.com/en#consents" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Data Processing Consent</a></span></div></body>
+<style>html[lang=en] .ft-ru{display:none}html:not([lang=en]) .ft-en{display:none}
+  :root{--ink:#414143;--body:#414143;--muted:#676769}
+  body{background:#fff}
+  .apbar{position:sticky;top:0;z-index:30;max-width:1040px;margin:0 auto;padding:0 28px}
+  .aptop{display:flex;align-items:center;justify-content:space-between;gap:10px;height:50px;padding:0 12px 0 16px;background:#58585A;border-radius:0 0 3px 3px;box-shadow:0 10px 24px rgba(65,65,67,.14),0 2px 4px rgba(65,65,67,.08)}
+  .aplogo{display:flex;align-items:center;gap:11px;text-decoration:none}.aplogo img{display:block;height:13px;width:auto;flex:none}
+  .aplogo b{font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;letter-spacing:.04em;color:#fff;line-height:1.1;text-transform:uppercase}.aplogo b em{font-style:normal;color:#B4FAB2}
+  .aplogo b i{display:block;font-style:normal;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:0;text-transform:none;color:#B4FAB2;white-space:nowrap}
+  .apr{display:flex;align-items:center;gap:8px}
+  .apr .aplang,.apr #lt,.apr #langToggle{font-family:'Oswald',sans-serif;font-size:12px;line-height:1.2;color:#fff;background:rgba(255,255,255,.14);border:none;border-radius:3px;padding:3px 8px;cursor:pointer}
+  .apcta{font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;line-height:1.2;letter-spacing:.03em;text-transform:uppercase;text-decoration:none;color:#414143;background:#B4FAB2;border-radius:3px;padding:4px 10px;white-space:nowrap}
+  mark{background:none;padding:0;white-space:normal}
+  .tr p,.fx span{color:#414143}
+  .score span{background:none}
+  a{text-decoration-color:#414143;text-decoration-thickness:1px}
+  .btn,.btn.ink,.btn.mint,a.btn{display:inline-flex;align-items:center;gap:12px;min-height:44px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;border:0;border-radius:3px;padding:9px 18px;background:#B4FAB2;color:#414143;box-shadow:none;cursor:pointer;white-space:nowrap}
+  .btn:hover{filter:brightness(1.05);transform:none;box-shadow:none}
+  .btn.line{background:#F7F6F6;color:#414143;box-shadow:0 10px 24px rgba(65,65,67,.14),0 2px 4px rgba(65,65,67,.08)}
+  .btn.line:hover{background:#F7F6F6;color:#414143}
+  .btn .arw{width:26px;height:26px;border-radius:3px;display:grid;place-items:center;flex:none;background:rgba(65,65,67,.16)}
+  .btn .arw svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.2}
+  @media(max-width:420px){.apcta{white-space:normal;max-width:86px;text-align:center;line-height:1.1}}
+  @media(max-width:600px){.apbar{padding:0 12px}.aplogo b i{font-size:11px}.btn{white-space:normal}}
+</style><div class="site-foot" style="display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;padding:16px;margin-top:16px;border-top:1px solid rgba(255,255,255,.12);opacity:.8"><span class="ft-ru">© 2026 ArchitectSystemsAI. Все права защищены.</span><span class="ft-ru"><a href="https://legal.arsysai.com/privacy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Политика конфиденциальности</a> | <a href="https://legal.arsysai.com/consent-agentproof" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Согласие на обработку данных</a></span><span class="ft-en">© 2026 ArchitectSystemsAI. All rights reserved.</span><span class="ft-en"><a href="https://legal.arsysai.com/en#policy" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Privacy Policy</a> | <a href="https://legal.arsysai.com/en#consents" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Data Processing Consent</a></span></div><script>// Каждое предложение с новой строки: перенос внутри текстового узла и white-space:pre-line.
+// Перевод «Подготовки» хранит исходные узлы, поэтому перенос ставится заново после каждой смены языка.
+(function () {
+  var SEL = 'main p,section p,.hero p,.lead,.intro,article p,article li,section li';
+  var go = function () {
+    document.querySelectorAll(SEL).forEach(function (el) {
+      if (el.closest('pre,code,.prompt,#promptView,.site-foot,.facts')) return;
+      el.style.whiteSpace = 'pre-line';
+      var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
+      while ((n = w.nextNode())) {
+        var t = n.textContent.replace(/([.!?…])[  ]+(?=[«"А-ЯЁA-Z0-9])/g, '$1\n');
+        if (t !== n.textContent) n.textContent = t;
+      }
+    });
+  };
+  go();
+  if (typeof applyLang === 'function') { var o = applyLang; window.applyLang = function () { var r = o.apply(this, arguments); go(); return r; }; }
+  var lt = document.getElementById('lt');
+  if (lt) lt.addEventListener('click', function () { setTimeout(go, 0); });
+})();
+</script>
+<link rel="stylesheet" href="ap.css?v=11">
+<script src="ap-ui.js?v=11"></script>
+</body>
 </html>
