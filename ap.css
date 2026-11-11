@@ -212,3 +212,9 @@ html body .x-oldstats>div+div::before{content:"·";margin:0 9px;font-family:var(
 html body .group li::before{width:6px!important;height:6px!important;border-radius:50%!important;background:#B4FAB2!important;box-shadow:inset 0 0 0 1px rgba(65,65,67,.3);top:.62em!important}
 
 html body h1 .pf{color:#16A34A;font-style:normal}
+
+/* «Подготовка»: блок о данных */
+#data .apdata{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px}
+#data .apdata>div{background:#F7F6F6;border-radius:3px;padding:14px 16px}
+#data .apdata h3{margin:0 0 6px!important}
+#data .apdata p{margin:0!important;font-size:15px!important;line-height:1.5!important}
