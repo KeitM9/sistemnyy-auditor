@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Условия проверки: AgentProof</title>
+<title>Условия аудита: AgentProof</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%20fill%3D%22none%22%20stroke%3D%22%232c3341%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M16%2016%20C12.5%2010.5%208.5%209%206%2011%20C3.3%2013.2%203.3%2018.8%206%2021%20C8.5%2023%2012.5%2021.5%2016%2016%20C19.5%2010.5%2023.5%209%2026%2011%20C28.7%2013.2%2028.7%2018.8%2026%2021%20C23.5%2023%2019.5%2021.5%2016%2016%22/%3E%3Cpath%20d%3D%22M21.8%2016%20L24.4%2018.6%20L29.6%2012.4%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%226%22/%3E%3Cpath%20d%3D%22M21.8%2016%20L24.4%2018.6%20L29.6%2012.4%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -30,7 +30,7 @@
 <div class="wrap">
 
   <article lang="ru" data-l="ru">
-    <h1>Условия проверки AgentProof</h1>
+    <h1>Условия аудита Agent<em class="pf">Proof</em></h1>
     <p class="meta">Architect Systems AI · agentproof.arsysai.com · редакция от 12.10.2026</p>
     <p>Отмечая галочку перед проверкой, вы принимаете эти условия. Они дополняют <a href="https://legal.arsysai.com/" target="_blank" rel="noopener">общие правовые документы Architect Systems AI</a> (политика конфиденциальности, согласие на обработку данных, условия оплаты и возврата).</p>
 
@@ -74,7 +74,7 @@
   </article>
 
   <article lang="en" data-l="en" hidden>
-    <h1>AgentProof Check Terms</h1>
+    <h1>AgentProof Audit Terms</h1>
     <p class="meta">Architect Systems AI · agentproof.arsysai.com · version of 12 Oct 2026</p>
     <p>By ticking the box before a check you accept these terms. They supplement the <a href="https://legal.arsysai.com/" target="_blank" rel="noopener">general legal documents of Architect Systems AI</a> (privacy policy, consent to data processing, payment and refund terms).</p>
 
@@ -121,7 +121,7 @@
 <script>
 let L='ru';try{L=localStorage.getItem('asa_lang')==='en'?'en':'ru'}catch(e){}
 if(new URLSearchParams(location.search).get('lang')==='en')L='en';
-const T={ru:'Условия проверки: AgentProof',en:'Check Terms: AgentProof'};
+const T={ru:'Условия аудита: AgentProof',en:'Audit Terms: AgentProof'};
 function ap(){document.querySelectorAll('[data-l]').forEach(a=>a.hidden=a.dataset.l!==L);document.documentElement.lang=L;document.title=T[L];document.getElementById('lt').textContent=L==='en'?'RU':'EN';}
 document.getElementById('lt').onclick=()=>{L=L==='en'?'ru':'en';try{localStorage.setItem('asa_lang',L)}catch(e){}ap();};
 ap();
@@ -171,7 +171,7 @@ ap();
   if (lt) lt.addEventListener('click', function () { setTimeout(go, 0); });
 })();
 </script>
-<link rel="stylesheet" href="ap.css?v=12">
-<script src="ap-ui.js?v=12"></script>
+<link rel="stylesheet" href="ap.css?v=13">
+<script src="ap-ui.js?v=13"></script>
 </body>
 </html>

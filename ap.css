@@ -210,3 +210,5 @@ html body .x-oldstats>div+div::before{content:"·";margin:0 9px;font-family:var(
 
 /* «Подготовка»: маркеры списков точками, а не чёрточками */
 html body .group li::before{width:6px!important;height:6px!important;border-radius:50%!important;background:#B4FAB2!important;box-shadow:inset 0 0 0 1px rgba(65,65,67,.3);top:.62em!important}
+
+html body h1 .pf{color:#16A34A;font-style:normal}

@@ -198,6 +198,10 @@ html body #consentBox .csrow input{width:20px;height:20px}
 html body #consentBox .csrow small{font-size:13px!important}
 html body #consentBox{max-width:640px}
 
+.hm-buy{color:#414143;text-decoration:none;border-bottom:2px solid #B4FAB2;white-space:nowrap}
+.hm-buy:hover{background:#B4FAB2}
+html body h1 .pf{color:#16A34A;font-style:normal}
+
 /* «Отчёты»: без карточек цен и без блока «закрыто», вместо них пункты аудита на реальном отчёте */
 html body #example .ex4cols,html body #showcase{display:none!important}
 .incx{margin:6px 0 30px;padding-top:24px;border-top:1px solid #E6E5E5}
