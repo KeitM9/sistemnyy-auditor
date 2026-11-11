@@ -191,6 +191,13 @@ html body #consentBox .cshint{font-size:13px!important;color:#676769;margin:8px 
 @media(max-width:860px){.hm-four{grid-template-columns:1fr 1fr!important}}
 @media(max-width:640px){.hm-four{grid-template-columns:1fr!important}}
 
+/* согласия по образцу Екатерины (тёмный блок), на белом */
+html body #consentBox .csh{text-transform:none!important;font-size:24px!important;letter-spacing:.01em!important}
+html body #consentBox .csrow{padding:12px 14px!important;margin-bottom:10px!important}
+html body #consentBox .csrow input{width:20px;height:20px}
+html body #consentBox .csrow small{font-size:13px!important}
+html body #consentBox{max-width:640px}
+
 /* «Отчёты»: без карточек цен и без блока «закрыто», вместо них пункты аудита на реальном отчёте */
 html body #example .ex4cols,html body #showcase{display:none!important}
 .incx{margin:6px 0 30px;padding-top:24px;border-top:1px solid #E6E5E5}

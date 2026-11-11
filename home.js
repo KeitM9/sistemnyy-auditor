@@ -25,8 +25,8 @@ hm_inc_h:"Что входит",
 hm_free_l:"Первая проверка",hm_full_l:"Полный аудит",
 hm_free:"Балл системы и вердикт|Слабое звено и сильное место|Все находки заголовками|Главная находка полностью",
 hm_full:"Отчёт по системе: все находки с цепочками и основанием|Исправление каждой находки: что сделать и как проверить|План укрепления с тестами, от критичных находок|PDF и задачи разработчику|Повторная проверка после исправлений с новым баллом",
-hm_order:"Заявка на полный аудит",
-hm_order_note:"Заявка приходит Екатерине в Telegram. Разовая оплата.",
+hm_order:"Купить полный аудит",
+hm_order_note:"Разовая оплата через Tribute. Сервисный сбор Tribute 30 $.",
 hm_fix_h:"После аудита: агент-исправитель",
 hm_fix_p:"Отдельная услуга для тех, кто хочет закрыть находки без поиска разработчика.<br>Цена зависит от сложности и обсуждается лично с Екатериной.",
 hm_fix:"Собирается под находки вашей системы|Открытый текстовый файл, его можно прочитать до установки|Работает в Claude Code, Cursor, Codex, Windsurf|Правки в отдельной копии, каждую вы подтверждаете сами",
@@ -89,8 +89,8 @@ hm_inc_h:"What is included",
 hm_free_l:"First check",hm_full_l:"Full audit",
 hm_free:"System score and verdict|Weak link and strong point|Every finding as a headline|The main finding in full",
 hm_full:"System report: every finding with its chain and basis|A fix for every finding: what to do and how to verify|Hardening plan with tests, critical findings first|PDF and developer tasks|A retest after fixes with a new score",
-hm_order:"Request the full audit",
-hm_order_note:"Your request goes to Ekaterina on Telegram. One-time payment.",
+hm_order:"Buy the full audit",
+hm_order_note:"One-time payment via Tribute. Tribute service fee $30.",
 hm_fix_h:"After the audit: fixer agent",
 hm_fix_p:"A separate service for closing findings without hiring a developer.<br>The price depends on complexity and is discussed with Ekaterina in person.",
 hm_fix:"Built for the findings of your system|An open text file you can read before installing|Works in Claude Code, Cursor, Codex, Windsurf|Changes go into a separate copy, you approve each one",
@@ -137,7 +137,7 @@ function paint(){
   var D=L();if(!q('#hmFree'))return;
   q('#hmFree').innerHTML=li(D.hm_free);q('#hmFull').innerHTML=li(D.hm_full);q('#hmFix').innerHTML=li(D.hm_fix);
   paintCmp();
-  paintLab();paintConsent();
+  paintLab();paintConsent();document.querySelectorAll('a[data-i18n="hm_order"]').forEach(function(a){a.href=(typeof lang!=='undefined'&&lang==='en')?'https://web.tribute.tg/p/Jp7':'https://web.tribute.tg/p/Jp4'});
   q('#hmBars').innerHTML=[6.0,6.7,7.7,7.9,8.0,8.3,8.4,8.7].map(function(v){return '<div style="height:'+(v*10)+'%"><em>'+v.toFixed(1)+'</em></div>'}).join('');
 }
 var cur=0;
@@ -152,7 +152,7 @@ document.addEventListener('click',function(e){var b=e.target.closest('[data-cmp]
 function paintLab(){var v=q('[data-view="lab"]');if(!v)return;var box=q('#labIntro');if(!box){box=document.createElement('div');box.id='labIntro';box.className='lab-intro';var t=q('#labTable');t.parentNode.insertBefore(box,t);}
   var D=L(),T=function(k){return (I18N[lang]&&I18N[lang][k])||I18N.ru[k]};
   box.innerHTML=[1,2,3].map(function(n){return '<div><span class="hm-n">'+n+'</span><b>'+T('lab_i'+n+'h')+'</b><p>'+T('lab_i'+n)+'</p></div>'}).join('');}
-function paintConsent(){var rows=document.querySelectorAll('#consentBox .csrow small');['cs_w1','cs_w2','cs_w3'].forEach(function(k,i){if(rows[i]){rows[i].setAttribute('data-i18n',k);rows[i].textContent=(I18N[lang]&&I18N[lang][k])||I18N.ru[k];}});
+function paintConsent(){var rows=document.querySelectorAll('#consentBox .csrow small');[].forEach(function(k,i){if(rows[i]){rows[i].setAttribute('data-i18n',k);rows[i].textContent=(I18N[lang]&&I18N[lang][k])||I18N.ru[k];}});
   var sub=q('#consentBox .cssub');if(sub){sub.setAttribute('data-i18n','cs_why');sub.textContent=(I18N[lang]&&I18N[lang].cs_why)||I18N.ru.cs_why;}}
 var o=window.applyLang;
 if(typeof o==='function')window.applyLang=applyLang=function(){var r=o.apply(this,arguments);paint();return r};
@@ -185,7 +185,7 @@ dev:"# Система продаж: задачи по отчёту AgentProof\n�
 reL:"Балл системы после каждой повторной проверки",
 re:[["Платный доступ по статичному коду из ссылки","Критично","Закрыто"],["Гонка при записи «оплачено» и начислений","Важно","Закрыто"],["Нет лимита обращений к модели на пользователя","Важно","Закрыто"]],
 reNote:"Повторная проверка идёт по тому же реестру находок: видно, что закрыто и что осталось.<br>На этой системе 8 проверок, 77 находок, балл вырос с 6.0 до 8.7.",
-was:"было",now:"стало",cta:"Заявка на полный аудит"};
+was:"было",now:"стало",cta:"Купить полный аудит",pdfB:"Скачать реальный отчёт PDF",pdfN:"Настоящий отчёт AgentProof по системе продаж: 45 страниц, 32 находки, балл 7.4.<br>Ключей и личных данных в нём нет.<br>Скачайте и проверьте его у любой нейросети.<br>Кнопки «Скачать PDF», «Задачи разработчику» и «Файл отчёта» есть внизу каждого отчёта."};
 var EN={
 h:"What the full audit includes",
 sub:"Five items, as on the audit card.<br>Under each one, a piece of a real report: a sales system with 4 bots and 2 AI agents, data anonymised.",
@@ -210,7 +210,7 @@ dev:"# Sales system: tasks from the AgentProof report\nScore 6/10 · with caveat
 reL:"System score after each retest",
 re:[["Paid access by a static code from a link","Critical","Fixed"],["Race between writing “paid” and crediting","Important","Fixed"],["No per-user limit on model calls","Important","Fixed"]],
 reNote:"A retest runs against the same findings registry: you see what is fixed and what is left.<br>On this system: 8 checks, 77 findings, the score went from 6.0 to 8.7.",
-was:"was",now:"now",cta:"Request the full audit"};
+was:"was",now:"now",cta:"Buy the full audit",pdfB:"Download the real report PDF",pdfN:"A real AgentProof report on a sales system: 45 pages, 32 findings, score 7.4.<br>It contains no keys or personal data.<br>Download it and check it with any AI model.<br>The Download PDF, Developer tasks and Report file buttons sit at the bottom of every report."};
 var cur=0,T=function(){return (typeof lang!=='undefined'&&lang==='en')?EN:RU};
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 function panel(i){var D=T();
@@ -219,14 +219,14 @@ function panel(i){var D=T();
   '<span class="hm-lbl">'+D.agentsL+'</span><div class="ic-agents">'+D.agents.map(function(a){return '<div><span>'+a[0]+'</span><b>'+a[1]+'</b></div>'}).join('')+'</div>';
  if(i===1)return '<div class="ic-find"><span class="ic-p r">'+D.fP+'</span><h3>'+D.fT+'</h3><div class="ic-f3"><div><span class="hm-lbl">'+D.fEvL+'</span><p>«'+D.fEv+'»</p></div><div><span class="hm-lbl">'+D.fDoL+'</span><p>'+D.fDo+'</p></div><div><span class="hm-lbl">'+D.fChL+'</span><p>'+D.fCh+'</p></div></div></div>';
  if(i===2)return '<div class="ic-plan"><div class="h">'+D.planH.join('</div><div class="h">')+'</div>'+D.plan.map(function(r){return '<div><span class="ic-p '+r[0]+'">'+r[1]+'</span></div><div>'+r[2]+'</div><div class="t">'+r[3]+'</div>'}).join('')+'</div>';
- if(i===3)return '<pre class="ic-dev">'+esc(D.dev)+'</pre><p class="hm-note">'+D.devNote+'</p>';
+ if(i===3)return '<p>'+D.pdfN+'</p><a class="btn pri" href="agentproof-real-report.pdf" download target="_blank" rel="noopener">'+D.pdfB+' <span class="arw"><svg viewBox="0 0 24 24"><path d="M12 4v12M6 11l6 6 6-6"/></svg></span></a>';
  return '<span class="hm-lbl">'+D.reL+'</span><div class="hm-bars ic-bars">'+[6.0,6.7,7.7,7.9,8.0,8.3,8.4,8.7].map(function(v){return '<div style="height:'+(v*10)+'%"><em>'+v.toFixed(1)+'</em></div>'}).join('')+'</div>'+
   '<div class="ic-re">'+D.re.map(function(r){return '<div><span>'+r[0]+'</span><em>'+D.was+': '+r[1]+'</em><b>'+D.now+': '+r[2]+'</b></div>'}).join('')+'</div><p class="hm-note">'+D.reNote+'</p>';
 }
 function paint(){var ex=document.getElementById('exampleFull');if(!ex)return;var box=document.getElementById('incBlock');
  if(!box){box=document.createElement('div');box.id='incBlock';box.className='incx';ex.parentNode.insertBefore(box,ex);}
  var D=T();box.innerHTML='<h2>'+D.h+'</h2><p>'+D.sub+'</p><div class="ic-grid"><div class="ic-tabs">'+D.items.map(function(t,i){return '<button type="button" data-inc="'+i+'" class="'+(i===cur?'on':'')+'"><span class="hm-n">'+(i+1)+'</span><span><b>'+t+'</b><small>'+D.d[i]+'</small></span></button>'}).join('')+
- '<a class="btn ghost" href="https://t.me/arsysai_bot?start=agentproof" target="_blank" rel="noopener">'+D.cta+'</a></div><div class="ic-panel">'+panel(cur)+'</div></div>';}
+ '<a class="btn ghost" href="'+((typeof lang!=='undefined'&&lang==='en')?'https://web.tribute.tg/p/Jp7':'https://web.tribute.tg/p/Jp4')+'" target="_blank" rel="noopener">'+D.cta+'</a></div><div class="ic-panel">'+panel(cur)+'</div></div>';}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-inc]');if(b){cur=+b.dataset.inc;paint();}});
 var o=window.applyLang;if(typeof o==='function')window.applyLang=applyLang=function(){var r=o.apply(this,arguments);paint();return r};
 paint();

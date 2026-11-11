@@ -11,7 +11,8 @@
     if(!box){box=document.createElement('div');box.className='apstats';var p=f.closest('p')||f;p.parentNode.insertBefore(box,p.nextSibling);}
     box.innerHTML=f.textContent.split('·').map(function(x){x=x.trim();var m=x.match(/^(\d+)\s+(.*)$/);return m?'<div><b>'+m[1]+'</b><span>'+m[2]+'</span></div>':'';}).join('');
   }
-  function all(){paintStats();}
+  function paintLogo(){var en=lang()==='en';document.querySelectorAll('.aplogo b i').forEach(function(e){e.textContent=en?'Audit':'Аудит'});document.querySelectorAll('[data-ap-cta]').forEach(function(e){e.textContent=en?'Check your system':'Проверить систему'});}
+  function all(){paintStats();paintLogo();}
   new MutationObserver(function(){setTimeout(all,0)}).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
   if(LB)LB.addEventListener('click',function(){setTimeout(all,0)});
   all();
