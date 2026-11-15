@@ -526,6 +526,12 @@
             <div class="hm-row"><button class="btn ghost" data-go="reports" data-i18n="hm_rep_btn"></button><span class="hm-note" data-i18n-html="hm_rep_note"></span></div>
           </div>
 
+          <div class="hm-sec">
+            <h2 data-i18n="fd_h"></h2>
+            <p data-i18n-html="fd_sub"></p>
+            <div class="hm-fd" id="hmFd"></div>
+          </div>
+
           <div class="hm-sec hm-case">
             <div>
               <h2 data-i18n="hm_case_h"></h2>
@@ -580,6 +586,11 @@
               <div><span class="hm-n">3</span><h3 data-i18n="hm_how2"></h3><p data-i18n-html="hm_how2p"></p></div>
               <div><span class="hm-n">4</span><h3 data-i18n="hm_how3"></h3><p data-i18n-html="hm_how3p"></p></div>
             </div>
+          </div>
+
+          <div class="hm-sec">
+            <h2 data-i18n="fq_h"></h2>
+            <div class="hm-fq" id="hmFq"></div>
           </div>
 
           <div class="hm-end">
@@ -1342,9 +1353,9 @@ window.show=function(v){var rep=document.getElementById('report'),home=document.
 <script>(function(){const OK="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12l5 5 9-10'/></svg>";document.addEventListener('click',function(e){if(e.target.closest('[data-pa]')&&typeof openExample==='function')openExample();});const fill=()=>{const L=(typeof lang!=='undefined'&&lang==='en')?'en':'ru';document.querySelectorAll('.c4l').forEach(u=>{u.innerHTML=JSON.parse(u.dataset[L]).map(x=>'<li>'+OK+'<span>'+x+'</span></li>').join('')});};fill();const o=window.applyLang;if(typeof o==='function')window.applyLang=function(){const r=o.apply(this,arguments);fill();return r};})();</script>
 <style>body:not([data-cur=overview]) .top2{display:none!important}</style>
 <script>(function(){var o=window.show;function m(v){document.body.dataset.cur=v}m(typeof curView!=="undefined"?curView:"overview");var h=location.hash.slice(1);if(["new","reports","lab"].indexOf(h)>-1)setTimeout(function(){show(h)},0);if(typeof o==="function")window.show=show=function(v){var r=o.apply(this,arguments);m(v);return r};})();</script>
-<link rel="stylesheet" href="ap.css?v=17">
-<link rel="stylesheet" href="home.css?v=17">
-<script src="home.js?v=17"></script>
-<script src="ap-ui.js?v=17"></script>
+<link rel="stylesheet" href="ap.css?v=18">
+<link rel="stylesheet" href="home.css?v=18">
+<script src="home.js?v=18"></script>
+<script src="ap-ui.js?v=18"></script>
 </body>
 </html>

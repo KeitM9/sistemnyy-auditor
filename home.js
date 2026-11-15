@@ -1,6 +1,6 @@
 (function(){
 var RU={
-hm_lead:"AgentProof проверяет описание мультиагентной системы.<br>Показывает слабые места в промптах, связях, правах и цепочках.<br>Вы получаете карту системы, балл и план укрепления.<br>Проверяйте до запуска и после каждого изменения.",
+hm_lead:"Независимый аудит архитектуры мультиагентных систем по описанию.<br>Доступ к работающей системе не нужен.<br>Мы проверяем систему целиком: агентов, связи между ними, права и цепочки.<br>Вы получаете карту системы, балл и план укрепления.",
 hm_facts:"<span>72 класса уязвимостей</span><i>·</i><span>13 типов багов в промптах</span><i>·</i><span>6 проверок каждого агента</span><i>·</i><span>16 системных проверок</span>",
 hm_sample:"Образец отчёта",
 hm_price:"<span>Первая проверка <b>0 $</b></span><i>·</i><a class=\"hm-buy\" data-buy href=\"https://t.me/tribute/app?startapp=pJp4\" target=\"_blank\" rel=\"noopener\">Полный аудит <b>2448 $</b></a>",
@@ -24,7 +24,7 @@ hm_cmp_src:"Цены и сроки: открытые страницы прода
 hm_inc_h:"Что входит",
 hm_free_l:"Первая проверка",hm_full_l:"Полный аудит",
 hm_free:"Балл системы и вердикт|Слабое звено и сильное место|Все находки заголовками|Главная находка полностью",
-hm_full:"Отчёт по системе: все находки с цепочками и основанием|Исправление каждой находки: что сделать и как проверить|План укрепления с тестами, от критичных находок|PDF и задачи разработчику|Повторная проверка после исправлений с новым баллом",
+hm_full:"Находим то, что обычно пропускают: стыки агентов, утечки ключей, инъекции из текста клиента, отсутствие лимитов|Цепочки атак с основанием: как именно можно сломать систему, каждое звено опирается на ваше описание|План укрепления: что чинить первым и как проверить, что дыра закрыта|PDF и задачи разработчику: готовый список, который можно сразу отдавать в работу|Повторный аудит: новый балл и подтверждение, что система стала крепче",
 hm_order:"Купить полный аудит",
 hm_order_note:"Разовая оплата через Tribute. Сервисный сбор Tribute 30 $.",
 hm_fix_h:"После аудита: агент-исправитель",
@@ -32,6 +32,7 @@ hm_fix_p:"Отдельная услуга для тех, кто хочет за�
 hm_fix:"Собирается под находки вашей системы|Открытый текстовый файл, его можно прочитать до установки|Работает в Claude Code, Cursor, Codex, Windsurf|Правки в отдельной копии, каждую вы подтверждаете сами",
 hm_fix_btn:"Обсудить с Екатериной",
 hm_fix_note:"Повторные прогоны аудита входят в стоимость агента-исправителя.",
+fd_h:"Что содержит каждая находка",fd_sub:"Технический директор видит не список рисков, а разбор, который можно проверить.",fd:"Класс сбоя|Какая из 72 проверок сработала~Основание|Цитата из вашего описания~Серьёзность|Критично, важно или укрепление~Последствия|Что может случиться и во что это обойдётся~Цепочка атаки|Шаги от входа до денег или ключей, вывод по описанию~Что сделать и как|Конкретный шаг и где его сделать~Как проверить|Тест, который подтверждает исправление",fq_h:"Вопросы и ответы",fq:"Что это|Независимый аудит архитектуры мультиагентной системы по её описанию. Движок строит карту, проходит 72 класса сбоев и считает балл по единой рубрике.~Чем это не является|Это не пентест и не атака на работающую систему. Для проверки живой системы нужен другой формат.~Что прислать|Описание системы, собранное промптом со страницы «Подготовка»: промпты, связи, права и настройки без значений ключей.~Сколько ждать|Отчёт готов через несколько минут после загрузки описания. Код доступа после оплаты выдаёт Екатерина в Telegram.~Оплата и данные|Первая проверка 0 $, полный аудит 2448 $ разово через Tribute. На серверах AgentProof описание не сохраняется, текст уходит в модель Claude (Anthropic) через API.",
 hm_how_h:"Как проходит аудит",
 hm_how1:"Заявка и код",hm_how1p:"Вы пишете в Telegram.<br>Екатерина выдаёт личный код доступа.",
 hm_how0:"Подготовка проекта",hm_how0p:"Промпт со страницы «Подготовка» собирает описание системы из папки проекта.<br>Ключи и доступы заменяются на [СЕКРЕТ], личные данные на [ПДн].<br>Ваши данные не уходят наружу.",
@@ -64,7 +65,7 @@ v:["Сканер дешевле и тоже быстрый.<br>Обычно он
 ["Атака на работающую систему","− Нет, проверка по описанию","+ Да","+ Да","+ Да"]]
 };
 var EN={
-hm_lead:"AgentProof reviews the description of your multi-agent system.<br>It shows weak spots in prompts, connections, permissions and chains.<br>You get a system map, a score and a hardening plan.<br>Check before launch and after every change.",
+hm_lead:"Independent architecture audit of multi-agent AI systems, based on your description.<br>No production access needed.<br>We check the system as a whole: agents, the links between them, permissions and chains.<br>You get a system map, a score and a hardening plan.",
 hm_facts:"<span>72 vulnerability classes</span><i>·</i><span>13 prompt bug types</span><i>·</i><span>6 checks per agent</span><i>·</i><span>16 system checks</span>",
 hm_sample:"Sample report",
 hm_price:"<span>First check <b>$0</b></span><i>·</i><a class=\"hm-buy\" data-buy href=\"https://t.me/tribute/app?startapp=pJp7\" target=\"_blank\" rel=\"noopener\">Full audit <b>$2448</b></a>",
@@ -88,7 +89,7 @@ hm_cmp_src:"Prices and timing: public seller pages and market reviews, November 
 hm_inc_h:"What is included",
 hm_free_l:"First check",hm_full_l:"Full audit",
 hm_free:"System score and verdict|Weak link and strong point|Every finding as a headline|The main finding in full",
-hm_full:"System report: every finding with its chain and basis|A fix for every finding: what to do and how to verify|Hardening plan with tests, critical findings first|PDF and developer tasks|A retest after fixes with a new score",
+hm_full:"We find what is usually missed: agent handoffs, key leaks, injections from customer text, missing limits|Attack chains with basis: exactly how the system can be broken, every link rests on your description|Hardening plan: what to fix first and how to verify the hole is closed|PDF and developer tasks: a ready list you can hand over right away|Follow-up audit: a new score and confirmation that the system got stronger",
 hm_order:"Buy the full audit",
 hm_order_note:"One-time payment via Tribute. Tribute service fee $30.",
 hm_fix_h:"After the audit: fixer agent",
@@ -96,6 +97,7 @@ hm_fix_p:"A separate service for closing findings without hiring a developer.<br
 hm_fix:"Built for the findings of your system|An open text file you can read before installing|Works in Claude Code, Cursor, Codex, Windsurf|Changes go into a separate copy, you approve each one",
 hm_fix_btn:"Talk to Ekaterina",
 hm_fix_note:"Repeat audit runs are included in the fixer agent price.",
+fd_h:"What every finding contains",fd_sub:"A CTO sees a breakdown that can be checked, not a list of risks.",fd:"Failure class|Which of the 72 checks fired~Basis|A quote from your description~Severity|Critical, important or hardening~Impact|What can happen and what it could cost~Attack chain|Steps from entry to money or keys, inferred from the description~Fix|A concrete step and where to make it~Verification|A test that confirms the fix",fq_h:"Questions and answers",fq:"What it is|An independent architecture audit of a multi-agent system based on its description. The engine builds a map, runs 72 failure classes and calculates a score on one rubric.~What it is not|This is not live red teaming or penetration testing of a running system. Testing a live system needs a different format.~What to send|A system description built with the prompt on the Preparation page: prompts, links, permissions and settings without key values.~How long it takes|The report is ready a few minutes after you upload the description. After payment, Ekaterina issues the access code on Telegram.~Payment and data|First check $0, full audit $2448 one-time via Tribute. The description is not saved on AgentProof servers, the text goes to the Claude model (Anthropic) through the API.",
 hm_how_h:"How the audit goes",
 hm_how1:"Request and code",hm_how1p:"You write on Telegram.<br>Ekaterina issues a personal access code.",
 hm_how0:"Project preparation",hm_how0p:"The prompt on the Preparation page builds the system description from your project folder.<br>Keys and access are replaced with [SECRET], personal data with [PII].<br>Your data does not leave.",
@@ -138,6 +140,7 @@ function paint(){
   q('#hmFree').innerHTML=li(D.hm_free);q('#hmFull').innerHTML=li(D.hm_full);q('#hmFix').innerHTML=li(D.hm_fix);
   paintCmp();
   paintLab();paintConsent();document.querySelectorAll('a[data-i18n="hm_order"]').forEach(function(a){a.href=(typeof lang!=='undefined'&&lang==='en')?'https://t.me/tribute/app?startapp=pJp7':'https://t.me/tribute/app?startapp=pJp4'});
+  var fd=q('#hmFd');if(fd)fd.innerHTML=D.fd.split('~').map(function(x,i){var p=x.split('|');return '<div><span class="hm-n">'+(i+1)+'</span><b>'+p[0]+'</b><p>'+p[1]+'</p></div>'}).join('');var fq=q('#hmFq');if(fq)fq.innerHTML=D.fq.split('~').map(function(x){var p=x.split('|');return '<details><summary>'+p[0]+'</summary><p>'+p[1]+'</p></details>'}).join('');
   q('#hmBars').innerHTML=[6.0,6.7,7.7,7.9,8.0,8.3,8.4,8.7].map(function(v){return '<div style="height:'+(v*10)+'%"><em>'+v.toFixed(1)+'</em></div>'}).join('');
 }
 var cur=0;
@@ -164,8 +167,8 @@ applyLang();
 var RU={
 h:"Что входит в полный аудит",
 sub:"Пять пунктов, как в карточке аудита.<br>Под каждым кусок реального отчёта: система продаж, 4 бота и 2 AI-агента, данные обезличены.",
-items:["Отчёт по системе","Исправление каждой находки","План укрепления с тестами","PDF и задачи разработчику","Повторная проверка"],
-d:["Все находки с цепочками и основанием","Что сделать и как проверить","Порядок работ от критичных находок","Готовый список для вашей команды","После исправлений, с новым баллом"],
+items:["Находим то, что обычно пропускают","Цепочки атак с основанием","План укрепления","PDF и задачи разработчику","Повторный аудит"],
+d:["Стыки, ключи, инъекции, лимиты","Как именно можно сломать систему","Что чинить первым и как проверить","Готовый список в работу","Новый балл после исправлений"],
 verdict:"С оговорками",weakL:"Слабое звено",weak:"Выдача платного доступа по коду из служебной ссылки.<br>Это единственный вход в «оплачено», который напрямую зависит от текста клиента.",
 strongL:"Сильное место",strong:"Платёжная связка пишет в базу ключом только на добавление записей.<br>Ключи в контекст модели не попадают.",
 chainL:"Как могут атаковать · вывод по описанию",chain:["Клиент отправляет ссылку с подобранным кодом","Бот ставит «оплачено» и выдаёт токен","Платный доступ без оплаты"],
@@ -189,8 +192,8 @@ was:"было",now:"стало",cta:"Купить полный аудит",pdfB:
 var EN={
 h:"What the full audit includes",
 sub:"Five items, as on the audit card.<br>Under each one, a piece of a real report: a sales system with 4 bots and 2 AI agents, data anonymised.",
-items:["System report","A fix for every finding","Hardening plan with tests","PDF and developer tasks","Retest"],
-d:["Every finding with its chain and basis","What to do and how to verify","Work order from critical findings","A ready list for your team","After fixes, with a new score"],
+items:["We find what is usually missed","Attack chains with basis","Hardening plan","PDF and developer tasks","Follow-up audit"],
+d:["Handoffs, keys, injections, limits","Exactly how the system can be broken","What to fix first and how to verify","A ready list for your team","A new score after fixes"],
 verdict:"With caveats",weakL:"Weak link",weak:"Paid access is issued by a code from a service link.<br>It is the only way into “paid” that depends directly on customer text.",
 strongL:"Strong point",strong:"The payment link writes to the database with an append-only key.<br>Keys never reach the model context.",
 chainL:"How it could be attacked · inferred from the description",chain:["A customer sends a link with a guessed code","The bot marks “paid” and issues a token","Paid access without payment"],
@@ -215,9 +218,8 @@ var cur=0,T=function(){return (typeof lang!=='undefined'&&lang==='en')?EN:RU};
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 function panel(i){var D=T();
  if(i===0)return '<div class="ic-sum"><div class="ic-score"><b>6</b><small>/10</small><span>'+D.verdict+'</span></div><div><span class="hm-lbl r">'+D.weakL+'</span><p>'+D.weak+'</p><span class="hm-lbl">'+D.strongL+'</span><p>'+D.strong+'</p></div></div>'+
-  '<span class="hm-lbl">'+D.chainL+'</span><div class="ic-chain">'+D.chain.map(function(c,k){return (k?'<i>→</i>':'')+'<span class="'+(k===2?'r':'')+'">'+c+'</span>'}).join('')+'</div>'+
   '<span class="hm-lbl">'+D.agentsL+'</span><div class="ic-agents">'+D.agents.map(function(a){return '<div><span>'+a[0]+'</span><b>'+a[1]+'</b></div>'}).join('')+'</div>';
- if(i===1)return '<div class="ic-find"><span class="ic-p r">'+D.fP+'</span><h3>'+D.fT+'</h3><div class="ic-f3"><div><span class="hm-lbl">'+D.fEvL+'</span><p>«'+D.fEv+'»</p></div><div><span class="hm-lbl">'+D.fDoL+'</span><p>'+D.fDo+'</p></div><div><span class="hm-lbl">'+D.fChL+'</span><p>'+D.fCh+'</p></div></div></div>';
+ if(i===1)return '<span class="hm-lbl">'+D.chainL+'</span><div class="ic-chain">'+D.chain.map(function(c,k){return (k?'<i>→</i>':'')+'<span class="'+(k===2?'r':'')+'">'+c+'</span>'}).join('')+'</div>'+'<div class="ic-find"><span class="ic-p r">'+D.fP+'</span><h3>'+D.fT+'</h3><div class="ic-f3"><div><span class="hm-lbl">'+D.fEvL+'</span><p>«'+D.fEv+'»</p></div><div><span class="hm-lbl">'+D.fDoL+'</span><p>'+D.fDo+'</p></div><div><span class="hm-lbl">'+D.fChL+'</span><p>'+D.fCh+'</p></div></div></div>';
  if(i===2)return '<div class="ic-plan"><div class="h">'+D.planH.join('</div><div class="h">')+'</div>'+D.plan.map(function(r){return '<div><span class="ic-p '+r[0]+'">'+r[1]+'</span></div><div>'+r[2]+'</div><div class="t">'+r[3]+'</div>'}).join('')+'</div>';
  if(i===3)return '<p>'+D.pdfN+'</p><a class="btn pri" href="agentproof-real-report.pdf" download target="_blank" rel="noopener">'+D.pdfB+' <span class="arw"><svg viewBox="0 0 24 24"><path d="M12 4v12M6 11l6 6 6-6"/></svg></span></a>';
  return '<span class="hm-lbl">'+D.reL+'</span><div class="hm-bars ic-bars">'+[6.0,6.7,7.7,7.9,8.0,8.3,8.4,8.7].map(function(v){return '<div style="height:'+(v*10)+'%"><em>'+v.toFixed(1)+'</em></div>'}).join('')+'</div>'+
