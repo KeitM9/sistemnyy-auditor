@@ -218,3 +218,6 @@ html body h1 .pf{color:#16A34A;font-style:normal}
 #data .apdata>div{background:#F7F6F6;border-radius:3px;padding:14px 16px}
 #data .apdata h3{margin:0 0 6px!important}
 #data .apdata p{margin:0!important;font-size:15px!important;line-height:1.5!important}
+
+.apprice{display:block;margin:0 0 10px;font-size:15px;color:#414143}
+.apprice a{color:#414143;text-decoration:none;border-bottom:2px solid #B4FAB2;font-family:'Oswald',sans-serif!important;font-weight:500!important}

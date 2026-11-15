@@ -3,7 +3,7 @@ var RU={
 hm_lead:"AgentProof проверяет описание мультиагентной системы.<br>Показывает слабые места в промптах, связях, правах и цепочках.<br>Вы получаете карту системы, балл и план укрепления.<br>Проверяйте до запуска и после каждого изменения.",
 hm_facts:"<span>72 класса уязвимостей</span><i>·</i><span>13 типов багов в промптах</span><i>·</i><span>6 проверок каждого агента</span><i>·</i><span>16 системных проверок</span>",
 hm_sample:"Образец отчёта",
-hm_price:"<span>Первая проверка <b>0 $</b></span><i>·</i><a class=\"hm-buy\" data-buy href=\"https://web.tribute.tg/p/Jp4\" target=\"_blank\" rel=\"noopener\">Полный аудит <b>2448 $</b></a>",
+hm_price:"<span>Первая проверка <b>0 $</b></span><i>·</i><a class=\"hm-buy\" data-buy href=\"https://t.me/tribute/app?startapp=pJp4\" target=\"_blank\" rel=\"noopener\">Полный аудит <b>2448 $</b></a>",
 hm_rep_h:"Каким будет ваш отчёт",
 hm_rep_sub:"Образец: учебный интернет-магазин с агентом поддержки и автодеплоем.<br>Все ключи и данные вымышленные.",
 hm_rep_score:"Балл по единой рубрике",hm_rep_v:"С оговорками",hm_rep_f:"8.0 после плана",
@@ -67,7 +67,7 @@ var EN={
 hm_lead:"AgentProof reviews the description of your multi-agent system.<br>It shows weak spots in prompts, connections, permissions and chains.<br>You get a system map, a score and a hardening plan.<br>Check before launch and after every change.",
 hm_facts:"<span>72 vulnerability classes</span><i>·</i><span>13 prompt bug types</span><i>·</i><span>6 checks per agent</span><i>·</i><span>16 system checks</span>",
 hm_sample:"Sample report",
-hm_price:"<span>First check <b>$0</b></span><i>·</i><a class=\"hm-buy\" data-buy href=\"https://web.tribute.tg/p/Jp7\" target=\"_blank\" rel=\"noopener\">Full audit <b>$2448</b></a>",
+hm_price:"<span>First check <b>$0</b></span><i>·</i><a class=\"hm-buy\" data-buy href=\"https://t.me/tribute/app?startapp=pJp7\" target=\"_blank\" rel=\"noopener\">Full audit <b>$2448</b></a>",
 hm_rep_h:"What your report looks like",
 hm_rep_sub:"Sample: a training online store with a support agent and auto-deploy.<br>All keys and data are made up.",
 hm_rep_score:"Score on one rubric",hm_rep_v:"With caveats",hm_rep_f:"8.0 after the plan",
@@ -137,7 +137,7 @@ function paint(){
   var D=L();if(!q('#hmFree'))return;
   q('#hmFree').innerHTML=li(D.hm_free);q('#hmFull').innerHTML=li(D.hm_full);q('#hmFix').innerHTML=li(D.hm_fix);
   paintCmp();
-  paintLab();paintConsent();document.querySelectorAll('a[data-i18n="hm_order"]').forEach(function(a){a.href=(typeof lang!=='undefined'&&lang==='en')?'https://web.tribute.tg/p/Jp7':'https://web.tribute.tg/p/Jp4'});
+  paintLab();paintConsent();document.querySelectorAll('a[data-i18n="hm_order"]').forEach(function(a){a.href=(typeof lang!=='undefined'&&lang==='en')?'https://t.me/tribute/app?startapp=pJp7':'https://t.me/tribute/app?startapp=pJp4'});
   q('#hmBars').innerHTML=[6.0,6.7,7.7,7.9,8.0,8.3,8.4,8.7].map(function(v){return '<div style="height:'+(v*10)+'%"><em>'+v.toFixed(1)+'</em></div>'}).join('');
 }
 var cur=0;
@@ -226,7 +226,7 @@ function panel(i){var D=T();
 function paint(){var ex=document.getElementById('exampleFull');if(!ex)return;var box=document.getElementById('incBlock');
  if(!box){box=document.createElement('div');box.id='incBlock';box.className='incx';ex.parentNode.insertBefore(box,ex);}
  var D=T();box.innerHTML='<h2>'+D.h+'</h2><p>'+D.sub+'</p><div class="ic-grid"><div class="ic-tabs">'+D.items.map(function(t,i){return '<button type="button" data-inc="'+i+'" class="'+(i===cur?'on':'')+'"><span class="hm-n">'+(i+1)+'</span><span><b>'+t+'</b><small>'+D.d[i]+'</small></span></button>'}).join('')+
- '<a class="btn ghost" href="'+((typeof lang!=='undefined'&&lang==='en')?'https://web.tribute.tg/p/Jp7':'https://web.tribute.tg/p/Jp4')+'" target="_blank" rel="noopener">'+D.cta+'</a></div><div class="ic-panel">'+panel(cur)+'</div></div>';}
+ '<a class="btn ghost" href="'+((typeof lang!=='undefined'&&lang==='en')?'https://t.me/tribute/app?startapp=pJp7':'https://t.me/tribute/app?startapp=pJp4')+'" target="_blank" rel="noopener">'+D.cta+'</a></div><div class="ic-panel">'+panel(cur)+'</div></div>';}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-inc]');if(b){cur=+b.dataset.inc;paint();}});
 var o=window.applyLang;if(typeof o==='function')window.applyLang=applyLang=function(){var r=o.apply(this,arguments);paint();return r};
 paint();
