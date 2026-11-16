@@ -222,7 +222,17 @@ html body h1 .pf{color:#16A34A;font-style:normal}
 .apprice{display:block;margin:0 0 10px;font-size:15px;color:#414143}
 .apprice a{color:#414143;text-decoration:none;border-bottom:2px solid #B4FAB2;font-family:'Oswald',sans-serif!important;font-weight:500!important}
 
-/* поддержка: маленькая кнопка в углу на всех страницах */
-html body a.apsup{position:fixed;right:16px;bottom:16px;z-index:60;background:#FFFFFF;color:#414143;border:1px solid #414143;border-radius:3px;padding:7px 12px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:400;font-size:13px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;line-height:1}
-html body a.apsup:hover{background:#B4FAB2}
 .hm-fq details a{color:#16A34A}
+
+/* подвал: Политика | Согласие | Поддержка и соцсети */
+.site-foot .ft-soc{display:inline-flex;gap:14px}
+.hm-upd{margin-top:10px}
+.hm-upd summary{cursor:pointer;color:#16A34A}
+#hmUpd .v2h{display:none}
+
+/* подвал цветом шапки, слова и значки при наведении мятные */
+html body .site-foot{background:#58585A!important;color:#FFFFFF!important;opacity:1!important;border-top:0!important;margin-top:24px!important;padding:16px 20px!important;align-items:center}
+html body .site-foot a{color:#FFFFFF!important;transition:color .15s}
+html body .site-foot a:hover{color:#B4FAB2!important}
+.site-foot .ft-ic{display:inline-flex;width:20px;height:20px}
+.site-foot .ft-ic svg{width:20px;height:20px;fill:currentColor}
