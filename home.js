@@ -4,7 +4,7 @@ hm_lead:"Независимый аудит архитектуры мультиа
 hm_facts:"<span>72 класса уязвимостей</span><i>·</i><span>13 типов багов в промптах</span><i>·</i><span>6 проверок каждого агента</span><i>·</i><span>16 системных проверок</span>",
 hm_sample:"Образец отчёта",
 hm_price:"<a class=\"hm-buy\" data-buy href=\"https://t.me/tribute/app?startapp=pJp4\" target=\"_blank\" rel=\"noopener\">Пройти полный аудит</a>",
-hm_upd:"Каждую неделю мы проверяем собственную систему AgentProof.<br>Каждую неделю она обновляется с учётом новых утечек данных и взломов.",hm_upd_more:"Свежие случаи, которые уже входят в проверку",
+hm_upd:"AgentProof обновляет базу проверок каждую неделю, учитывая новые утечки данных, взломы и обнаруженные уязвимости. Свежие инциденты становятся частью методологии аудита.",hm_upd_more:"Свежие случаи, которые уже входят в проверку",
 hm_rep_h:"Каким будет ваш отчёт",
 hm_rep_sub:"Образец: учебный интернет-магазин с агентом поддержки и автодеплоем.<br>Все ключи и данные вымышленные.",
 hm_rep_score:"Балл по единой рубрике",hm_rep_v:"С оговорками",hm_rep_f:"8.0 после плана",
@@ -70,7 +70,7 @@ hm_lead:"Independent architecture audit of multi-agent AI systems, based on your
 hm_facts:"<span>72 vulnerability classes</span><i>·</i><span>13 prompt bug types</span><i>·</i><span>6 checks per agent</span><i>·</i><span>16 system checks</span>",
 hm_sample:"Sample report",
 hm_price:"<a class=\"hm-buy\" data-buy href=\"https://t.me/tribute/app?startapp=pJp7\" target=\"_blank\" rel=\"noopener\">Take the full audit</a>",
-hm_upd:"Every week we audit our own AgentProof system.<br>Every week it is updated with new data leaks and breaches.",hm_upd_more:"Recent cases already included in the check",
+hm_upd:"AgentProof updates its check base every week, taking into account new data leaks, breaches and discovered vulnerabilities. Fresh incidents become part of the audit methodology.",hm_upd_more:"Recent cases already included in the check",
 hm_rep_h:"What your report looks like",
 hm_rep_sub:"Sample: a training online store with a support agent and auto-deploy.<br>All keys and data are made up.",
 hm_rep_score:"Score on one rubric",hm_rep_v:"With caveats",hm_rep_f:"8.0 after the plan",
@@ -235,4 +235,47 @@ function paint(){var ex=document.getElementById('exampleFull');if(!ex)return;var
 document.addEventListener('click',function(e){var b=e.target.closest('[data-inc]');if(b){cur=+b.dataset.inc;paint();}});
 var o=window.applyLang;if(typeof o==='function')window.applyLang=applyLang=function(){var r=o.apply(this,arguments);paint();return r};
 paint();
+})();
+
+/* «Обновления системы» на главной: последнее обновление раскрывается по пунктам,
+   каждый новый класс ведёт в «Библиотеку сбоев», где он отмечен меткой «новое». 16.11.2026 */
+(function(){
+var TX={ru:{last:"Последнее обновление",plus:"новых классов: {n}",open:"Открыть библиотеку сбоев",libH:"История угроз и обновлений AgentProof",libSub:"Инциденты каждой недели и проверки, которые после них появились в аудите.",happ:"Что произошло",vul:"Уязвимость",add:"Что добавлено в AgentProof",added:"Добавлено в проверку",chk:"Что проверяем",seen:"Так уже случилось",lib:"Показать класс в библиотеке",prev:"Прошлые обновления",
+  new:"новое",libNote:"Библиотека сбоев пополняется каждую неделю.<br>Последнее обновление: {d}. Новые классы отмечены меткой «новое».",cls:"класс",feat:"в отчёте"},
+ en:{last:"Latest update",plus:"new classes: {n}",open:"Open the failure library",libH:"Threat history and AgentProof updates",libSub:"Incidents of each week and the checks that entered the audit after them.",happ:"What happened",vul:"Vulnerability",add:"What was added to AgentProof",added:"Added to the check",chk:"What we check",seen:"Already happened",lib:"Show the class in the library",prev:"Earlier updates",
+  new:"new",libNote:"The failure library grows every week.<br>Latest update: {d}. New classes carry a “new” mark.",cls:"class",feat:"in the report"}};
+function L(){return (typeof lang!=='undefined'&&lang==='en')?'en':'ru'}
+function has(){return typeof UPDATES!=='undefined'&&UPDATES.length}
+function inLib(c){return c&&typeof BUGS!=='undefined'&&BUGS.lib.some(function(x){return x[0]===c})}
+function name(c){try{return libn(c)}catch(e){return ''}}
+function item(it,i,open){var l=L(),T=TX[l],v=it[l],link=inLib(it.cls),nm=link?name(it.cls):'';
+ return '<details class="up-i"'+(open?' open':'')+'><summary><span class="up-n">'+(i+1)+'</span><b>'+v[0]+'</b>'+
+  '<span class="up-c">'+(it.cls?it.cls:T.feat)+'</span></summary><div class="up-b">'+
+  (v[2]?'<p><span class="up-k">'+T.happ+'</span>'+v[2]+'</p>':'')+
+  (nm?'<p><span class="up-k">'+T.vul+'</span>'+nm+'</p>':'')+
+  '<p><span class="up-k">'+T.add+'</span>'+v[1]+'</p>'+
+  (link?'<button type="button" class="up-go" data-up-cls="'+it.cls+'">'+T.lib+' →</button>':'')+'</div></details>';}
+function block(){var l=L(),T=TX[l],w=UPDATES[0];
+ return '<div class="up-head"><span class="up-tag">'+w.wk[l]+'</span><span>'+T.added+': '+w.items.length+'</span></div>'+
+  w.items.map(function(it,i){return item(it,i,i===0)}).join('')+
+  (UPDATES.length>1?'<details class="up-prev"><summary>'+T.prev+'</summary>'+UPDATES.slice(1).map(function(o){
+   return '<div class="up-wk"><span class="up-tag">'+o.wk[l]+'</span>'+o.items.map(function(it,i){return item(it,i,false)}).join('')+'</div>'}).join('')+'</details>':'');}
+function paint(){var box=document.getElementById('hmUpdBox');if(!box)return;box.innerHTML='<button type="button" class="btn pri up-open"><span>'+TX[L()].open+'</span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>';}
+// Библиотека: строка о последнем обновлении и метки «новое» у классов последнего обновления
+function markLib(){var tb=document.getElementById('labTable');if(!tb||!has())return;var l=L(),T=TX[l];
+ var note=document.getElementById('labUpd');if(!note){note=document.createElement('div');note.id='labUpd';note.className='up up-lib';tb.parentNode.insertBefore(note,tb);}
+ if(note.dataset.l!==l){note.dataset.l=l;note.innerHTML='<h3 class="up-h">'+T.libH+'</h3><p class="up-sub">'+T.libSub+'</p>'+block();}
+ var fresh={};UPDATES[0].items.forEach(function(it){if(inLib(it.cls))fresh[name(it.cls)]=it.cls});
+ tb.querySelectorAll('details.bgi>summary').forEach(function(s){var c=fresh[s.textContent.replace(T.new,'').trim()];
+  if(c&&!s.querySelector('.up-new')){s.insertAdjacentHTML('beforeend',' <span class="up-new">'+T.new+'</span>');s.parentNode.dataset.cls=c;
+   var g=s.parentNode.closest('details.bg');if(g&&!g.querySelector(':scope>summary .up-new'))g.querySelector(':scope>summary').insertAdjacentHTML('beforeend',' <span class="up-new">'+T.new+'</span>');}});}
+function openInLib(c){if(typeof show==='function')show('lab');setTimeout(function(){markLib();var d=document.querySelector('#labTable details.bgi[data-cls="'+c+'"]');
+ if(!d){var n=name(c);document.querySelectorAll('#labTable details.bgi>summary').forEach(function(s){if(!d&&s.textContent.indexOf(n)===0)d=s.parentNode})}
+ if(!d)return;var g=d.closest('details.bg');if(g)g.open=true;d.open=true;d.classList.add('up-hl');d.scrollIntoView({block:'center'});setTimeout(function(){d.classList.remove('up-hl')},2500);},120);}
+document.addEventListener('click',function(e){var b=e.target.closest('[data-up-cls]');if(b)openInLib(b.dataset.upCls);
+ if(e.target.closest('.up-open')&&typeof show==='function'){show('lab');setTimeout(function(){markLib();var x=document.getElementById('labUpd');if(x)x.scrollIntoView({block:'start'});window.scrollBy(0,-90)},120);}});
+function all(){paint();markLib();}
+var o=window.applyLang;if(typeof o==='function')window.applyLang=applyLang=function(){var r=o.apply(this,arguments);all();return r};
+var s=window.show;if(typeof s==='function')window.show=show=function(v){var r=s.apply(this,arguments);if(v==='lab')setTimeout(markLib,0);return r};
+all();
 })();

@@ -222,13 +222,10 @@ html body h1 .pf{color:#16A34A;font-style:normal}
 .apprice{display:block;margin:0 0 10px;font-size:15px;color:#414143}
 .apprice a{color:#414143;text-decoration:none;border-bottom:2px solid #B4FAB2;font-family:'Oswald',sans-serif!important;font-weight:500!important}
 
-.hm-fq details a{color:#16A34A}
+.hm-fq details a{color:#414143;text-decoration:none;box-shadow:inset 0 -3px 0 #B4FAB2}
 
 /* подвал: Политика | Согласие | Поддержка и соцсети */
 .site-foot .ft-soc{display:inline-flex;gap:14px}
-.hm-upd{margin-top:10px}
-.hm-upd summary{cursor:pointer;color:#16A34A}
-#hmUpd .v2h{display:none}
 
 /* подвал цветом шапки, слова и значки при наведении мятные */
 html body .site-foot{background:#58585A!important;color:#FFFFFF!important;opacity:1!important;border-top:0!important;margin-top:24px!important;padding:16px 20px!important;align-items:center}
@@ -236,3 +233,44 @@ html body .site-foot a{color:#FFFFFF!important;transition:color .15s}
 html body .site-foot a:hover{color:#B4FAB2!important}
 .site-foot .ft-ic{display:inline-flex;width:20px;height:20px}
 .site-foot .ft-ic svg{width:20px;height:20px;fill:currentColor}
+
+/* «Обновления системы»: последнее обновление по пунктам, только мятный акцент */
+.up{margin-top:14px;max-width:880px}
+.up-lib{border-left:3px solid #B4FAB2;padding-left:16px;margin:4px 0 22px}
+.up-h{margin:0 0 8px!important;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:500;font-size:18px;letter-spacing:.05em;text-transform:uppercase;color:#414143}
+.up-mini{display:flex;gap:12px;align-items:center;flex-wrap:wrap;color:#676769;font-size:14px}
+.up-mini .up-open{margin-left:auto}
+@media(max-width:640px){.up-mini .up-open{margin-left:0}}
+.up-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px;color:#676769;font-size:14px}
+.up-tag{background:#B4FAB2;color:#414143;border-radius:3px;padding:3px 8px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:13px;letter-spacing:.05em;text-transform:uppercase}
+.up-i{border-bottom:1px solid #E6E5E5}
+.up-i>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:11px 0}
+.up-i>summary::-webkit-details-marker{display:none}
+.up-i>summary::after{content:"+";margin-left:8px;color:#414143;font-size:18px;line-height:1}
+.up-i[open]>summary::after{content:"−"}
+.up-i>summary b{flex:1;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:500;font-size:16px;letter-spacing:.04em;text-transform:uppercase;color:#414143}
+.up-n{flex:none;width:24px;height:24px;border-radius:3px;background:#F7F6F6;display:inline-flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:13px;color:#414143}
+.up-i[open] .up-n{background:#B4FAB2}
+.up-c{flex:none;font-size:12px;color:#676769;border:1px solid #E6E5E5;border-radius:3px;padding:1px 6px}
+.up-b{padding:0 0 12px 34px}
+.up-b p{margin:0 0 8px!important;font-size:15.5px!important;line-height:1.5!important}
+.up-k{display:block;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#676769;margin-bottom:2px}
+.up-go{background:none;border:0;padding:0;cursor:pointer;font:inherit;font-size:15px;color:#414143;box-shadow:inset 0 -3px 0 #B4FAB2}
+.up-go:hover{background:#B4FAB2}
+.up-prev{margin-top:12px}
+.up-prev>summary{cursor:pointer;color:#414143;font-size:15px;box-shadow:inset 0 -3px 0 #B4FAB2;display:inline-block}
+.up-wk{margin-top:12px}
+.up-new{background:#B4FAB2;color:#414143;border-radius:3px;padding:1px 6px;font-size:11px;font-family:'Oswald',sans-serif;letter-spacing:.05em;text-transform:uppercase;vertical-align:middle}
+.up-libnote{margin:0 0 12px!important;padding:10px 14px;background:#F7F6F6;border-left:3px solid #B4FAB2;border-radius:3px;font-size:15px!important}
+.up-hl>summary{background:#B4FAB2}
+@media(max-width:640px){.up{padding-left:10px}.up-b{padding-left:0}.up-c{display:none}}
+
+.up-row{display:flex;align-items:center;gap:16px 32px;flex-wrap:wrap}
+.up-row>p{flex:1 1 420px;max-width:640px;margin:0!important}
+.up-sub{margin:0 0 10px!important;color:#676769;font-size:15px!important}
+
+/* все кнопки одного вида: как «Проверить систему», без свечения */
+html body .btn.ghost,html body .btn.ghost:hover{background:#B4FAB2!important;color:#414143!important;box-shadow:none!important;border:0!important}
+html body .btn,html body .btn:hover{box-shadow:none!important}
+/* «Видно всем посетителям сайта» в библиотеке не показываем */
+[data-view="lab"] .scope{display:none!important}

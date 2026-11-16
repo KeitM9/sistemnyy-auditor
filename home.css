@@ -211,7 +211,7 @@ html body h1 .pf{color:#16A34A;font-style:normal}
 .hm-fq details{border-bottom:1px solid #E6E5E5}
 .hm-fq summary{cursor:pointer;list-style:none;padding:12px 0;font-family:'Oswald','Arial Narrow',Arial,sans-serif!important;font-weight:500!important;font-size:16px!important;letter-spacing:.05em!important;text-transform:uppercase;display:flex;justify-content:space-between;gap:12px}
 .hm-fq summary::-webkit-details-marker{display:none}
-.hm-fq summary::after{content:"+";color:#16A34A;font-size:20px;line-height:1}
+.hm-fq summary::after{content:"+";color:#414143;font-size:20px;line-height:1}
 .hm-fq details[open] summary::after{content:"−"}
 .hm-fq details p{margin:0 0 12px!important;font-size:15.5px!important}
 
