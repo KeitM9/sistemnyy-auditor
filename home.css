@@ -200,7 +200,8 @@ html body #consentBox{max-width:640px}
 
 .hm-buy{color:#414143;text-decoration:none;border-bottom:2px solid #B4FAB2;white-space:nowrap}
 .hm-buy:hover{background:#B4FAB2}
-html body h1 .pf{color:#16A34A;font-style:normal}
+html body h1 .pf{color:#B4FAB2;font-style:normal}
+html body .apbrand{display:inline-block;background:#58585A;color:#FFFFFF;padding:0 .22em;border-radius:3px;line-height:1.15}
 
 /* каждая находка: 7 полей; вопросы и ответы */
 .hm-fd{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:14px}

@@ -211,7 +211,8 @@ html body .x-oldstats>div+div::before{content:"·";margin:0 9px;font-family:var(
 /* «Подготовка»: маркеры списков точками, а не чёрточками */
 html body .group li::before{width:6px!important;height:6px!important;border-radius:50%!important;background:#B4FAB2!important;box-shadow:inset 0 0 0 1px rgba(65,65,67,.3);top:.62em!important}
 
-html body h1 .pf{color:#16A34A;font-style:normal}
+html body h1 .pf{color:#B4FAB2;font-style:normal}
+html body .apbrand{display:inline-block;background:#58585A;color:#FFFFFF;padding:0 .22em;border-radius:3px;line-height:1.15}
 
 /* «Подготовка»: блок о данных */
 #data .apdata{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px}
@@ -311,3 +312,9 @@ html body .btn,html body .btn:hover{box-shadow:none!important}
 .aps-note a{color:#414143;box-shadow:inset 0 -3px 0 #B4FAB2;text-decoration:none}
 @media(max-width:760px){.aps-cols{grid-template-columns:1fr}.apstart{padding:20px 14px}}
 html body .btn.line,html body .btn.line:hover{background:#B4FAB2!important;color:#414143!important;border:0!important;box-shadow:none!important}
+
+.aps-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;align-items:stretch}
+.aps-grid h3{margin:0!important;font-size:18px!important;align-self:end}
+.aps-grid .aps-row{margin:0;align-items:center;min-height:64px;box-sizing:border-box}
+.aps-grid .aps-row input{margin:0}
+@media(max-width:760px){.aps-grid{grid-template-columns:1fr}.aps-hp{order:0}.aps-p{order:1}.aps-hc{order:2;margin-top:8px!important}.aps-c{order:3}}
