@@ -275,3 +275,6 @@ html body #example .ex4cols,html body #showcase{display:none!important}
   .ic-re div{grid-template-columns:1fr auto}
   .ic-re em{display:none}
 }
+
+.ic-top{margin:6px 0 18px}
+.ic-top .ic-bars{margin-top:28px!important}

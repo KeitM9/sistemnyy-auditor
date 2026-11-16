@@ -62,7 +62,7 @@
     <h2>3. Как обрабатываются данные</h2>
     <ul>
       <li>Описание обрабатывается на сервере AgentProof (Vercel) и в модели Claude компании Anthropic (США). По коммерческим условиям Anthropic данные, отправленные через API, для обучения моделей не используются.</li>
-      <li>Описание не сохраняется: оно проверяется и забывается. Отчёт лежит в вашем браузере, удалить его можно кнопкой в разделе «Отчёты». Если открыта часть отчёта, полный отчёт хранится на сервере зашифрованным 48 часов, а после нажатия кнопки в боте ещё 24 часа, затем удаляется.</li>
+      <li>На серверах AgentProof описание не сохраняется: текст уходит в модель Claude (Anthropic, США) через API. Отчёт лежит в вашем браузере, удалить его можно кнопкой в разделе «Отчёты». Если открыта часть отчёта, полный отчёт хранится на сервере зашифрованным 48 часов, а после нажатия кнопки в боте ещё 24 часа, затем удаляется.</li>
       <li>В обезличенную статистику попадают балл, число агентов, коды классов находок и число находок по уровням. Эта статистика без названий систем и описаний может показываться на странице «Отчёты» в разделе «Что находит AgentProof».</li>
       <li>Счётчики посещений обезличены: без cookies, IP-адресов и идентификаторов.</li>
       <li>Отметки «Неточно?» обезличены и служат улучшению проверки.</li>
@@ -106,7 +106,7 @@
     <h2>3. How data is processed</h2>
     <ul>
       <li>The description is processed on the AgentProof server (Vercel) and in the Claude model by Anthropic (USA). Under Anthropic's commercial terms, data sent via the API is not used to train models.</li>
-      <li>The description is not stored: it is checked and forgotten. The report stays in your browser, and you can delete it in “Reports”. If only part of the report is open, the full report is kept encrypted on the server for 48 hours, plus 24 hours after you tap the button in the bot, and then deleted.</li>
+      <li>The description is not saved on AgentProof servers: the text goes to the Claude model (Anthropic, USA) through the API. The report stays in your browser, and you can delete it in “Reports”. If only part of the report is open, the full report is kept encrypted on the server for 48 hours, plus 24 hours after you tap the button in the bot, and then deleted.</li>
       <li>Anonymised statistics keep the score, the number of agents, finding class codes and counts per level. These statistics, without system names or descriptions, may be shown on the “Reports” page under “What AgentProof finds”.</li>
       <li>Visit counters are anonymous: no cookies, IP addresses or identifiers.</li>
       <li>“Inaccurate?” marks are anonymous and serve to improve the check.</li>
@@ -184,7 +184,7 @@ ap();
   if (lt) lt.addEventListener('click', function () { setTimeout(go, 0); });
 })();
 </script>
-<link rel="stylesheet" href="ap.css?v=17">
-<script src="ap-ui.js?v=17"></script>
+<link rel="stylesheet" href="ap.css?v=19">
+<script src="ap-ui.js?v=19"></script>
 </body>
 </html>
