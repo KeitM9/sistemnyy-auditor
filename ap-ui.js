@@ -15,10 +15,10 @@
   // Оплата только после согласий: любая ссылка на Tribute открывает окно с тремя согласиями (16.11.2026)
   var PAY={ru:{h:'Прежде чем оплатить',sub:'Подтвердите три согласия.<br>Без них мы не можем принять заказ.',req:'обязательно',
      rows:[['Политика конфиденциальности','https://legal.arsysai.com/privacy'],['Обработка персональных данных','https://legal.arsysai.com/consent-agentproof'],['Соглашение и условия аудита','terms.html']],
-     go:'Перейти к оплате',wait:'Отметьте обязательные пункты, чтобы перейти к оплате',note:'Оплата разово через Tribute.<br>После оплаты Екатерина выдаст код доступа в Telegram.',close:'Закрыть',url:'https://t.me/tribute/app?startapp=pJp4'},
+     go:'Перейти к оплате',wait:'Отметьте обязательные пункты, чтобы перейти к оплате',note:'Оплата разово через Tribute.<br>После оплаты Architect Systems AI выдаст код доступа в Telegram.',close:'Закрыть',url:'https://t.me/tribute/app?startapp=pJp4'},
    en:{h:'Before you pay',sub:'Please confirm three consents.<br>We cannot accept the order without them.',req:'required',
      rows:[['Privacy Policy','https://legal.arsysai.com/en#policy'],['Personal data processing','https://legal.arsysai.com/en#consents'],['Audit agreement and terms','terms.html?lang=en']],
-     go:'Go to payment',wait:'Tick the required boxes to go to payment',note:'One-time payment via Tribute.<br>After payment, Ekaterina issues the access code on Telegram.',close:'Close',url:'https://t.me/tribute/app?startapp=pJp7'}};
+     go:'Go to payment',wait:'Tick the required boxes to go to payment',note:'One-time payment via Tribute.<br>After payment, Architect Systems AI issues the access code on Telegram.',close:'Close',url:'https://t.me/tribute/app?startapp=pJp7'}};
   function payOpen(){var T=PAY[lang()],m=document.getElementById('appay');if(m)m.remove();m=document.createElement('div');m.id='appay';m.className='appay';
     m.innerHTML='<div class="appay-box" role="dialog" aria-modal="true" aria-labelledby="appayH"><button type="button" class="appay-x" aria-label="'+T.close+'">×</button>'+
      '<h2 id="appayH">'+T.h+'</h2><p class="appay-sub">'+T.sub+'</p>'+

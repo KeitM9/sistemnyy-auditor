@@ -318,3 +318,7 @@ html body .btn.line,html body .btn.line:hover{background:#B4FAB2!important;color
 .aps-grid .aps-row{margin:0;align-items:center;min-height:64px;box-sizing:border-box}
 .aps-grid .aps-row input{margin:0}
 @media(max-width:760px){.aps-grid{grid-template-columns:1fr}.aps-hp{order:0}.aps-p{order:1}.aps-hc{order:2;margin-top:8px!important}.aps-c{order:3}}
+
+/* Кнопки чёткие: без теней и свечения на всех страницах. 16.11.2026 */
+html body :is(button,.btn,.cta,.langbtn,.apcta,.aplang,a.btn,.up-go,.pl-all,.pl-copy,[data-buy],[data-ap-cta]){box-shadow:none!important;text-shadow:none!important;filter:none!important}
+html body :is(button,.btn,.cta,.langbtn,.apcta,.aplang,a.btn):is(:hover,:focus,:active){box-shadow:none!important;filter:none!important}
