@@ -500,7 +500,7 @@ export function normalize(map, probe, fin, ax, lang, meta, devil = { p1: [] }) {
   devil = { p1: Object.values(dv) };
   const refuted = hard.filter(h => h.p === 'P1' && dv[h.id]?.verdict === 'removed' && h.st !== 'closed').map(h => ({ id: h.id, t: h.t, why: `${dv[h.id].arg}: ${dv[h.id].why}${dv[h.id].quote ? ` — «${cut(dv[h.id].quote, 160)}»` : ''}` }));
   const refIds = new Set(refuted.map(r => r.id));
-  hard = hard.filter(h => !refIds.has(h.id)).map(h => h.p === 'P1' && dv[h.id]?.verdict === 'downgraded' ? { ...h, p: 'P2', basis: 'hypothesis', dv: 'down', how: h.how + (dv[h.id].residual ? ` Остаток риска: ${dv[h.id].residual}` : '') } : h.p === 'P1' && dv[h.id]?.verdict === 'stands' ? { ...h, dv: 'ok' } : h);
+  hard = hard.filter(h => !refIds.has(h.id)).map(h => h.p === 'P1' && dv[h.id]?.verdict === 'downgraded' ? { ...h, p: 'P2', basis: 'hypothesis', dv: 'down', how: h.how + (dv[h.id].residual ? `${lang === 'en' ? ' Residual risk: ' : ' Остаток риска: '}${dv[h.id].residual}` : '') } : h.p === 'P1' && dv[h.id]?.verdict === 'stands' ? { ...h, dv: 'ok' } : h);
   // Опросник клиенту: не больше 10 вопросов, у каждого предрегистрация «какой ответ что значит»
   const devilQs = [...new Map((devil.p1 || []).filter(d => d.question).map(d => [d.question, `${d.id}: ${d.question}${d.prereg ? ` (${d.prereg})` : ''}`])).values()].slice(0, 10);
   // Возврат-Детектив: находка класса, который в прошлый раз был закрыт, — вернулась после исправления

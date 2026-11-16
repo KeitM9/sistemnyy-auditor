@@ -16,6 +16,9 @@ ok(r.compliance.items.length === 4, 'таблица AI Act из 4 статей')
 ok(r.hardening[0].seen && !r.hardening[0].seen.startsWith('['), '«Так уже случилось» — случай из библиотеки по классу находки');
 const rEn = m.normalize(map, probe, fin, top, 'en', {});
 ok(!/[а-яё]/i.test(rEn.hardening[0].seen + rEn.matched[0]), 'EN-отчёт: случай и название класса на английском');
+const dvl = { p1: [{ id: 'F1', verdict: 'downgraded', arg: 'A1', why: 'w', quote: 'q', residual: 'rest', rejected: [] }] };
+const hEn = m.normalize(map, probe, fin, top, 'en', {}, dvl).hardening[0], hRu = m.normalize(map, probe, fin, top, 'ru', {}, dvl).hardening[0];
+ok(hEn.p === 'P2' && (hEn.how.endsWith('Residual risk: rest') && hRu.how.endsWith('Остаток риска: rest')), 'остаток риска на языке отчёта');
 const r2 = m.normalize(map, probe, { ...fin, hardening: [{ ...fin.hardening[0], st: 'closed' }] }, top, 'ru',
   { prev: { score: 7, items: [{ id: 'F1', p: 'P1', cls: 'D2', t: 'x' }, { id: 'F2', p: 'P2', cls: 'D3', t: 'y' }] } });
 ok(r2.score === 10 && r2.hardening[1].id === 'F2' && r2.hardening[1].st === 'open', 'ретест: закрытая P1 снимает потолок, пропущенная находка остаётся открытой');
