@@ -1375,9 +1375,9 @@ window.show=function(v){var rep=document.getElementById('report'),home=document.
 <script>(function(){const OK="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12l5 5 9-10'/></svg>";document.addEventListener('click',function(e){if(e.target.closest('[data-pa]')&&typeof openExample==='function')openExample();});const fill=()=>{const L=(typeof lang!=='undefined'&&lang==='en')?'en':'ru';document.querySelectorAll('.c4l').forEach(u=>{u.innerHTML=JSON.parse(u.dataset[L]).map(x=>'<li>'+OK+'<span>'+x+'</span></li>').join('')});};fill();const o=window.applyLang;if(typeof o==='function')window.applyLang=function(){const r=o.apply(this,arguments);fill();return r};})();</script>
 <style>body:not([data-cur=overview]) .top2{display:none!important}</style>
 <script>(function(){var o=window.show;function m(v){document.body.dataset.cur=v}m(typeof curView!=="undefined"?curView:"overview");var h=location.hash.slice(1);if(["new","reports","lab"].indexOf(h)>-1)setTimeout(function(){show(h)},0);if(typeof o==="function")window.show=show=function(v){var r=o.apply(this,arguments);m(v);return r};})();</script>
-<link rel="stylesheet" href="ap.css?v=32">
-<link rel="stylesheet" href="home.css?v=32">
-<script src="home.js?v=32"></script>
-<script src="ap-ui.js?v=32"></script>
+<link rel="stylesheet" href="ap.css?v=33">
+<link rel="stylesheet" href="home.css?v=33">
+<script src="home.js?v=33"></script>
+<script src="ap-ui.js?v=33"></script>
 </body>
 </html>
