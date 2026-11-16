@@ -274,3 +274,19 @@ html body .btn.ghost,html body .btn.ghost:hover{background:#B4FAB2!important;col
 html body .btn,html body .btn:hover{box-shadow:none!important}
 /* «Видно всем посетителям сайта» в библиотеке не показываем */
 [data-view="lab"] .scope{display:none!important}
+
+/* окно согласий перед оплатой */
+.appay{position:fixed;inset:0;z-index:100;background:rgba(65,65,67,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+.appay-box{position:relative;background:#FFFFFF;border-radius:3px;max-width:560px;width:100%;max-height:calc(100vh - 32px);overflow:auto;padding:28px 24px 20px;text-align:center;color:#414143}
+.appay-box h2{margin:0 0 6px!important;font-size:28px!important;text-transform:none!important}
+.appay-sub{margin:0 0 16px!important;color:#676769;font-size:15.5px!important}
+.appay-x{position:absolute;top:8px;right:10px;background:none;border:0;font-size:26px;line-height:1;color:#676769;cursor:pointer}
+.appay-row{display:flex;align-items:center;gap:14px;text-align:left;border:1px solid #E6E5E5;border-radius:3px;padding:12px 14px;margin-bottom:10px;cursor:pointer}
+.appay-row:has(input:checked){border-color:#B4FAB2}
+.appay-row input{flex:none;width:20px;height:20px;margin:0;accent-color:#B4FAB2}
+.appay-row span{flex:1}html body .appay-row b{display:block;font-family:inherit!important;font-weight:600!important;font-size:16px!important;text-transform:none!important;letter-spacing:0!important}.appay-row small{color:#676769;font-size:13px}
+.appay-i{flex:none;width:22px;height:22px;border:1px solid #676769;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;color:#414143;text-decoration:none}
+.appay-go{display:flex!important;justify-content:center;width:100%;margin-top:6px}
+.appay-go.is-off{opacity:.45;cursor:not-allowed}
+.appay-wait{margin:8px 0 0!important;font-size:13.5px!important;color:#676769}
+.appay-note{margin:10px 0 0!important;font-size:13.5px!important;color:#676769}

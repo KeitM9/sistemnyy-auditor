@@ -495,7 +495,6 @@
                 <button class="btn pri" data-go="new"><span data-i18n="btn_check">Проверить систему</span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
                 <button class="btn ghost" data-go="reports" data-i18n="hm_sample">Образец отчёта</button>
               </div>
-              <div class="hm-price" data-i18n-html="hm_price"><a class="hm-buy" data-buy href="https://t.me/tribute/app?startapp=pJp4" target="_blank" rel="noopener">Пройти полный аудит</a></div>
             </div>
             <div class="hm-hero-r"><video src="hero-loop.mp4" poster="hero-loop.jpg" autoplay muted loop playsinline preload="auto"></video></div>
           </div>
@@ -569,7 +568,7 @@
                 <div class="hm-num">2448 $</div>
                 <ul id="hmFull"></ul>
                 <a class="btn ghost" href="https://t.me/arsysai_bot?start=agentproof" target="_blank" rel="noopener" data-i18n="hm_order">Купить полный аудит</a>
-                <span class="hm-note" data-i18n="hm_order_note">Разовая оплата через Tribute. Сервисный сбор Tribute 30 $.</span>
+                <span class="hm-note" data-i18n-html="hm_order_note">Разовая оплата через Tribute.<br>Tribute может взимать сервисный сбор.</span>
               </div>
             </div>
           </div>
@@ -599,7 +598,7 @@
           </div>
 
           <div class="hm-end">
-            <div><h2 data-i18n="hm_end_h">Проверьте систему до запуска</h2><div class="hm-price" data-i18n-html="hm_price"><a class="hm-buy" data-buy href="https://t.me/tribute/app?startapp=pJp4" target="_blank" rel="noopener">Пройти полный аудит</a></div></div>
+            <div><h2 data-i18n="hm_end_h">Проверьте систему до запуска</h2></div>
             <button class="btn pri" data-go="new"><span data-i18n="btn_check">Проверить систему</span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
           </div>
 
@@ -1358,9 +1357,9 @@ window.show=function(v){var rep=document.getElementById('report'),home=document.
 <script>(function(){const OK="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12l5 5 9-10'/></svg>";document.addEventListener('click',function(e){if(e.target.closest('[data-pa]')&&typeof openExample==='function')openExample();});const fill=()=>{const L=(typeof lang!=='undefined'&&lang==='en')?'en':'ru';document.querySelectorAll('.c4l').forEach(u=>{u.innerHTML=JSON.parse(u.dataset[L]).map(x=>'<li>'+OK+'<span>'+x+'</span></li>').join('')});};fill();const o=window.applyLang;if(typeof o==='function')window.applyLang=function(){const r=o.apply(this,arguments);fill();return r};})();</script>
 <style>body:not([data-cur=overview]) .top2{display:none!important}</style>
 <script>(function(){var o=window.show;function m(v){document.body.dataset.cur=v}m(typeof curView!=="undefined"?curView:"overview");var h=location.hash.slice(1);if(["new","reports","lab"].indexOf(h)>-1)setTimeout(function(){show(h)},0);if(typeof o==="function")window.show=show=function(v){var r=o.apply(this,arguments);m(v);return r};})();</script>
-<link rel="stylesheet" href="ap.css?v=25">
-<link rel="stylesheet" href="home.css?v=25">
-<script src="home.js?v=25"></script>
-<script src="ap-ui.js?v=25"></script>
+<link rel="stylesheet" href="ap.css?v=26">
+<link rel="stylesheet" href="home.css?v=26">
+<script src="home.js?v=26"></script>
+<script src="ap-ui.js?v=26"></script>
 </body>
 </html>
