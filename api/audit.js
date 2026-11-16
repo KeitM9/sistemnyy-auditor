@@ -510,9 +510,10 @@ export function normalize(map, probe, fin, ax, lang, meta, devil = { p1: [] }) {
   const { score, hit } = scoreOf(ax.axes, { ...ax.caps, open_p1: openP1 });
   const L = lang === 'en' ? 3 : 2;
   const capNote = hit.length ? (lang === 'en' ? 'Ceiling applied: ' : 'Сработал потолок: ') + hit.map(c => `${c[1]} — ${c[L]}`).join('; ') + '. ' : '';
-  const libName = id => LIBRARY.find(c => c.id === id)?.t || id;
+  const libOf = id => LIBRARY.find(c => c.id === id);
+  const libName = id => (lang === 'en' && libOf(id)?.t_en) || libOf(id)?.t || id;
   // «Так уже случилось»: первый случай из библиотеки по классу находки — ставит код, не модель
-  const caseOf = id => cut(((LIBRARY.find(c => c.id === id)?.cases || '').split(/;\s*(?=\[)/)[0] || '').replace(/^\[[^\]]+\]\s*/, ''), 300);
+  const caseOf = id => cut((((lang === 'en' && libOf(id)?.cases_en) || libOf(id)?.cases || '').split(/;\s*(?=\[)/)[0] || '').replace(/^\[[^\]]+\]\s*/, ''), 300);
   hard = hard.map(h => h.cls !== 'NEW' && caseOf(h.cls) ? { ...h, seen: caseOf(h.cls) } : h);
   const matched = [...new Set((probe.matched || []).map(m => m.id).filter(id => LIB_IDS.has(id)))];
   const agentName = Object.fromEntries((map.agents || []).map(a => [a.id, a.name]));

@@ -14,6 +14,8 @@ ok(r.score === 7.4 && r.verdict === 'С оговорками', 'открытая
 ok(r.matched.length === 1 && r.matched[0].startsWith('D2'), 'в «совпало» только коды библиотеки');
 ok(r.compliance.items.length === 4, 'таблица AI Act из 4 статей');
 ok(r.hardening[0].seen && !r.hardening[0].seen.startsWith('['), '«Так уже случилось» — случай из библиотеки по классу находки');
+const rEn = m.normalize(map, probe, fin, top, 'en', {});
+ok(!/[а-яё]/i.test(rEn.hardening[0].seen + rEn.matched[0]), 'EN-отчёт: случай и название класса на английском');
 const r2 = m.normalize(map, probe, { ...fin, hardening: [{ ...fin.hardening[0], st: 'closed' }] }, top, 'ru',
   { prev: { score: 7, items: [{ id: 'F1', p: 'P1', cls: 'D2', t: 'x' }, { id: 'F2', p: 'P2', cls: 'D3', t: 'y' }] } });
 ok(r2.score === 10 && r2.hardening[1].id === 'F2' && r2.hardening[1].st === 'open', 'ретест: закрытая P1 снимает потолок, пропущенная находка остаётся открытой');
