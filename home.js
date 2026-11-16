@@ -1,5 +1,6 @@
 (function(){
 var RU={
+hm_std:"Классы проверок сопоставлены с OWASP Top 10 for Agentic Applications 2026.<br>В отчёте есть сверка с четырьмя статьями EU AI Act.",
 hm_lead:"Независимый аудит архитектуры мультиагентных систем по описанию.<br>Доступ к работающей системе не нужен.<br>Мы проверяем систему целиком: агентов, связи между ними, права и цепочки.<br>Вы получаете карту системы, балл и план укрепления.",
 hm_facts:"<span>75 классов уязвимостей</span><i>·</i><span>13 типов багов в промптах</span><i>·</i><span>6 проверок каждого агента</span><i>·</i><span>16 системных проверок</span>",
 hm_sample:"Образец отчёта",
@@ -66,6 +67,7 @@ v:["Сканер дешевле и тоже быстрый.<br>Обычно он
 ["Атака на работающую систему","− Нет, проверка по описанию","+ Да","+ Да","+ Да"]]
 };
 var EN={
+hm_std:"Check classes are mapped to the OWASP Top 10 for Agentic Applications 2026.<br>The report includes a check against four EU AI Act articles.",
 hm_lead:"Independent architecture audit of multi-agent AI systems, based on your description.<br>No production access needed.<br>We check the system as a whole: agents, the links between them, permissions and chains.<br>You get a system map, a score and a hardening plan.",
 hm_facts:"<span>75 vulnerability classes</span><i>·</i><span>13 prompt bug types</span><i>·</i><span>6 checks per agent</span><i>·</i><span>16 system checks</span>",
 hm_sample:"Sample report",
@@ -279,4 +281,59 @@ function all(){paint();markLib();}
 var o=window.applyLang;if(typeof o==='function')window.applyLang=applyLang=function(){var r=o.apply(this,arguments);all();return r};
 var s=window.show;if(typeof s==='function')window.show=show=function(v){var r=s.apply(this,arguments);if(v==='lab')setTimeout(markLib,0);return r};
 all();
+})();
+
+/* Дополнения 16.11.2026, отдельно от ядра сайта:
+   1) разделы OWASP в «Библиотеке сбоев» и в отчёте;
+   2) пометка «после вашего аудита библиотека пополнилась» в «Отчётах» и в отчёте;
+   3) раздел отчёта «Проверьте сами». Любая ошибка здесь гасится и не мешает сайту. */
+(function(){
+// OWASP Top 10 for Agentic Applications 2026: группы A01–A10 библиотеки = ASI01–ASI10
+var ASI=['Agent Goal Hijack','Tool Misuse','Identity & Privilege Abuse','Agentic Supply Chain Vulnerabilities','Unexpected Code Execution','Memory & Context Poisoning','Insecure Inter-Agent Communication','Cascading Failures','Human-Agent Trust Exploitation','Rogue Agents'];
+// Когда в библиотеку добавляли классы: [дата версии, сколько]. Новая версия библиотеки = новая строка.
+var ADDED=[['2026-10-16',1],['2026-10-18',3],['2026-11-04',14],['2026-11-16',3]];
+var TX={ru:{old:"новых классов после аудита: {n}",oldH:"Библиотека пополнилась после этого аудита",oldP:"Добавлено классов: {n}.<br>Повторная проверка сверит систему с ними.",again:"Проверить повторно",
+  owH:"Разделы OWASP в этом отчёте",owP:"Находки относятся к разделам OWASP Top 10 for Agentic Applications 2026.",
+  selfH:"Проверьте сами",selfP:"Эти проверки вы запускаете сами на своей системе.<br>Доступ к ней мы не запрашиваем.",copy:"Скопировать список",copied:"Скопировано",hint:"После ваших проверок библиотека сбоев пополнилась.<br>Повторная проверка сверит систему с новыми классами."},
+ en:{old:"new classes since the audit: {n}",oldH:"The library has grown since this audit",oldP:"Classes added: {n}.<br>A repeat check will match your system against them.",again:"Check again",
+  owH:"OWASP sections in this report",owP:"The findings belong to sections of the OWASP Top 10 for Agentic Applications 2026.",
+  selfH:"Check it yourself",selfP:"You run these checks yourself on your own system.<br>We do not ask for access to it.",copy:"Copy the list",copied:"Copied",hint:"The failure library has grown since your checks.<br>A repeat check will match your system against the new classes."}};
+function L(){return (typeof lang!=='undefined'&&lang==='en')?'en':'ru'}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function asi(code){var m=/^A(\d\d)(\.|$)/.exec(String(code||''));return m&&+m[1]>=1&&+m[1]<=10?+m[1]:0}
+function newer(lib){var d=/(\d{4}-\d\d-\d\d)/.exec(String(lib||''));if(!d)return 0;return ADDED.reduce(function(s,a){return s+(a[0]>d[1]?a[1]:0)},0)}
+
+// 1. Библиотека: подпись раздела OWASP у групп A01–A10
+function lab(){var tb=document.getElementById('labTable');if(!tb)return;
+ [].slice.call(tb.querySelectorAll(':scope>details.bg')).slice(0,10).forEach(function(d,i){var s=d.querySelector(':scope>summary');
+  if(s&&!s.querySelector('.pl-asi'))s.insertAdjacentHTML('beforeend','<span class="pl-asi">OWASP ASI'+('0'+(i+1)).slice(-2)+' · '+ASI[i]+'</span>');});}
+
+// 2. «Отчёты»: сколько классов добавлено после каждой проверки
+function reps(){var tb=document.getElementById('reportsTable');if(!tb||typeof loadReps!=='function')return;var a=loadReps(),T=TX[L()],any=0;
+ [].forEach.call(tb.querySelectorAll('.tr[data-i]'),function(el){var x=a[+el.dataset.i],n=x&&x.rep?newer(x.rep.lib):0,dt=el.querySelector('.name');
+  if(n&&dt&&!dt.querySelector('.pl-old')){dt.insertAdjacentHTML('beforeend',' <span class="pl-old">'+T.old.replace('{n}',n)+'</span>')}if(n)any=1;});
+ var h=document.getElementById('plOldHint');if(any&&!h)tb.insertAdjacentHTML('afterend','<p class="pl-hint" id="plOldHint">'+T.hint+'</p>');else if(!any&&h)h.remove();else if(h)h.innerHTML=T.hint;}
+
+// 3. Отчёт: библиотека пополнилась, разделы OWASP, «Проверьте сами»
+function report(r){var v=document.getElementById('report');if(!v||!r)return;[].forEach.call(v.querySelectorAll('.pl-box'),function(e){e.remove()});
+ var T=TX[L()],demo=(typeof isDemo!=='undefined'&&isDemo),H=r.hardening||[],top='',bot='';
+ var n=demo?0:newer(r.lib);
+ if(n)top+='<div class="pl-box pl-warn"><h3>'+T.oldH+'</h3><p>'+T.oldP.replace('{n}',n)+'</p><a class="btn ghost" href="paket.html'+(L()==='en'?'?lang=en':'')+'#start">'+T.again+'</a></div>';
+ var set={};H.forEach(function(h){var k=asi(h.cls);if(k)set[k]=1});(r.matched||[]).forEach(function(m){var k=asi(m);if(k)set[k]=1});
+ var ks=Object.keys(set).map(Number).sort(function(a,b){return a-b});
+ if(ks.length)bot+='<div class="pl-box"><h3>'+T.owH+'</h3><p>'+T.owP+'</p><div class="pl-tags">'+ks.map(function(k){return '<span>ASI'+('0'+k).slice(-2)+' · '+ASI[k-1]+'</span>'}).join('')+'</div></div>';
+ var ch=H.filter(function(h){return h.st!=='closed'&&!h.locked&&h.check});
+ if(ch.length)bot+='<div class="pl-box pl-self"><h3>'+T.selfH+' · '+ch.length+'</h3><p>'+T.selfP+'</p><ol>'+ch.map(function(h){return '<li><b>'+esc(String(h.id||'').replace(/^F/,'№'))+' '+esc(h.t)+'</b><span>'+esc(h.check)+'</span></li>'}).join('')+'</ol><button type="button" class="btn ghost pl-copy">'+T.copy+'</button></div>';
+ if(top)v.insertAdjacentHTML('afterbegin',top);if(bot)v.insertAdjacentHTML('beforeend',bot);
+}
+// Кнопка «Скопировать список» работает и в образце отчёта: текст берётся со страницы
+document.addEventListener('click',function(e){var b=e.target.closest('.pl-copy');if(!b)return;var NL=String.fromCharCode(10),txt=[].map.call(b.parentNode.querySelectorAll('li'),function(li,i){return (i+1)+'. '+li.querySelector('b').textContent+NL+li.querySelector('span').textContent}).join(NL+NL);
+ try{navigator.clipboard.writeText(txt).then(function(){b.textContent=TX[L()].copied})}catch(x){}});
+
+var last=null;
+function safe(f){return function(){try{return f.apply(null,arguments)}catch(e){}}}
+var sLab=safe(lab),sReps=safe(reps),sRep=safe(report);
+var o=window.render;if(typeof o==='function')window.render=render=function(r){var res=o.apply(this,arguments);last=r;sRep(r);return res};
+[['labTable',sLab],['reportsTable',sReps]].forEach(function(p){var el=document.getElementById(p[0]);if(el){new MutationObserver(function(){p[1]()}).observe(el,{childList:true});p[1]();}});
+var al=window.applyLang;if(typeof al==='function')window.applyLang=applyLang=function(){var res=al.apply(this,arguments);sLab();sReps();var v=document.getElementById('report');if(last&&v&&v.classList.contains('on'))sRep(last);return res};
 })();

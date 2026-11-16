@@ -279,3 +279,21 @@ html body #example .ex4cols,html body #showcase{display:none!important}
 
 .ic-top{margin:6px 0 18px}
 .ic-top .ic-bars{margin-top:28px!important}
+
+/* Дополнения 16.11.2026: стандарты, «отчёт устарел», «Проверьте сами» */
+.hm-std{margin:10px 0 0;font-size:14.5px;line-height:1.6;color:#414143}
+.pl-asi{display:inline-block;margin-left:10px;font:500 11px/1.5 'Oswald','Arial Narrow',Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#414143;background:#F7F6F6;border-radius:3px;padding:2px 7px;white-space:nowrap}
+.pl-old{display:inline-block;margin-left:6px;font-size:12.5px;color:#414143;background:#B4FAB2;border-radius:3px;padding:1px 7px;white-space:nowrap}
+.pl-hint{margin:10px 0 0;font-size:14.5px;line-height:1.6;color:#414143}
+.pl-box{background:#fff;border:1px solid rgba(65,65,67,.15);border-left:3px solid #B4FAB2;border-radius:3px;padding:18px 22px;margin:16px 0}
+.pl-box h3{margin:0 0 6px}
+.pl-box p{margin:0 0 12px;font-size:14.5px;line-height:1.6;color:#414143}
+.pl-warn{border-left-color:#FF0A16}
+.pl-tags{display:flex;flex-wrap:wrap;gap:6px}
+.pl-tags span{font:500 12px/1.5 'Oswald','Arial Narrow',Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;background:#F7F6F6;border-radius:3px;padding:3px 9px}
+.pl-self ol{margin:0 0 14px;padding-left:0;list-style:none}
+.pl-self li{margin:0 0 12px;line-height:1.55}
+.pl-self li b{display:block}
+.pl-self li span{display:block;font-size:14.5px}
+@media(max-width:640px){.pl-asi{display:block;margin:6px 0 0;white-space:normal;width:fit-content}.pl-box{padding:14px 16px}}
+@media print{.pl-copy,.pl-warn a{display:none}}
