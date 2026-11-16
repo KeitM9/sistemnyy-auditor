@@ -492,7 +492,7 @@
               <p class="hm-lead" data-i18n-html="hm_lead">Независимый аудит архитектуры мультиагентных систем по описанию.<br>Доступ к работающей системе не нужен.<br>Мы проверяем систему целиком: агентов, связи между ними, права и цепочки.<br>Вы получаете карту системы, балл и план укрепления.</p>
               <div class="hm-facts" data-i18n-html="hm_facts"><span>72 класса уязвимостей</span><i>·</i><span>13 типов багов в промптах</span><i>·</i><span>6 проверок каждого агента</span><i>·</i><span>16 системных проверок</span></div>
               <div class="hm-acts">
-                <button class="btn pri" data-go="new"><span data-i18n="btn_check">Проверить систему</span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+                <a class="btn pri" href="paket.html#start"><span data-i18n="btn_check">Проверить систему</span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
                 <button class="btn ghost" data-go="reports" data-i18n="hm_sample">Образец отчёта</button>
               </div>
             </div>
@@ -561,13 +561,13 @@
                 <span class="hm-lbl" data-i18n="hm_free_l">Первая проверка</span>
                 <div class="hm-num">0 $</div>
                 <ul id="hmFree"></ul>
-                <button class="btn pri" data-go="new"><span data-i18n="btn_check">Проверить систему</span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+                <a class="btn pri" href="paket.html#start"><span data-i18n="btn_check">Проверить систему</span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
               </div>
               <div class="hm-card full">
                 <span class="hm-lbl" data-i18n="hm_full_l">Полный аудит</span>
                 <div class="hm-num">2448 $</div>
                 <ul id="hmFull"></ul>
-                <a class="btn ghost" href="https://t.me/arsysai_bot?start=agentproof" target="_blank" rel="noopener" data-i18n="hm_order">Купить полный аудит</a>
+                <a class="btn pri" href="paket.html#start" data-i18n="hm_order">Купить полный аудит</a>
                 <span class="hm-note" data-i18n-html="hm_order_note">Разовая оплата через Tribute.<br>Tribute может взимать сервисный сбор.</span>
               </div>
             </div>
@@ -588,7 +588,7 @@
               <div><span class="hm-n">1</span><h3 data-i18n="hm_how0">Подготовка проекта</h3><p data-i18n-html="hm_how0p">Промпт со страницы «Подготовка» собирает описание системы из папки проекта.<br>Ключи и доступы заменяются на [СЕКРЕТ], личные данные на [ПДн].<br>Ваши данные не уходят наружу.</p></div>
               <div><span class="hm-n">2</span><h3 data-i18n="hm_how1">Заявка и код</h3><p data-i18n-html="hm_how1p">Вы пишете в Telegram.<br>Екатерина выдаёт личный код доступа.</p></div>
               <div><span class="hm-n">3</span><h3 data-i18n="hm_how2">Загрузка описания</h3><p data-i18n-html="hm_how2p">Вы загружаете готовый файл без ключей.<br>Сайт ещё раз вырезает ключи и контакты до проверки.</p></div>
-              <div><span class="hm-n">4</span><h3 data-i18n="hm_how3">Отчёт</h3><p data-i18n-html="hm_how3p">Движок строит карту и проходит 72 класса сбоев.<br>Время зависит от объёма проекта.</p></div>
+              <div><span class="hm-n">4</span><h3 data-i18n="hm_how3">Отчёт</h3><p data-i18n-html="hm_how3p">Движок строит карту и проходит 72 класса сбоев.<br>Отчёт готов в течение 30 минут.</p></div>
             </div>
           </div>
 
@@ -599,7 +599,7 @@
 
           <div class="hm-end">
             <div><h2 data-i18n="hm_end_h">Проверьте систему до запуска</h2></div>
-            <button class="btn pri" data-go="new"><span data-i18n="btn_check">Проверить систему</span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+            <a class="btn pri" href="paket.html#start"><span data-i18n="btn_check">Проверить систему</span> <span class="arw"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
           </div>
 
         </div>
@@ -765,7 +765,7 @@ const I18N={
   rep_weak:"Слабое звено",rep_battery:"Проверка каждого агента",rep_system:"Системные проверки",
   rep_matched:"Совпадения с библиотекой сбоев",rep_attack:"Как могут атаковать",
   rep_comp:"Соответствие",rep_cert:"Сертификат надёжности",rep_fix:"Что укрепить",
-  load_map:"Шаг 1 из 4 · аудитор строит карту системы",load_probe:"Шаг 2 из 4 · батарея по агентам, системные проверки, сверка с библиотекой",load_final:"Шаг 3 из 4 · полный реестр находок и план исправления",load_hint:"Время зависит от объёма проекта. Держите страницу открытой.",rep_strong:"Сильное место",rep_channels:"Каналы, по которым данные могут уйти",ch_closed:"закрыт",ch_open:"открыт",ch_unknown:"не описано",ch_sum:"закрыто {n} из {m}",rep_gaps:"Чего не хватило в описании",rep_spread:"разброс трёх независимых оценок: ±{n}",cs_yes:"выполнено",cs_partial:"частично",cs_no:"барьера нет",cs_unknown:"не описано",b_fact:"Взято из вашего описания",b_hyp:"Вывод по вашему описанию",flag_btn:"Неточно?",flag_q:"Что здесь неточно? Это поможет движку учиться.",flag_ok:"Спасибо, записано",lib_code:"Код",lib_class:"Класс сбоя",
+  load_map:"Шаг 1 из 4 · аудитор строит карту системы",load_probe:"Шаг 2 из 4 · батарея по агентам, системные проверки, сверка с библиотекой",load_final:"Шаг 3 из 4 · полный реестр находок и план исправления",load_hint:"Отчёт будет готов в течение 30 минут. Держите страницу открытой.",rep_strong:"Сильное место",rep_channels:"Каналы, по которым данные могут уйти",ch_closed:"закрыт",ch_open:"открыт",ch_unknown:"не описано",ch_sum:"закрыто {n} из {m}",rep_gaps:"Чего не хватило в описании",rep_spread:"разброс трёх независимых оценок: ±{n}",cs_yes:"выполнено",cs_partial:"частично",cs_no:"барьера нет",cs_unknown:"не описано",b_fact:"Взято из вашего описания",b_hyp:"Вывод по вашему описанию",flag_btn:"Неточно?",flag_q:"Что здесь неточно? Это поможет движку учиться.",flag_ok:"Спасибо, записано",lib_code:"Код",lib_class:"Класс сбоя",
   rep_top3:"Что закрыть первым",rep_forecast:"Если закрыть критичные находки, балл вырастет до {n}. Прогноз по описанию.",rep_cov:"Карта построена так. Прямо из описания: {d}, по выводу: {i}, не описано: {u}",rep_red:"В описании были открытые данные. Секретов: {s}, личных данных: {p}. Они вырезаны до проверки и к модели не ушли. Если это настоящие ключи, смените их: они уже побывали в файле.",rep_links:"Передачи между агентами",fmt_schema:"строгая схема",fmt_json:"JSON без схемы",fmt_free_text:"любой текст",fmt_unknown:"не описано",rep_bounds:"Куда доходит чужой текст",rep_xray:"Промпт-Рентген · где текст может стать командой",rep_unch:"Что не проверялось",st_ret:"вернулась",err_503:"Проверка временно недоступна. Ваш код сохранён: попробуйте через час или напишите в @arsysai_bot.",
   load_verify:"Шаг 4 из 4 · повторная проверка каждой критичной находки, три независимые оценки",rep_devil:"Каждую критичную находку проверили второй раз, отдельно: подтверждены {s} из {c}, переведены в «Важно» {d}, сняты {r}",rep_refuted:"Сняты после повторной проверки",rd_title:"Готовность описания",rd_ok:"есть",rd_miss:"не хватает",rd_hint:"Чем полнее описание, тем точнее отчёт. Недостающее можно дописать в поле ниже.",rd_1:"агенты",rd_2:"промпты",rd_3:"инструменты",rd_4:"ключи и права",rd_5:"передачи между агентами",rd_6:"каналы наружу",rd_7:"деньги и доступ",rd_8:"примеры работы",
   rep_loss:"Сколько может стоить сбой",loss_band_C:"вероятно: одно звено цепочки пока предположение",loss_band_D:"возможно: несколько звеньев цепочки не подтверждены",loss_inputs:"Чтобы посчитать сумму, нужны ваши данные",loss_analog:"Похожий публичный случай",loss_buckets:"Что пострадает",dv_ok:"подтверждена повторной проверкой",dv_down:"после повторной проверки: важно",rep_back:"Почему вернулась",
@@ -846,7 +846,7 @@ const I18N={
   rep_weak:"Weak link",rep_battery:"Check of every agent",rep_system:"System checks",
   rep_matched:"Matches in the failure library",rep_attack:"How an attack could run",
   rep_comp:"Compliance",rep_cert:"Reliability certificate",rep_fix:"What to harden",
-  load_map:"Step 1 of 4 · the auditor is building the system map",load_probe:"Step 2 of 4 · per-agent battery, system checks, library matching",load_final:"Step 3 of 4 · full findings registry and fix plan",load_hint:"Time depends on the size of the project. Keep this page open.",rep_strong:"Strong point",rep_channels:"Channels data could leave through",ch_closed:"closed",ch_open:"open",ch_unknown:"not described",ch_sum:"{n} of {m} closed",rep_gaps:"What the description was missing",rep_spread:"spread of three independent scores: ±{n}",cs_yes:"in place",cs_partial:"partial",cs_no:"no barrier",cs_unknown:"not described",b_fact:"Taken from your description",b_hyp:"Inferred from your description",flag_btn:"Inaccurate?",flag_q:"What is inaccurate here? This helps the engine learn.",flag_ok:"Thanks, recorded",lib_code:"Code",lib_class:"Failure class",
+  load_map:"Step 1 of 4 · the auditor is building the system map",load_probe:"Step 2 of 4 · per-agent battery, system checks, library matching",load_final:"Step 3 of 4 · full findings registry and fix plan",load_hint:"The report will be ready within 30 minutes. Keep this page open.",rep_strong:"Strong point",rep_channels:"Channels data could leave through",ch_closed:"closed",ch_open:"open",ch_unknown:"not described",ch_sum:"{n} of {m} closed",rep_gaps:"What the description was missing",rep_spread:"spread of three independent scores: ±{n}",cs_yes:"in place",cs_partial:"partial",cs_no:"no barrier",cs_unknown:"not described",b_fact:"Taken from your description",b_hyp:"Inferred from your description",flag_btn:"Inaccurate?",flag_q:"What is inaccurate here? This helps the engine learn.",flag_ok:"Thanks, recorded",lib_code:"Code",lib_class:"Failure class",
   rep_top3:"What to close first",rep_forecast:"Close the critical findings and the score rises to {n}. Forecast from the description.",rep_cov:"How the map was built. Straight from the description: {d}, inferred: {i}, not described: {u}",rep_red:"The description contained open data. Secrets: {s}, personal data: {p}. They were removed before the check and never reached the model. If these are real keys, rotate them: they have already been in the file.",rep_links:"Handoffs between agents",fmt_schema:"strict schema",fmt_json:"JSON without schema",fmt_free_text:"any text",fmt_unknown:"not described",rep_bounds:"Where outside text can reach",rep_xray:"Prompt X-ray · where text can become a command",rep_unch:"Not checked",st_ret:"returned",err_503:"The check is temporarily unavailable. Your code is saved. Try again in an hour or write to @arsysai_bot.",
   load_verify:"Step 4 of 4 · a second check of every critical finding, three independent scores",rep_devil:"Every critical finding was checked a second time, separately: {s} of {c} confirmed, moved to “Important” {d}, removed {r}",rep_refuted:"Withdrawn after a second check",rd_title:"Description readiness",rd_ok:"present",rd_miss:"missing",rd_hint:"The fuller the description, the more precise the report. Add what is missing in the field below.",rd_1:"agents",rd_2:"prompts",rd_3:"tools",rd_4:"keys and permissions",rd_5:"handoffs between agents",rd_6:"outbound channels",rd_7:"money and access",rd_8:"examples of work",
   rep_loss:"What a failure could cost",loss_band_C:"likely: one link of the chain is still an assumption",loss_band_D:"possible: several links of the chain are unconfirmed",loss_inputs:"To put a number on it, we need your data",loss_analog:"Similar public case",loss_buckets:"What gets hit",dv_ok:"confirmed by a second check",dv_down:"after a second check: important",rep_back:"Why it came back",
@@ -1357,9 +1357,9 @@ window.show=function(v){var rep=document.getElementById('report'),home=document.
 <script>(function(){const OK="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12l5 5 9-10'/></svg>";document.addEventListener('click',function(e){if(e.target.closest('[data-pa]')&&typeof openExample==='function')openExample();});const fill=()=>{const L=(typeof lang!=='undefined'&&lang==='en')?'en':'ru';document.querySelectorAll('.c4l').forEach(u=>{u.innerHTML=JSON.parse(u.dataset[L]).map(x=>'<li>'+OK+'<span>'+x+'</span></li>').join('')});};fill();const o=window.applyLang;if(typeof o==='function')window.applyLang=function(){const r=o.apply(this,arguments);fill();return r};})();</script>
 <style>body:not([data-cur=overview]) .top2{display:none!important}</style>
 <script>(function(){var o=window.show;function m(v){document.body.dataset.cur=v}m(typeof curView!=="undefined"?curView:"overview");var h=location.hash.slice(1);if(["new","reports","lab"].indexOf(h)>-1)setTimeout(function(){show(h)},0);if(typeof o==="function")window.show=show=function(v){var r=o.apply(this,arguments);m(v);return r};})();</script>
-<link rel="stylesheet" href="ap.css?v=26">
-<link rel="stylesheet" href="home.css?v=26">
-<script src="home.js?v=26"></script>
-<script src="ap-ui.js?v=26"></script>
+<link rel="stylesheet" href="ap.css?v=27">
+<link rel="stylesheet" href="home.css?v=27">
+<script src="home.js?v=27"></script>
+<script src="ap-ui.js?v=27"></script>
 </body>
 </html>

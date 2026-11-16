@@ -290,3 +290,24 @@ html body .btn,html body .btn:hover{box-shadow:none!important}
 .appay-go.is-off{opacity:.45;cursor:not-allowed}
 .appay-wait{margin:8px 0 0!important;font-size:13.5px!important;color:#676769}
 .appay-note{margin:10px 0 0!important;font-size:13.5px!important;color:#676769}
+
+/* «Подготовка»: финал с чек-листом и согласиями */
+#start{padding:8px 0 40px}
+.apstart{max-width:1040px;margin:0 auto;padding:28px 24px;background:#F7F6F6;border-left:3px solid #B4FAB2;border-radius:3px}
+.apstart h2{margin:0 0 6px!important}
+.aps-sub{margin:0 0 18px!important;color:#676769}
+.aps-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.aps-cols h3{margin:0 0 8px!important;font-size:18px!important}
+.aps-cn{margin:0 0 8px!important;font-size:14.5px!important;color:#676769}
+.aps-row{display:flex;gap:12px;align-items:flex-start;background:#FFFFFF;border:1px solid #E6E5E5;border-radius:3px;padding:11px 13px;margin-bottom:8px;cursor:pointer;font-size:15px;line-height:1.45}
+.aps-row:has(input:checked){border-color:#B4FAB2}
+.aps-row input{flex:none;width:19px;height:19px;margin:1px 0 0;accent-color:#B4FAB2}
+.aps-row a{color:#414143;box-shadow:inset 0 -3px 0 #B4FAB2;text-decoration:none}
+.aps-go{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.aps-go .btn.is-off{opacity:.45;cursor:not-allowed}
+.aps-wait{margin:8px 0 0!important;font-size:13.5px!important;color:#676769}
+.aps-wait.aps-shake{color:#FF0A16}
+.aps-note{margin:8px 0 0!important;font-size:14px!important;color:#676769}
+.aps-note a{color:#414143;box-shadow:inset 0 -3px 0 #B4FAB2;text-decoration:none}
+@media(max-width:760px){.aps-cols{grid-template-columns:1fr}.apstart{padding:20px 14px}}
+html body .btn.line,html body .btn.line:hover{background:#B4FAB2!important;color:#414143!important;border:0!important;box-shadow:none!important}

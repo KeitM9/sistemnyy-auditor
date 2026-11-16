@@ -33,12 +33,12 @@ hm_fix_p:"Отдельная услуга для тех, кто хочет за�
 hm_fix:"Собирается под находки вашей системы|Открытый текстовый файл, его можно прочитать до установки|Работает в Claude Code, Cursor, Codex, Windsurf|Правки в отдельной копии, каждую вы подтверждаете сами",
 hm_fix_btn:"Обсудить с Екатериной",
 hm_fix_note:"Повторные прогоны аудита входят в стоимость агента-исправителя.",
-fd_h:"Что содержит каждая находка",fd_sub:"Технический директор видит не список рисков, а разбор, который можно проверить.",fd:"Класс сбоя|Какая из 72 проверок сработала~Основание|Цитата из вашего описания~Серьёзность|Критично, важно или укрепление~Последствия|Что может случиться и во что это обойдётся~Цепочка атаки|Шаги от входа до денег или ключей, вывод по описанию~Что сделать и как|Конкретный шаг и где его сделать~Как проверить|Тест, который подтверждает исправление",fq_h:"Вопросы и ответы",fq:"Что это|Независимый аудит архитектуры мультиагентной системы по её описанию. Движок строит карту, проходит 72 класса сбоев и считает балл по единой рубрике.~Чем это не является|Это не пентест и не атака на работающую систему. Для проверки живой системы нужен другой формат.~Что прислать|Описание системы, собранное промптом со страницы «Подготовка»: промпты, связи, права и настройки без значений ключей.~Сколько ждать|Время зависит от объёма проекта.<br>Движок строит карту, проверяет каждого агента и всю систему, затем отдельно перепроверяет каждую критичную находку.<br>Код доступа после оплаты выдаёт Екатерина в Telegram.~Оплата и данные|Оплата разово через Tribute.<br>На серверах AgentProof описание не сохраняется, текст уходит в модель Claude (Anthropic) через API.~Не тот файл|Если загрузили не тот файл, напишите в <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>поддержку</a> в течение 48 часов после отчёта.<br>Екатерина выдаст новый код.~Повторный аудит|Когда разработчик закончит исправления, напишите в <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>поддержку</a>.<br>Екатерина выдаст код на повторный аудит.<br>48 часов считаются с момента выдачи кода, поэтому исправлять можно в своём темпе.~Поддержка|Вопросы по аудиту, оплате и кодам: <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>@arsysai_bot</a> в Telegram.",
+fd_h:"Что содержит каждая находка",fd_sub:"Технический директор видит не список рисков, а разбор, который можно проверить.",fd:"Класс сбоя|Какая из 72 проверок сработала~Основание|Цитата из вашего описания~Серьёзность|Критично, важно или укрепление~Последствия|Что может случиться и во что это обойдётся~Цепочка атаки|Шаги от входа до денег или ключей, вывод по описанию~Что сделать и как|Конкретный шаг и где его сделать~Как проверить|Тест, который подтверждает исправление",fq_h:"Вопросы и ответы",fq:"Что это|Независимый аудит архитектуры мультиагентной системы по её описанию. Движок строит карту, проходит 72 класса сбоев и считает балл по единой рубрике.~Чем это не является|Это не пентест и не атака на работающую систему. Для проверки живой системы нужен другой формат.~Что прислать|Описание системы, собранное промптом со страницы «Подготовка»: промпты, связи, права и настройки без значений ключей.~Сколько ждать|Отчёт готов в течение 30 минут после загрузки описания.<br>За это время движок строит карту, проверяет каждого агента и всю систему, затем отдельно перепроверяет каждую критичную находку.<br>Код доступа после оплаты приходит в Telegram в течение 30 минут.~Оплата и данные|Перед оплатой нужно принять условия аудита.<br>Оплата разово через Tribute.<br>На серверах AgentProof описание не сохраняется, текст уходит в модель Claude (Anthropic) через API.~Забыли убрать ключи|Сайт вырезает ключи известных форматов, email, телефоны и номера карт до того, как текст уйдёт модели.<br>Описание на серверах AgentProof не сохраняется.<br>Если настоящий ключ всё же попал в файл, смените его: так безопаснее в любом случае.~Не тот файл|Если загрузили не тот файл, напишите в <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>поддержку</a> в течение 48 часов после отчёта.<br>Екатерина выдаст новый код.~Повторный аудит|Когда разработчик закончит исправления, напишите в <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>поддержку</a>.<br>Екатерина выдаст код на повторный аудит.<br>48 часов считаются с момента выдачи кода, поэтому исправлять можно в своём темпе.~Поддержка|Вопросы по аудиту, оплате и кодам: <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>@arsysai_bot</a> в Telegram.",
 hm_how_h:"Как проходит аудит",
 hm_how1:"Заявка и код",hm_how1p:"Вы пишете в Telegram.<br>Екатерина выдаёт личный код доступа.",
 hm_how0:"Подготовка проекта",hm_how0p:"Промпт со страницы «Подготовка» собирает описание системы из папки проекта.<br>Ключи и доступы заменяются на [СЕКРЕТ], личные данные на [ПДн].<br>Ваши данные не уходят наружу.",
 hm_how2:"Загрузка описания",hm_how2p:"Вы загружаете готовый файл без ключей.<br>Сайт ещё раз вырезает ключи и контакты до проверки.",
-hm_how3:"Отчёт",hm_how3p:"Движок строит карту и проходит 72 класса сбоев.<br>Время зависит от объёма проекта.",
+hm_how3:"Отчёт",hm_how3p:"Движок строит карту и проходит 72 класса сбоев.<br>Отчёт готов в течение 30 минут.",
 hm_end_h:"Проверьте систему до запуска",
 lab_i1h:"Что это",lab_i1:"72 класса сбоев AI-агентов.<br>У каждого признаки, барьер и реальные случаи.",
 lab_i2h:"Как пользоваться",lab_i2:"Откройте строку, похожую на ваш проект.<br>Внутри видно, как сбой выглядит и как его закрыть.",
@@ -46,10 +46,10 @@ lab_i3h:"Связь с аудитом",lab_i3:"AgentProof сверяет ваш�
 cs_w1:"Как мы обращаемся с данными: описание не сохраняется, отчёт хранится зашифрованным 48 часов.",
 cs_w2:"В описании могут быть имена и контакты. Сайт вырезает их до проверки.",
 cs_w3:"Проверка идёт по описанию и даёт второе мнение. Решения о системе принимаете вы.",
-cs_why:"Три согласия нужны по закону, чтобы мы могли обработать ваше описание.",
+cs_why:"Три согласия нужны по закону, чтобы мы могли обработать ваше описание.<br>Перед проверкой ознакомьтесь с условиями аудита: в них правила оплаты, возврата и хранения данных.",
 cmp2:{vs:"AgentProof против",tabs:["Автоматического сканера","Ручного аудита","Платформы защиты"],
 rows:["Цена","Срок","Вся система целиком","Карта и слабое звено","План исправлений с тестами","Повторная проверка","Без ключей и доступа","Атака на работающую систему"],
-ap:["2448 $","Зависит от объёма","y|Да","y|Да","y|Да","y|Входит","y|Да","n|Нет, по описанию"],
+ap:["2448 $","До 30 минут","y|Да","y|Да","y|Да","y|Входит","y|Да","n|Нет, по описанию"],
 c:[["99–500 $","Минуты","n|Один агент","n|Нет","p|Частично","p|За доплату","n|Нужен доступ","y|Да"],
 ["16 000–75 000 $","Недели","y|Да","y|Да","y|Да","p|По договору","n|Нужен доступ","y|Да"],
 ["По запросу","Подключение","p|Частично","p|Частично","p|Частично","p|Частично","n|Подключение","y|Да"]],
@@ -57,7 +57,7 @@ v:["Сканер дешевле и тоже быстрый.<br>Обычно он
 "Ручной аудит глубже: эксперт атакует живую систему.<br>Стоит от 16 000 $ и идёт неделями.",
 "Платформа следит за системой постоянно.<br>Это подписка с подключением к вашей системе и цена по запросу."]},cmp:[["","AgentProof","Автоматический сканер","Ручной аудит","Платформа защиты"],
 ["Цена","2448 $ разово","99–500 $","16 000–75 000 $","Подписка, цена по запросу"],
-["Срок","Зависит от объёма","Минуты","Недели","Подключение и настройка"],
+["Срок","До 30 минут","Минуты","Недели","Подключение и настройка"],
 ["Вся система: связи, деньги, доступы","+ Да","− Обычно один агент","+ Да","± Частично"],
 ["Карта системы и слабое звено","+ Да","− Нет","+ Да","± Частично"],
 ["План исправлений с тестами","+ Да","± Частично","+ Да","± Частично"],
@@ -99,12 +99,12 @@ hm_fix_p:"A separate service for closing findings without hiring a developer.<br
 hm_fix:"Built for the findings of your system|An open text file you can read before installing|Works in Claude Code, Cursor, Codex, Windsurf|Changes go into a separate copy, you approve each one",
 hm_fix_btn:"Talk to Ekaterina",
 hm_fix_note:"Repeat audit runs are included in the fixer agent price.",
-fd_h:"What every finding contains",fd_sub:"A CTO sees a breakdown that can be checked, not a list of risks.",fd:"Failure class|Which of the 72 checks fired~Basis|A quote from your description~Severity|Critical, important or hardening~Impact|What can happen and what it could cost~Attack chain|Steps from entry to money or keys, inferred from the description~Fix|A concrete step and where to make it~Verification|A test that confirms the fix",fq_h:"Questions and answers",fq:"What it is|An independent architecture audit of a multi-agent system based on its description. The engine builds a map, runs 72 failure classes and calculates a score on one rubric.~What it is not|This is not live red teaming or penetration testing of a running system. Testing a live system needs a different format.~What to send|A system description built with the prompt on the Preparation page: prompts, links, permissions and settings without key values.~How long it takes|Time depends on the size of the project.<br>The engine builds the map, checks every agent and the whole system, then rechecks every critical finding separately.<br>After payment, Ekaterina issues the access code on Telegram.~Payment and data|One-time payment via Tribute.<br>The description is not saved on AgentProof servers, the text goes to the Claude model (Anthropic) through the API.~Wrong file|If you uploaded the wrong file, message <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>support</a> within 48 hours after the report.<br>Ekaterina will issue a new code.~Follow-up audit|When your developer finishes the fixes, message <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>support</a>.<br>Ekaterina will issue a code for the follow-up audit.<br>The 48 hours start when the code is issued, so fixes can take as long as they need.~Support|Questions about the audit, payment and codes: <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>@arsysai_bot</a> on Telegram.",
+fd_h:"What every finding contains",fd_sub:"A CTO sees a breakdown that can be checked, not a list of risks.",fd:"Failure class|Which of the 72 checks fired~Basis|A quote from your description~Severity|Critical, important or hardening~Impact|What can happen and what it could cost~Attack chain|Steps from entry to money or keys, inferred from the description~Fix|A concrete step and where to make it~Verification|A test that confirms the fix",fq_h:"Questions and answers",fq:"What it is|An independent architecture audit of a multi-agent system based on its description. The engine builds a map, runs 72 failure classes and calculates a score on one rubric.~What it is not|This is not live red teaming or penetration testing of a running system. Testing a live system needs a different format.~What to send|A system description built with the prompt on the Preparation page: prompts, links, permissions and settings without key values.~How long it takes|The report is ready within 30 minutes after you upload the description.<br>In that time the engine builds the map, checks every agent and the whole system, then rechecks every critical finding separately.<br>After payment, the access code arrives on Telegram within 30 minutes.~Payment and data|You accept the audit terms before payment.<br>One-time payment via Tribute.<br>The description is not saved on AgentProof servers, the text goes to the Claude model (Anthropic) through the API.~Forgot to remove keys|The site removes keys of known formats, emails, phone and card numbers before the text reaches the model.<br>The description is not saved on AgentProof servers.<br>If a real key still got into the file, replace it: it is safer in any case.~Wrong file|If you uploaded the wrong file, message <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>support</a> within 48 hours after the report.<br>Ekaterina will issue a new code.~Follow-up audit|When your developer finishes the fixes, message <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>support</a>.<br>Ekaterina will issue a code for the follow-up audit.<br>The 48 hours start when the code is issued, so fixes can take as long as they need.~Support|Questions about the audit, payment and codes: <a href='https://t.me/arsysai_bot' target='_blank' rel='noopener'>@arsysai_bot</a> on Telegram.",
 hm_how_h:"How the audit goes",
 hm_how1:"Request and code",hm_how1p:"You write on Telegram.<br>Ekaterina issues a personal access code.",
 hm_how0:"Project preparation",hm_how0p:"The prompt on the Preparation page builds the system description from your project folder.<br>Keys and access are replaced with [SECRET], personal data with [PII].<br>Your data does not leave.",
 hm_how2:"Upload the description",hm_how2p:"You upload the ready file without keys.<br>The site removes keys and contacts once more before the check.",
-hm_how3:"Report",hm_how3p:"The engine builds a map and runs 72 failure classes.<br>Time depends on the size of the project.",
+hm_how3:"Report",hm_how3p:"The engine builds a map and runs 72 failure classes.<br>The report is ready within 30 minutes.",
 hm_end_h:"Check your system before launch",
 lab_i1h:"What it is",lab_i1:"72 failure classes of AI agents.<br>Each has signs, a barrier and real incidents.",
 lab_i2h:"How to use it",lab_i2:"Open the row that looks like your project.<br>Inside you see how the failure looks and how to close it.",
@@ -112,10 +112,10 @@ lab_i3h:"How it links to the audit",lab_i3:"AgentProof checks your system agains
 cs_w1:"How we handle data: the description is not stored, the report is kept encrypted for 48 hours.",
 cs_w2:"The description may contain names and contacts. The site removes them before the check.",
 cs_w3:"The check works from the description and gives a second opinion. You make the decisions about your system.",
-cs_why:"These three consents are required by law so we can process your description.",
+cs_why:"These three consents are required by law so we can process your description.<br>Before the check, read the audit terms: they cover payment, refunds and data storage.",
 cmp2:{vs:"AgentProof vs",tabs:["Automated scanner","Manual audit","Protection platform"],
 rows:["Price","Timing","Whole system","Map and weak link","Fix plan with tests","Retest","No keys or access","Attack on the running system"],
-ap:["$2448","Depends on size","y|Yes","y|Yes","y|Yes","y|Included","y|Yes","n|No, from the description"],
+ap:["$2448","Up to 30 minutes","y|Yes","y|Yes","y|Yes","y|Included","y|Yes","n|No, from the description"],
 c:[["$99–500","Minutes","n|One agent","n|No","p|Partly","p|Paid extra","n|Access needed","y|Yes"],
 ["$16,000–75,000","Weeks","y|Yes","y|Yes","y|Yes","p|By contract","n|Access needed","y|Yes"],
 ["On request","Connection","p|Partly","p|Partly","p|Partly","p|Partly","n|Connected","y|Yes"]],
@@ -123,7 +123,7 @@ v:["A scanner is cheaper and just as fast.<br>It usually looks at one agent and 
 "A manual audit goes deeper: an expert attacks the live system.<br>It costs from $16,000 and takes weeks.",
 "A platform watches your system all the time.<br>It is a subscription connected to your system, priced on request."]},cmp:[["","AgentProof","Automated scanner","Manual audit","Protection platform"],
 ["Price","$2448 one-time","$99–500","$16,000–75,000","Subscription, price on request"],
-["Timing","Depends on size","Minutes","Weeks","Connection and setup"],
+["Timing","Up to 30 minutes","Minutes","Weeks","Connection and setup"],
 ["Whole system: links, money, access","+ Yes","− Usually one agent","+ Yes","± Partly"],
 ["System map and weak link","+ Yes","− No","+ Yes","± Partly"],
 ["Fix plan with tests","+ Yes","± Partly","+ Yes","± Partly"],
@@ -141,7 +141,7 @@ function paint(){
   var D=L();if(!q('#hmFree'))return;
   q('#hmFree').innerHTML=li(D.hm_free);q('#hmFull').innerHTML=li(D.hm_full);q('#hmFix').innerHTML=li(D.hm_fix);
   paintCmp();
-  paintLab();paintConsent();document.querySelectorAll('a[data-i18n="hm_order"]').forEach(function(a){a.href=(typeof lang!=='undefined'&&lang==='en')?'https://t.me/tribute/app?startapp=pJp7':'https://t.me/tribute/app?startapp=pJp4'});
+  paintLab();paintConsent();document.querySelectorAll('a[data-i18n="hm_order"]').forEach(function(a){a.href='paket.html'+((typeof lang!=='undefined'&&lang==='en')?'?lang=en':'')+'#start';a.removeAttribute('target')});
   var fd=q('#hmFd');if(fd)fd.innerHTML=D.fd.split('~').map(function(x,i){var p=x.split('|');return '<div><span class="hm-n">'+(i+1)+'</span><b>'+p[0]+'</b><p>'+p[1]+'</p></div>'}).join('');var fq=q('#hmFq');if(fq)fq.innerHTML=D.fq.split('~').map(function(x){var p=x.split('|');return '<details><summary>'+p[0]+'</summary><p>'+p[1]+'</p></details>'}).join('');
   var ud=q('#hmUpd');if(ud&&!ud.dataset.on){ud.dataset.on=1;ud.addEventListener('toggle',function(){if(ud.open&&typeof renderUpdates==='function')renderUpdates()})}
   q('#hmBars').innerHTML=[6.0,6.7,7.7,7.9,8.0,8.3,8.4,8.7].map(function(v){return '<div style="height:'+(v*10)+'%"><em>'+v.toFixed(1)+'</em></div>'}).join('');
@@ -231,7 +231,7 @@ function panel(i){var D=T();
 function paint(){var ex=document.getElementById('exampleFull');if(!ex)return;var box=document.getElementById('incBlock');
  if(!box){box=document.createElement('div');box.id='incBlock';box.className='incx';ex.parentNode.insertBefore(box,ex);}
  var D=T();box.innerHTML='<h2>'+D.h+'</h2><p>'+D.sub+'</p><div class="ic-top"><span class="hm-lbl">'+D.topL+'</span><div class="hm-bars ic-bars">'+[6.0,6.7,7.7,7.9,8.0,8.3,8.4,8.7].map(function(v){return '<div style="height:'+(v*10)+'%"><em>'+v.toFixed(1)+'</em></div>'}).join('')+'</div></div><div class="ic-grid"><div class="ic-tabs">'+D.items.map(function(t,i){return '<button type="button" data-inc="'+i+'" class="'+(i===cur?'on':'')+'"><span class="hm-n">'+(i+1)+'</span><span><b>'+t+'</b><small>'+D.d[i]+'</small></span></button>'}).join('')+
- '<a class="btn ghost" href="'+((typeof lang!=='undefined'&&lang==='en')?'https://t.me/tribute/app?startapp=pJp7':'https://t.me/tribute/app?startapp=pJp4')+'" target="_blank" rel="noopener">'+D.cta+'</a></div><div class="ic-panel">'+panel(cur)+'</div></div>';}
+ '<a class="btn pri" href="paket.html'+((typeof lang!=='undefined'&&lang==='en')?'?lang=en':'')+'#start">'+D.cta+'</a></div><div class="ic-panel">'+panel(cur)+'</div></div>';}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-inc]');if(b){cur=+b.dataset.inc;paint();}});
 var o=window.applyLang;if(typeof o==='function')window.applyLang=applyLang=function(){var r=o.apply(this,arguments);paint();return r};
 paint();
@@ -272,6 +272,7 @@ function markLib(){var tb=document.getElementById('labTable');if(!tb||!has())ret
 function openInLib(c){if(typeof show==='function')show('lab');setTimeout(function(){markLib();var d=document.querySelector('#labTable details.bgi[data-cls="'+c+'"]');
  if(!d){var n=name(c);document.querySelectorAll('#labTable details.bgi>summary').forEach(function(s){if(!d&&s.textContent.indexOf(n)===0)d=s.parentNode})}
  if(!d)return;var g=d.closest('details.bg');if(g)g.open=true;d.open=true;d.classList.add('up-hl');d.scrollIntoView({block:'center'});setTimeout(function(){d.classList.remove('up-hl')},2500);},120);}
+document.addEventListener('click',function(e){if(e.target.closest('#newBtn,#exGo')){e.preventDefault();e.stopImmediatePropagation();location.href='paket.html'+(L()==='en'?'?lang=en':'')+'#start';return}},true);
 document.addEventListener('click',function(e){var b=e.target.closest('[data-up-cls]');if(b)openInLib(b.dataset.upCls);
  if(e.target.closest('.up-open')&&typeof show==='function'){show('lab');setTimeout(function(){markLib();var x=document.getElementById('labUpd');if(x)x.scrollIntoView({block:'start'});window.scrollBy(0,-90)},120);}});
 function all(){paint();markLib();}
