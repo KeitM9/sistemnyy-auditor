@@ -365,11 +365,11 @@ async function journal(ev) {
     const h = sha(rec);
     await redis(['RPUSH', 'ap:journal', rec + ' ' + h]);
     await redis(['SET', 'ap:journal:head', h]);
-    // срок хранения журнала — 90 дней (legal.arsysai.com/privacy, раздел 3.5): самую старую запись старше срока убираем
+    // срок хранения журнала — 180 дней (legal.arsysai.com/privacy, раздел 3.5; решение Екатерины 16.11.2026): самую старую запись старше срока убираем
     for (let i = 0; i < 100; i++) {
       const first = await redis(['LINDEX', 'ap:journal', '0']);
       const ts = first ? (JSON.parse(String(first).slice(0, String(first).lastIndexOf(' '))).ts || '') : '';
-      if (!ts || Date.now() - Date.parse(ts) <= 90 * 86400 * 1000) break;
+      if (!ts || Date.now() - Date.parse(ts) <= 180 * 86400 * 1000) break;
       await redis(['LPOP', 'ap:journal']);
     }
   } catch (e) { await tell('журнал: запись не удалась — ' + String(e).slice(0, 120)); }
@@ -696,7 +696,7 @@ export default async function handler(req, res) {
       const c = body.consent || {};
       if (c.pd === true && c.terms === true) {
         const rec = { v: String(c.v || '').slice(0, 12), pd: true, terms: true, news: c.news === true, d: new Date().toISOString(), lang };
-        await redis(['SET', `ap:consent:${code.tg}`, JSON.stringify(rec), 'EX', String(90 * 86400)]);
+        await redis(['SET', `ap:consent:${code.tg}`, JSON.stringify(rec), 'EX', String(180 * 86400)]);
         await journal({ ev: 'consent', tg: code.tg, v: rec.v, news: rec.news });
       }
       const used = await redis(['GET', usedKey]);
