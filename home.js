@@ -355,3 +355,11 @@ var o=window.render;if(typeof o==='function')window.render=render=function(r){va
 [['labTable',sLab],['reportsTable',sReps]].forEach(function(p){var el=document.getElementById(p[0]);if(el){new MutationObserver(function(){p[1]()}).observe(el,{childList:true});p[1]();}});
 var al=window.applyLang;if(typeof al==='function')window.applyLang=applyLang=function(){var res=al.apply(this,arguments);sLab();sReps();var v=document.getElementById('report');if(last&&v&&v.classList.contains('on'))sRep(last);return res};
 })();
+
+// Смена языка: сообщение о принятом коде и об ошибке перерисовываются на новом языке (17.11.2026)
+(function(){var al=window.applyLang;if(typeof al!=='function')return;
+ window.applyLang=applyLang=function(){var r=al.apply(this,arguments);try{
+  var c=document.getElementById('codeOk');if(c&&c.dataset.exp){var en=(typeof lang!=='undefined'&&lang==='en');
+   c.textContent=t('code_ok').replace('{d}',new Date(c.dataset.exp*1000).toLocaleString(en?'en':'ru',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}));}
+  var e=document.getElementById('err');if(e&&e.dataset.key)e.innerHTML=t(e.dataset.key);
+ }catch(x){}return r};})();

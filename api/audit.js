@@ -572,7 +572,15 @@ async function ask(client, schema, content, maxTokens, effort, usage) {
     output_config: { effort, format: zodOutputFormat(schema) },
     messages: [{ role: 'user', content }]
   });
-  let model = MODEL, r = await call(model);
+  let model = MODEL, r;
+  try { r = await call(model); }
+  catch (e) {
+    // Ответ обрезан на середине JSON: размышления съели лимит (большая система, 17.11.2026). Один повтор с коротким
+    // размышлением в том же лимите: так ответ влезает и укладывается во время функции (maxDuration 300 с).
+    if (!/structured output|max_tokens/i.test(String(e))) throw e;
+    effort = 'low';
+    r = await call(model);
+  }
   if (r.stop_reason === 'refusal') { model = FALLBACK_MODEL; r = await call(model); }
   for (const k of ['input_tokens', 'output_tokens', 'cache_read_input_tokens', 'cache_creation_input_tokens']) usage[k] = (usage[k] || 0) + (r.usage?.[k] || 0);
   if (!r.parsed_output) throw new Error('no output, stop=' + r.stop_reason);
@@ -854,6 +862,7 @@ export default async function handler(req, res) {
       await tell(`ВНИМАНИЕ: на ключе Claude закончились деньги — аудиты не проходят. Пополните счёт в console.anthropic.com → Billing. Клиенту сказано, что код сохранён. (tg ${code.tg}, шаг ${action})`);
       return res.status(503).json({ error: 'engine_unavailable' });
     }
+    try { await redis(['DEL', lockKey]); } catch (x) { /* замок истечёт сам через RUN_TTL */ }
     await tell(`сбой шага ${action} · tg ${code.tg} · ${String(e).slice(0, 200)}`);
     return res.status(502).json({ error: 'bad report' });
   }

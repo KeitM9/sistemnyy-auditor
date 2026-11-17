@@ -755,7 +755,7 @@ const I18N={
   
   
   del_reps:"Очистить историю в этом браузере",del_ok:"Очистить историю отчётов в этом браузере? Полные отчёты на сервере удаляются сами через 48 часов.",
-  err_txt:"Аудит сейчас не собрался. Попробуйте ещё раз через минуту или напишите нам в t.me/arsysai_bot, разберём вручную.",
+  err_txt:"Аудит сейчас не собрался. Код при этом не потрачен.<br>Попробуйте ещё раз через минуту.<br>Если повторится, напишите в поддержку <a href=\"https://t.me/supprmaster_bot\" target=\"_blank\" rel=\"noopener\">@supprmaster_bot</a>, разберём вручную.",
   kb:"КБ",
   th_sys:"Система",th_status:"Статус",th_score:"Балл",th_date:"Дата",
   lab_intro:"Библиотека сбоев: 75 классов уязвимостей агентных систем из реальных инцидентов. Каждый аудит сверяет систему с этой базой, и она пополняется новыми инцидентами.",
@@ -836,7 +836,7 @@ const I18N={
   
   
   del_reps:"Clear history in this browser",del_ok:"Clear the report history in this browser? Full reports on the server delete themselves after 48 hours.",
-  err_txt:"The audit did not come together this time. Try again in a minute or message t.me/arsysai_bot and we will run it by hand.",
+  err_txt:"The audit did not come together this time. Your code has not been used.<br>Try again in a minute.<br>If it happens again, message support <a href=\"https://t.me/supprmaster_bot\" target=\"_blank\" rel=\"noopener\">@supprmaster_bot</a> and we will run it by hand.",
   kb:"KB",
   th_sys:"System",th_status:"Status",th_score:"Score",th_date:"Date",
   lab_intro:"Failure library: 75 vulnerability classes of agent systems drawn from real incidents. Every audit matches the system against it, and it grows with new incidents.",
@@ -1307,7 +1307,7 @@ $('#codeBtn').onclick=async()=>{const code=$('#codeIn').value.trim(); if(!code){
     if(res.status===401)return gateMsg('code_bad'); if(res.status===410)return gateMsg('code_expired'); if(!res.ok)return gateMsg('code_off');
     const j=await res.json(); if(j.used)return gateMsg('code_used');
     setCode(code); gateMsg('gate_help'); hit('code_ok');
-    $('#codeOk').textContent=t('code_ok').replace('{d}',new Date(j.expires*1000).toLocaleString(lang==='en'?'en':'ru',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}));
+    $('#codeOk').dataset.exp=j.expires;$('#codeOk').textContent=t('code_ok').replace('{d}',new Date(j.expires*1000).toLocaleString(lang==='en'?'en':'ru',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}));
     gateView();}
   catch(e){gateMsg('code_off');} finally{$('#codeBtn').disabled=false;}};
 $('#codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('#codeBtn').click();});
@@ -1319,7 +1319,7 @@ $('#run').addEventListener('click',async()=>{
   $('#err').style.display='none';
   if(!getConsent()){gateView();return;}
   const code=getCode(); if(!code){gateView();return;}
-  $('#run').disabled=true; $('#load').style.display='flex'; $('#err').textContent=t('err_txt');
+  $('#run').disabled=true; $('#load').style.display='flex'; $('#err').innerHTML=t('err_txt');$('#err').dataset.key='err_txt';
   const pr=$('#prevSel').value!==''?loadReps()[+$('#prevSel').value]:null;
   const prev=pr?{score:pr.rep.score,items:(pr.rep.hardening||[]).map((h,i)=>({id:h.id||`F${i+1}`,p:h.p,cls:h.cls||'',st:h.st||'open',t:h.t}))}:null;
   // Три шага; описание уходит на каждом шаге заново и нигде не хранится. Сбой шага: один повтор.
