@@ -12,7 +12,8 @@ import { z } from 'zod';
 import crypto from 'node:crypto';
 import { LIBRARY, LIB_VERSION } from '../lib/library.js';
 
-const ALLOWED = ['https://agentproof.arsysai.com', 'https://keitm9.github.io'];
+// Только боевой адрес сайта (F16 аудита 17.11.2026: старый адрес GitHub Pages убран)
+const ALLOWED = ['https://agentproof.arsysai.com'];
 const MODEL = 'claude-opus-5-5';
 const FALLBACK_MODEL = 'claude-sonnet-5'; // если Opus отказал по фильтру безопасности
 const RUBRIC = 'v2';
@@ -737,6 +738,8 @@ export default async function handler(req, res) {
     // ── Шаг 1: карта. Код ещё не использован, запуск один на код.
     if (action === 'map') {
       if (await overLimit(ip, 'run', 3, 600)) return res.status(429).json({ error: 'too many' });
+      // Лимит и по коду, а не только по IP (F15 аудита 17.11.2026): смена адреса не даёт обойти предел
+      if (await overLimit('code:' + code.id, 'run', 6, 3600)) return res.status(429).json({ error: 'too many' });
       if (await redis(['GET', usedKey])) return res.status(409).json({ error: 'used' });
       if (!(await redis(['GET', `ap:consent:${code.tg}`]))) return res.status(428).json({ error: 'consent' });
       // Один человек и один проект: бесплатная проверка одна. Купивший проверяет снова по своему коду.
