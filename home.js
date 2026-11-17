@@ -363,3 +363,47 @@ var al=window.applyLang;if(typeof al==='function')window.applyLang=applyLang=fun
    c.textContent=t('code_ok').replace('{d}',new Date(c.dataset.exp*1000).toLocaleString(en?'en':'ru',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}));}
   var e=document.getElementById('err');if(e&&e.dataset.key)e.innerHTML=t(e.dataset.key);
  }catch(x){}return r};})();
+
+// Карта системы в отчёте (17.11.2026): узлы шире по подписи, связи между соседями прямые, дальние дугой сверху,
+// подписи связей и пометки узлов не налезают друг на друга. Старую функцию заменяем целиком.
+(function(){
+ if(typeof graphSVG!=='function')return;
+ var F='system-ui, Segoe UI, Roboto, Arial, sans-serif';
+ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+ function cut(s,n){s=String(s||'');return s.length>n?s.slice(0,n-1)+'…':s}
+ function wrap(s,n){var w=String(s||'').split(/\s+/),out=[],cur='';w.forEach(function(x){if((cur+' '+x).trim().length>n){if(cur)out.push(cur);cur=x}else cur=(cur+' '+x).trim()});if(cur)out.push(cur);return out}
+ window.graphSVG=graphSVG=function(g){
+  var nodes=(g&&g.nodes)||[],edges=(g&&g.edges)||[];if(!nodes.length)return '';
+  var idx={};nodes.forEach(function(n,i){idx[n.id]=i});
+  var CH=7.6,nh=46,GAPMIN=64;
+  var nw=nodes.map(function(n){return Math.min(190,Math.max(112,cut(n.label,24).length*8.4+28))});
+  // зазор после узла i: под подписи прямых связей i→i+1 и под пометки соседних узлов
+  var gap=nodes.map(function(n,i){var need=GAPMIN;edges.forEach(function(e){var a=idx[e.f],b=idx[e.t];if(a==null||b==null)return;
+    if(Math.min(a,b)===i&&Math.abs(a-b)===1&&e.label)need=Math.max(need,cut(e.label,26).length*CH+26)});return Math.min(230,need)});
+  var x=[],cx=12;nodes.forEach(function(n,i){x.push(cx);cx+=nw[i]+gap[i]});var W=Math.max(640,cx-gap[nodes.length-1]+12);
+  var far=edges.filter(function(e){var a=idx[e.f],b=idx[e.t];return a!=null&&b!=null&&Math.abs(a-b)>1});
+  var arcTop=far.length?34+Math.min(far.length,4)*18:18,y0=arcTop+8;
+  var noteLines=nodes.map(function(n,i){var f=(n.flags||[]).join(' · ');return f?wrap(cut(f,90),Math.max(14,Math.floor((nw[i]+gap[i]*0.8)/CH))).slice(0,3):[]});
+  var maxL=Math.max.apply(null,noteLines.map(function(l){return l.length}).concat([0]));
+  var H=y0+nh+12+maxL*17+6;
+  var out=[];
+  edges.forEach(function(e,k){var a=idx[e.f],b=idx[e.t];if(a==null||b==null)return;
+   var weak=!!e.weak,c=weak?'#B4FAB2':'#414143',sw=weak?3:1.6,da=weak?'7 5':'0',lab=e.label?cut(e.label,26):'';
+   var fwd=a<b,ya=y0+nh/2;
+   if(Math.abs(a-b)===1){var x1=fwd?x[a]+nw[a]:x[a],x2=fwd?x[b]:x[b]+nw[b];var tip=fwd?x2-7:x2+7;
+    out.push('<line x1="'+x1+'" y1="'+ya+'" x2="'+tip+'" y2="'+ya+'" stroke="'+c+'" stroke-width="'+sw+'" stroke-dasharray="'+da+'"/>');
+    out.push('<polygon points="'+tip+','+(ya-4)+' '+x2+','+ya+' '+tip+','+(ya+4)+'" fill="'+c+'"/>');
+    if(lab)out.push('<text x="'+((x1+x2)/2)+'" y="'+(ya-8)+'" fill="#414143" font-size="12" text-anchor="middle" font-family="Oswald" letter-spacing=".5">'+esc(lab.toUpperCase())+'<title>'+esc(e.label)+'</title></text>');
+   }else{var level=far.indexOf(e)%4,hy=arcTop-6-level*18;var sx=x[a]+nw[a]/2,ex=x[b]+nw[b]/2;
+    out.push('<path d="M'+sx+','+y0+' C'+sx+','+hy+' '+ex+','+hy+' '+ex+','+(y0-7)+'" fill="none" stroke="'+c+'" stroke-width="'+sw+'" stroke-dasharray="'+da+'"/>');
+    out.push('<polygon points="'+(ex-4)+','+(y0-7)+' '+ex+','+y0+' '+(ex+4)+','+(y0-7)+'" fill="'+c+'"/>');
+    if(lab)out.push('<text x="'+((sx+ex)/2)+'" y="'+(hy+(hy<y0?-2:12))+'" fill="#414143" font-size="12" text-anchor="middle" font-family="Oswald" letter-spacing=".5">'+esc(lab.toUpperCase())+'<title>'+esc(e.label)+'</title></text>');}
+  });
+  nodes.forEach(function(n,i){var leak=!!n.leak,st=leak?'#FF0A16':'#414143',cxn=x[i]+nw[i]/2;
+   out.push('<rect x="'+x[i]+'" y="'+y0+'" width="'+nw[i]+'" height="'+nh+'" rx="3" fill="'+(n.io?'#fff':'#F7F6F6')+'" stroke="'+st+'" stroke-width="'+(leak?2:1)+'"/>');
+   out.push('<text x="'+cxn+'" y="'+(y0+nh/2+5)+'" fill="#414143" font-size="14" text-anchor="middle" font-family="'+F+'" font-weight="600">'+esc(cut(n.label,24))+'<title>'+esc(n.label)+'</title></text>');
+   noteLines[i].forEach(function(l,j){out.push('<text x="'+cxn+'" y="'+(y0+nh+18+j*17)+'" fill="'+(leak?'#FF0A16':'#414143')+'" font-size="12.5" text-anchor="middle" font-family="'+F+'">'+esc(l)+'</text>')});
+  });
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" style="min-width:'+W+'px;max-width:none">'+out.join('')+'</svg>';
+ };
+})();

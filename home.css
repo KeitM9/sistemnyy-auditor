@@ -341,3 +341,8 @@ html body .badge.ok{padding:3px 9px!important;border-radius:3px}
 .pl-brand{text-transform:none;letter-spacing:.01em;background:#B4FAB2;border-radius:3px;padding:0 6px}
 
 .pl-name{text-transform:none;letter-spacing:.01em}
+
+/* Две колонки проверок (17.11.2026): блоки друг под другом во всю ширину, внутри пункты в две колонки, без пустой правой половины */
+html body #report .cols{grid-template-columns:1fr}
+@media(min-width:900px){html body #report .cols>.block{columns:2;column-gap:32px}html body #report .cols>.block>h3{column-span:all}html body #report .cols .metric{break-inside:avoid;display:inline-block;width:100%}}
+@media print{html body #report .cols>.block{columns:2}}
