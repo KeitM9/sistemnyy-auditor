@@ -67,4 +67,10 @@ const mapB = { agents: [{ name: 'бот оплата' }, { name: 'ПРОДАВЕ
 ok(m.projectPrint(mapA) && m.projectPrint(mapA) === m.projectPrint(mapB), 'тот же проект даёт тот же отпечаток');
 ok(m.projectPrint({ agents: [{ name: 'Другой' }] }) !== m.projectPrint(mapA) && m.projectPrint({}) === '', 'другой проект и пустая карта');
 ok(fv.fullHours === 48 && Date.parse(fv.until) > Date.now(), '48 часов на решение');
+// F26: прошлый отчёт со статусом «закрыто» принимается только с подписью движка
+{ const p = { score: 4, items: [{ id: 'F1', p: 'P1', cls: 'D1', st: 'closed', t: 'x' }] };
+  const sig = m.regSig('k1', m.prevOf(p, ['k1']) && { score: 4, items: [{ id: 'F1', p: 'P1', cls: 'D1', st: 'closed', t: 'x' }] });
+  ok(m.prevOf({ ...p, sig }, ['k1']).items[0].st === 'closed', 'подписанный реестр сохраняет «закрыто»');
+  ok(m.prevOf({ ...p, sig }, ['k2']).items[0].st === 'open', 'чужая подпись — статусы открыты');
+  ok(m.prevOf(p, ['k1']).signed === false && m.prevOf(p, ['k1']).items[0].st === 'open', 'без подписи — статусы открыты'); }
 console.log('engine checks ok');

@@ -558,12 +558,26 @@ export function normalize(map, probe, fin, ax, lang, meta, devil = { p1: [] }) {
 }
 
 // Прошлый реестр для повторной проверки приходит из браузера клиента — чистим и режем.
-function prevOf(p) {
+function regView(p) {
   const items = Array.isArray(p?.items) ? p.items.slice(0, 120) : [];
   if (!items.length) return null;
   const clean = (s, n) => cut(String(s || '').replace(/[<>]/g, ''), n);
   return { score: clamp(p.score, 0, 10), items: items.map(h => ({ id: clean(h.id, 8), p: clean(h.p, 3), cls: clean(h.cls, 6), st: h.st === 'closed' ? 'closed' : 'open', t: clean(h.t, 200) })) };
 }
+export function prevOf(p, secrets = []) {
+  const pv = regView(p);
+  if (!pv) return null;
+  // F26 (аудит 17.11): статусы «закрыто» принимаются только из реестра, подписанного движком при выдаче отчёта
+  const sig = String(p?.sig || '');
+  pv.signed = !!sig && secrets.some(k => k && regSig(k, pv) === sig);
+  if (!pv.signed) pv.items.forEach(h => { h.st = 'open'; });
+  return pv;
+}
+// Подпись реестра находок: тот же вид, что сайт присылает на повторную проверку
+export const regSig = (secret, pv) => crypto.createHmac('sha256', secret)
+  .update('reg:' + JSON.stringify({ score: pv.score, items: pv.items.map(({ id, p, cls, st, t }) => ({ id, p, cls, st, t })) })).digest('hex').slice(0, 32);
+// F34: производные блоки (<map>, <probe>, <p1>) не могут закрыть свою метку изнутри
+const safeJ = o => JSON.stringify(o).replace(/</g, '\\u003c');
 
 // Один вызов модели: общий системный префикс + описание кешируются между шагами.
 async function ask(client, schema, content, maxTokens, effort, usage) {
@@ -605,6 +619,10 @@ export default async function handler(req, res) {
   const body = req.body || {};
   const lang = body.lang === 'en' ? 'en' : 'ru';
   const secret = (process.env.AP_CODE_SECRET || '').trim(); // лишний пробел/перенос при вставке
+  // F10 (аудит 17.11): при смене секрета старый принимается, пока задан AP_CODE_SECRET_OLD; выпуск и подпись идут новым
+  const secretOld = (process.env.AP_CODE_SECRET_OLD || '').trim();
+  const secrets = [secret, secretOld].filter(Boolean);
+  const viaAny = f => { for (const k of secrets) { const v = f(k); if (v) return v; } return null; };
   if (!secret || !redisCfg()) {
     await tell('движок не настроен: нет AP_CODE_SECRET или памяти Redis');
     return res.status(503).json({ error: 'not configured' });
@@ -660,12 +678,13 @@ export default async function handler(req, res) {
   // Открытие полного отчёта после оплаты: токен выдаётся после подтверждения оплаты
   if (action === 'unlock') {
     if (await overLimit(ip, 'unlock', 20, 600)) return res.status(429).json({ error: 'too many' });
-    const rid = parseUnlock(secret, body.token);
+    const rid = viaAny(k => parseUnlock(k, body.token));
     if (!rid) return res.status(401).json({ error: 'token' });
-    const full = unseal(secret, await redis(['GET', `ap:full:${rid}`]));
+    const sealedFull = await redis(['GET', `ap:full:${rid}`]);
+    const full = viaAny(k => unseal(k, sealedFull));
     if (!full) return res.status(410).json({ error: 'expired' });
     await redis(['SET', `ap:paid:${full.tg}`, '1', 'EX', String(ONE_FREE_TTL)]);
-    await journal({ ev: 'unlock', run: rid });
+    await journal({ ev: 'unlock', run: rid, ip: sha(ip).slice(0, 12) });
     return res.status(200).json(full.report);
   }
 
@@ -673,7 +692,7 @@ export default async function handler(req, res) {
   // Отчёт здесь не отдаётся. Токен знает только бот, до подтверждения оплаты покупателю он не приходит.
   if (action === 'hold') {
     if (await overLimit(ip, 'unlock', 20, 600)) return res.status(429).json({ error: 'too many' });
-    const rid = parseUnlock(secret, body.token);
+    const rid = viaAny(k => parseUnlock(k, body.token));
     if (!rid) return res.status(401).json({ error: 'token' });
     let ttl = Number(await redis(['TTL', `ap:full:${rid}`]));
     if (ttl <= 0) return res.status(410).json({ error: 'expired' });
@@ -687,15 +706,16 @@ export default async function handler(req, res) {
   // Оплата пришла, а отчёт уже удалён: человек получает новую проверку бесплатно (решение 06.11). Подпись ставит бот после кнопки Екатерины.
   if (action === 'paid') {
     if (await overLimit(ip, 'unlock', 20, 600)) return res.status(429).json({ error: 'too many' });
-    const tg = parsePaid(secret, body.token);
+    const tg = viaAny(k => parsePaid(k, body.token));
     if (!tg) return res.status(401).json({ error: 'token' });
     await redis(['SET', `ap:paid:${tg}`, '1', 'EX', String(ONE_FREE_TTL)]);
-    await journal({ ev: 'paid', tg });
+    await journal({ ev: 'paid', tg, ip: sha(ip).slice(0, 12) });
     return res.status(200).json({ ok: true });
   }
 
   // Код проверяется на сервере при каждом действии
-  const code = parseCode(body.code, secret);
+  let code = parseCode(body.code, secret);
+  if (!code.ok && secretOld) { const c2 = parseCode(body.code, secretOld); if (c2.ok || c2.why === 'expired') code = c2; }
   if (!code.ok) return res.status(code.why === 'expired' ? 410 : 401).json({ error: code.why });
   const usedKey = `ap:used:${code.id}`, lockKey = `ap:lock:${code.id}`;
 
@@ -756,7 +776,7 @@ export default async function handler(req, res) {
       try {
         const { out, model } = await ask(client, MapS, [...docBlocks(lang, system, nonce), { type: 'text', text: STEP_MAP }], 16000, 'medium', usage);
         await spend(usage);
-        await journal({ ev: 'map', run, tg: code.tg, sys: sysHash.slice(0, 12), tokens: Math.round(weight(usage)) });
+        await journal({ ev: 'map', run, tg: code.tg, sys: sysHash.slice(0, 12), ip: sha(ip).slice(0, 12), tokens: Math.round(weight(usage)) });
         const print = projectPrint(out);
         if (oneFree && print && await redis(['GET', `ap:proj:${print}`])) {
           await redis(['DEL', lockKey]);
@@ -769,7 +789,7 @@ export default async function handler(req, res) {
     }
 
     // ── Шаги 2 и 3: состояние подписано сервером и привязано к коду, запуску и тексту описания
-    const st = openState(secret, body.sealed);
+    const st = viaAny(k => openState(k, body.sealed));
     if (!st || st.code !== code.id || st.sys !== sysHash) return res.status(400).json({ error: 'state' });
     if (await redis(['GET', lockKey]) !== st.run) return res.status(409).json({ error: 'expired run' });
     await redis(['EXPIRE', lockKey, String(RUN_TTL)]);
@@ -778,7 +798,7 @@ export default async function handler(req, res) {
       await tell(`СТОП-КРАН: прогон вышел за потолок (${Math.round(weight(st.usage))} > ${RUN_CAP} усл. токенов) перед шагом ${action}. Остановлен, состояние заморожено, код не погашен (tg ${code.tg}).`);
       return res.status(503).json({ error: 'engine_unavailable' });
     }
-    const mapBlock = { type: 'text', text: `<map>\n${JSON.stringify(st.map)}\n</map>` };
+    const mapBlock = { type: 'text', text: `<map>\n${safeJ(st.map)}\n</map>` };
 
     if (action === 'probe') {
       if (st.step !== 'map') return res.status(400).json({ error: 'order' });
@@ -789,8 +809,8 @@ export default async function handler(req, res) {
       return res.status(200).json(sealState(secret, next));
     }
 
-    const probeBlock = { type: 'text', text: `<probe>\n${JSON.stringify(st.probe)}\n</probe>` };
-    const prev = prevOf(body.prev);
+    const probeBlock = { type: 'text', text: `<probe>\n${safeJ(st.probe)}\n</probe>` };
+    const prev = prevOf(body.prev, secrets);
 
     if (action === 'final') {
       if (st.step !== 'probe') return res.status(400).json({ error: 'order' });
@@ -803,7 +823,7 @@ export default async function handler(req, res) {
 
     // action === 'verify': Адвокат Дьявола по P1 + три независимые оценки осей → отчёт
     if (st.step !== 'final') return res.status(400).json({ error: 'order' });
-    const p1 = (st.fin.hardening || []).filter(h => h.p === 'P1' && h.st !== 'closed').map(h => `${h.id} | ${h.cls} | ${h.t} | ${h.how}`);
+    const p1 = (st.fin.hardening || []).filter(h => h.p === 'P1' && h.st !== 'closed').map(h => `${h.id} | ${h.cls} | ${h.t} | ${h.how}`.replace(/</g, '‹'));
     const axesContent = [{ type: 'text', text: `Язык: ${lang === 'en' ? 'English' : 'русский'}.` }, mapBlock, probeBlock, { type: 'text', text: STEP_AXES }];
     const [devil, ...axRuns] = await Promise.all([
       p1.length ? ask(client, DevilS, [...docBlocks(lang, system, st.nonce), { type: 'text', text: `<p1>\n${p1.join('\n')}\n</p1>` }, { type: 'text', text: STEP_DEVIL }], 8000, 'medium', usage) : Promise.resolve({ out: { p1: [] } }),
@@ -812,6 +832,9 @@ export default async function handler(req, res) {
       ask(client, AxesS, axesContent, 4000, 'low', usage)
     ]);
     await spend(usage);
+    const dch = (devil.out.p1 || []).filter(d => d.verdict !== 'stands');
+    if (dch.length) await journal({ ev: 'devil', run: st.run, changes: dch.map(d => ({ id: cut(d.id, 8), v: d.verdict, arg: d.arg, q: cut(d.quote, 200) })) });
+    if (prev && !prev.signed) await journal({ ev: 'prev_unsigned', run: st.run });
     const ax = mergeAxes(axRuns.map(r => r.out));
     const total = addUsage(st.usage, usage);
     const meta = { total: raw.length, checked: Math.min(raw.length, MAX_INPUT), source: 'description', model: st.model, date: new Date().toISOString().slice(0, 10), prev, found };
@@ -821,6 +844,8 @@ export default async function handler(req, res) {
     for (const k of ['note', 'strong', 'weak', 'axes', 'battery', 'system', 'compliance', 'exploit', 'unchecked']) rep0[k] = guardPromises(rep0[k], hits);
     const report = deepEsc(rep0);
     report.basis.found = undefined;
+    { const pv = regView({ score: report.score, items: (report.hardening || []).map((h, i) => ({ id: h.id || `F${i + 1}`, p: h.p, cls: h.cls || '', st: h.st || 'open', t: h.t })) });
+      if (pv) report.reg = regSig(secret, pv); }
     // код гасится только после того, как отчёт собран
     await redis(['SET', usedKey, new Date().toISOString()]);
     await redis(['DEL', lockKey]);

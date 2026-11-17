@@ -1321,7 +1321,7 @@ $('#run').addEventListener('click',async()=>{
   const code=getCode(); if(!code){gateView();return;}
   $('#run').disabled=true; $('#load').style.display='flex'; $('#err').innerHTML=t('err_txt');$('#err').dataset.key='err_txt';
   const pr=$('#prevSel').value!==''?loadReps()[+$('#prevSel').value]:null;
-  const prev=pr?{score:pr.rep.score,items:(pr.rep.hardening||[]).map((h,i)=>({id:h.id||`F${i+1}`,p:h.p,cls:h.cls||'',st:h.st||'open',t:h.t}))}:null;
+  const prev=pr?{score:pr.rep.score,items:(pr.rep.hardening||[]).map((h,i)=>({id:h.id||`F${i+1}`,p:h.p,cls:h.cls||'',st:h.st||'open',t:h.t})),sig:pr.rep.reg||''}:null;
   // Три шага; описание уходит на каждом шаге заново и нигде не хранится. Сбой шага: один повтор.
   const step=async(extra,msg)=>{$('#loadMsg').textContent=t(msg);
     for(let i=0;i<2;i++){const res=await fetch(ENGINE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,system,lang,...extra})});
@@ -1375,9 +1375,9 @@ window.show=function(v){var rep=document.getElementById('report'),home=document.
 <script>(function(){const OK="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12l5 5 9-10'/></svg>";document.addEventListener('click',function(e){if(e.target.closest('[data-pa]')&&typeof openExample==='function')openExample();});const fill=()=>{const L=(typeof lang!=='undefined'&&lang==='en')?'en':'ru';document.querySelectorAll('.c4l').forEach(u=>{u.innerHTML=JSON.parse(u.dataset[L]).map(x=>'<li>'+OK+'<span>'+x+'</span></li>').join('')});};fill();const o=window.applyLang;if(typeof o==='function')window.applyLang=function(){const r=o.apply(this,arguments);fill();return r};})();</script>
 <style>body:not([data-cur=overview]) .top2{display:none!important}</style>
 <script>(function(){var o=window.show;function m(v){document.body.dataset.cur=v}m(typeof curView!=="undefined"?curView:"overview");var h=location.hash.slice(1);if(["new","reports","lab"].indexOf(h)>-1)setTimeout(function(){show(h)},0);if(typeof o==="function")window.show=show=function(v){var r=o.apply(this,arguments);m(v);return r};})();</script>
-<link rel="stylesheet" href="ap.css?v=35">
-<link rel="stylesheet" href="home.css?v=35">
-<script src="home.js?v=35"></script>
-<script src="ap-ui.js?v=35"></script>
+<link rel="stylesheet" href="ap.css?v=36">
+<link rel="stylesheet" href="home.css?v=36">
+<script src="home.js?v=36"></script>
+<script src="ap-ui.js?v=36"></script>
 </body>
 </html>
